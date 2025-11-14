@@ -1,5 +1,6 @@
 import { ArrowRight, Calendar } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import portraitImage from "@/assets/portrait.png";
 
 export const Hero = () => {
   const handleScroll = (id: string) => {
@@ -12,58 +13,79 @@ export const Hero = () => {
   return (
     <section id="home" className="min-h-screen flex items-center justify-center hero-gradient pt-20">
       <div className="container-custom">
-        <div className="max-w-4xl mx-auto text-center">
-          {/* Main Headline */}
-          <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-foreground mb-6 animate-slide-up">
-            I build automations that{" "}
-            <span className="text-primary">remove busywork</span> and{" "}
-            <span className="text-accent">scale your operations</span>
-          </h1>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center max-w-7xl mx-auto">
+          {/* Left Column - Text Content */}
+          <div className="order-2 lg:order-1 text-center lg:text-left">
+            {/* Main Headline */}
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-foreground mb-6 animate-slide-up">
+              Eleazar Sebastian Martinez
+            </h1>
 
-          {/* Subheading */}
-          <p className="text-lg md:text-xl text-muted-foreground mb-8 max-w-2xl mx-auto animate-slide-up [animation-delay:200ms]">
-            I specialize in AI automation, data workflows, and integrations using cutting-edge tools like{" "}
-            <span className="font-semibold text-foreground">n8n</span>,{" "}
-            <span className="font-semibold text-foreground">Make</span>,{" "}
-            <span className="font-semibold text-foreground">Zapier</span>,{" "}
-            <span className="font-semibold text-foreground">Apify</span>, and{" "}
-            <span className="font-semibold text-foreground">Notion</span>.
-          </p>
+            {/* Subheadline */}
+            <h2 className="text-2xl md:text-3xl font-semibold mb-6 animate-slide-up [animation-delay:100ms]">
+              I build automations that{" "}
+              <span className="text-primary">remove busywork</span> and{" "}
+              <span className="text-primary">scale your operations</span>
+            </h2>
 
-          {/* CTAs */}
-          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center animate-slide-up [animation-delay:400ms]">
-            <Button
-              size="lg"
-              className="bg-primary hover:bg-primary/90 text-primary-foreground shadow-lg hover:shadow-xl transition-all group"
-              onClick={() => handleScroll("#portfolio")}
-            >
-              View My Work
-              <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
-            </Button>
-            <Button
-              size="lg"
-              variant="outline"
-              className="border-2 border-accent text-accent hover:bg-accent hover:text-accent-foreground transition-all"
-              onClick={() => handleScroll("#contact")}
-            >
-              <Calendar className="mr-2 h-5 w-5" />
-              Book a Call
-            </Button>
+            {/* Supporting Text */}
+            <p className="text-base md:text-lg text-muted-foreground mb-8 animate-slide-up [animation-delay:200ms]">
+              I specialize in AI automation, data workflows, and integrations using cutting-edge tools like{" "}
+              <span className="font-semibold text-foreground">n8n</span>,{" "}
+              <span className="font-semibold text-foreground">Make</span>,{" "}
+              <span className="font-semibold text-foreground">Zapier</span>,{" "}
+              <span className="font-semibold text-foreground">Apify</span>, and{" "}
+              <span className="font-semibold text-foreground">Notion</span>.
+            </p>
+
+            {/* CTAs */}
+            <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start animate-slide-up [animation-delay:300ms]">
+              <Button
+                size="lg"
+                className="bg-primary hover:bg-background hover:text-primary hover:border-primary border-2 border-primary text-primary-foreground shadow-lg transition-all group"
+                onClick={() => handleScroll("#portfolio")}
+              >
+                View My Work
+                <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+              </Button>
+              <Button
+                size="lg"
+                variant="outline"
+                className="border-2 border-primary text-primary hover:bg-primary hover:text-primary-foreground transition-all"
+                onClick={() => handleScroll("#contact")}
+              >
+                <Calendar className="mr-2 h-5 w-5" />
+                Book a Call
+              </Button>
+            </div>
+
+            {/* Trust Indicators */}
+            <div className="mt-12 grid grid-cols-3 gap-6 animate-fade-in [animation-delay:400ms]">
+              <div className="text-center lg:text-left">
+                <div className="text-2xl md:text-3xl font-bold text-primary mb-1">50+</div>
+                <div className="text-xs md:text-sm text-muted-foreground">Automations Built</div>
+              </div>
+              <div className="text-center lg:text-left">
+                <div className="text-2xl md:text-3xl font-bold text-primary mb-1">100%</div>
+                <div className="text-xs md:text-sm text-muted-foreground">Client Satisfaction</div>
+              </div>
+              <div className="text-center lg:text-left">
+                <div className="text-2xl md:text-3xl font-bold text-primary mb-1">1000+</div>
+                <div className="text-xs md:text-sm text-muted-foreground">Hours Saved</div>
+              </div>
+            </div>
           </div>
 
-          {/* Trust Indicators */}
-          <div className="mt-16 grid grid-cols-1 md:grid-cols-3 gap-8 animate-fade-in [animation-delay:600ms]">
-            <div className="text-center">
-              <div className="text-3xl md:text-4xl font-bold text-primary mb-2">50+</div>
-              <div className="text-sm text-muted-foreground">Automations Built</div>
-            </div>
-            <div className="text-center">
-              <div className="text-3xl md:text-4xl font-bold text-primary mb-2">100%</div>
-              <div className="text-sm text-muted-foreground">Client Satisfaction</div>
-            </div>
-            <div className="text-center">
-              <div className="text-3xl md:text-4xl font-bold text-primary mb-2">1000+</div>
-              <div className="text-sm text-muted-foreground">Hours Saved</div>
+          {/* Right Column - Portrait Image */}
+          <div className="order-1 lg:order-2 flex justify-center lg:justify-end animate-fade-in [animation-delay:200ms]">
+            <div className="relative">
+              <div className="w-64 h-64 md:w-80 md:h-80 lg:w-96 lg:h-96 rounded-full border-4 border-primary overflow-hidden shadow-[0_0_40px_rgba(250,204,21,0.3)]">
+                <img
+                  src={portraitImage}
+                  alt="Eleazar Sebastian Martinez"
+                  className="w-full h-full object-cover"
+                />
+              </div>
             </div>
           </div>
         </div>
