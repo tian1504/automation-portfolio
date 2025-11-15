@@ -1,15 +1,15 @@
 import { useState } from "react";
 
 const techTools = [
-  { name: "n8n", icon: "🔗" },
-  { name: "Make.com", icon: "⚙️" },
-  { name: "Zapier", icon: "⚡" },
-  { name: "Apify", icon: "🕷️" },
-  { name: "Notion", icon: "📝" },
-  { name: "HubSpot", icon: "🎯" },
-  { name: "Google Sheets", icon: "📊" },
-  { name: "Airtable", icon: "📋" },
-  { name: "Slack", icon: "💬" },
+  { name: "n8n", logo: "https://n8n.io/favicon.ico", color: "#EA4B71" },
+  { name: "Make.com", logo: null, color: "#6D3BFF" },
+  { name: "Zapier", logo: null, color: "#FF4A00" },
+  { name: "Notion", logo: null, color: "#000000" },
+  { name: "Apify", logo: null, color: "#FF9013" },
+  { name: "HubSpot", logo: null, color: "#FF7A59" },
+  { name: "Airtable", logo: null, color: "#FCB400" },
+  { name: "OpenAI", logo: null, color: "#10A37F" },
+  { name: "Gemini", logo: null, color: "#4285F4" },
 ];
 
 export const TechStack = () => {
@@ -66,7 +66,9 @@ export const TechStack = () => {
                     : `float 3s ease-in-out infinite ${index * 0.2}s`,
                 }}
               >
-                <span className="text-4xl md:text-5xl">{tool.icon}</span>
+                <span className="text-2xl md:text-3xl font-bold text-primary">
+                  {tool.name.split('.')[0].split(' ')[0]}
+                </span>
               </div>
               
               <div
