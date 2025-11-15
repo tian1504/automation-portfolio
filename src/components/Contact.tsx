@@ -2,18 +2,21 @@ import { Mail, Linkedin, Github, Calendar } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 
+// Update this URL when you have your Calendly/TidyCal link
+const BOOKING_URL = "#";
+
 const contactMethods = [
   {
     icon: Mail,
     title: "Email",
-    value: "eleazar.martinez@example.com",
-    link: "mailto:eleazar.martinez@example.com",
+    value: "tian1504@gmail.com",
+    link: "mailto:tian1504@gmail.com",
   },
   {
     icon: Linkedin,
     title: "LinkedIn",
     value: "Connect on LinkedIn",
-    link: "https://linkedin.com",
+    link: "https://www.linkedin.com/in/eleazar-sebastian-martinez-76210983/",
   },
   {
     icon: Github,
@@ -25,7 +28,7 @@ const contactMethods = [
     icon: Calendar,
     title: "Schedule a Call",
     value: "Book a meeting",
-    link: "#",
+    link: BOOKING_URL,
   },
 ];
 
@@ -77,9 +80,12 @@ export const Contact = () => {
             <Button
               size="lg"
               className="bg-accent hover:bg-accent/90 text-accent-foreground shadow-lg hover:shadow-xl transition-all"
+              asChild
             >
-              <Calendar className="mr-2 h-5 w-5" />
-              Schedule a Discovery Call
+              <a href={BOOKING_URL}>
+                <Calendar className="mr-2 h-5 w-5" />
+                Schedule a Discovery Call
+              </a>
             </Button>
           </Card>
         </div>
