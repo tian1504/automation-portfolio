@@ -7,35 +7,35 @@ import { useState } from "react";
 const projects = [
   {
     title: "Asana–Xero Integration Workflow",
-    description: "Built a Make scenario that connects Asana and Xero, automating task creation and financial data sync so project work and invoices always stay in step.",
+    description: "Built a Make scenario that connects Asana and Xero, automating task creation, expense syncing, and invoice status updates so finance and operations stay aligned.",
     image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&q=80",
     tags: ["Make", "Asana", "Xero"],
     filters: ["Make"],
   },
   {
     title: "Gmail Automation with AI",
-    description: "Designed a Gmail automation in Make that reads incoming emails, classifies them with Google Gemini, extracts key details, and routes them automatically to the right label or team.",
+    description: "Designed a Gmail automation in Make that reads incoming emails, classifies them with Google Gemini AI, extracts key details, and routes messages automatically to the right label or team.",
     image: "https://images.unsplash.com/photo-1596526131083-e8c633c948d2?w=800&q=80",
     tags: ["Make", "Gmail", "Gemini"],
     filters: ["Make"],
   },
   {
-    title: "Lead Gen Scraping & Enrichment Pipeline",
-    description: "Used Apify + n8n to scrape public communities and reviews, enrich leads with third-party data, and send clean contact lists into Google Sheets and Airtable for sales teams.",
-    image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&q=80",
-    tags: ["n8n", "Apify", "Lead Generation"],
-    filters: ["n8n", "Apify"],
+    title: "Creative Intelligence Engine (n8n)",
+    description: "Built an n8n workflow that pulls ads, UGC, and reviews into Notion, scores them, and uses AI to generate hooks and UGC briefs—saving hours of manual research for each campaign.",
+    image: "https://images.unsplash.com/photo-1531746790731-6c087fecd65a?w=800&q=80",
+    tags: ["n8n", "Notion", "AI"],
+    filters: ["n8n"],
   },
   {
-    title: "Creative Intelligence Engine for UGC & Ads",
-    description: "Built a 'creative intelligence' workflow that pulls ads, UGC, and reviews into Notion, scores them, and uses OpenAI/Gemini to generate hooks and briefs for new campaigns.",
-    image: "https://images.unsplash.com/photo-1531746790731-6c087fecd65a?w=800&q=80",
-    tags: ["n8n", "HubSpot", "Notion", "OpenAI", "Gemini"],
-    filters: ["n8n", "HubSpot"],
+    title: "Lead Capture to CRM & Email Follow-up",
+    description: "Created a Zapier automation that takes leads from forms and Calendly, enriches the contact, adds them to the CRM, and triggers personalized email follow-ups automatically.",
+    image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&q=80",
+    tags: ["Zapier", "CRM", "Email"],
+    filters: ["Zapier"],
   },
 ];
 
-const filterCategories = ["All", "Make", "n8n", "Zapier", "Apify", "HubSpot"];
+const filterCategories = ["All", "Make", "n8n", "Zapier"];
 
 export const Portfolio = () => {
   const [activeFilter, setActiveFilter] = useState("All");
@@ -119,16 +119,32 @@ export const Portfolio = () => {
 
         {/* Upwork Link Section */}
         <div className="text-center mt-16">
-          <p className="text-lg text-foreground mb-2">
+          <p className="text-sm text-muted-foreground mb-2">
             Want to see more workflows?
           </p>
           <a
-            href="https://www.upwork.com/freelancers/~01ac0c23391406fb0d"
+            href="https://www.upwork.com/freelancers/~01ac0c23391406fb0d?nav_dir=pop"
             target="_blank"
             rel="noopener noreferrer"
-            className="text-lg text-primary hover:text-primary/80 hover:underline transition-all duration-300 font-medium"
+            className="text-xl font-bold text-primary hover:text-primary/80 hover:underline transition-all duration-300 inline-block mb-8"
           >
-            Visit my Upwork profile
+            View my Upwork profile
+          </a>
+          
+          {/* Upwork Profile Preview Image */}
+          <a
+            href="https://www.upwork.com/freelancers/~01ac0c23391406fb0d?nav_dir=pop"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="block max-w-4xl mx-auto group"
+          >
+            <div className="bg-background rounded-lg border-2 border-primary/30 shadow-lg shadow-primary/20 overflow-hidden transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl hover:shadow-primary/30 hover:border-primary/50">
+              <img
+                src={new URL('../assets/upwork-profile-preview.png', import.meta.url).href}
+                alt="Eleazar Sebastian M. – Upwork profile preview"
+                className="w-full h-auto"
+              />
+            </div>
           </a>
         </div>
       </div>
