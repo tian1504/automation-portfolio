@@ -82,7 +82,7 @@ export const Hero = () => {
               <div className="w-64 h-64 md:w-80 md:h-80 lg:w-96 lg:h-96 rounded-full border-4 border-primary overflow-hidden shadow-[0_0_40px_rgba(250,204,21,0.3)]">
                 <img
                   src={portraitImage}
-                  alt="Eleazar Sebastian Martinez"
+                  alt="Portrait of Eleazar Sebastian Martinez"
                   className="w-full h-full object-cover"
                 />
               </div>
