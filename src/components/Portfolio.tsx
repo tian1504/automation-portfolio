@@ -2,7 +2,7 @@ import { ExternalLink } from "lucide-react";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 
 const projects = [
   {
@@ -39,10 +39,54 @@ const filterCategories = ["All", "Make", "n8n", "Zapier"];
 
 export const Portfolio = () => {
   const [activeFilter, setActiveFilter] = useState("All");
+  const linkRef = useRef<HTMLAnchorElement>(null);
 
   const filteredProjects = activeFilter === "All" 
     ? projects 
     : projects.filter(project => project.filters.includes(activeFilter));
+
+  useEffect(() => {
+    const chars = linkRef.current?.querySelectorAll('.char');
+    if (!chars) return;
+
+    // Check for reduced motion preference
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    chars.forEach((char, index) => {
+      const element = char as HTMLElement;
+      
+      if (prefersReducedMotion) {
+        // Simple fade in for reduced motion
+        element.style.opacity = '0';
+        element.style.transition = 'opacity 0.3s ease-out';
+        setTimeout(() => {
+          element.style.opacity = '1';
+        }, 50);
+      } else {
+        // Puzzle animation
+        const randomX = (Math.random() - 0.5) * 40; // -20 to +20
+        const randomY = (Math.random() - 0.5) * 40; // -20 to +20
+        const randomRotate = (Math.random() - 0.5) * 30; // -15 to +15
+        
+        element.style.opacity = '0';
+        element.style.transform = `translate(${randomX}px, ${randomY}px) rotate(${randomRotate}deg)`;
+        element.style.transition = 'all 0.6s cubic-bezier(0.4, 0, 0.2, 1)';
+        
+        setTimeout(() => {
+          element.style.opacity = '1';
+          element.style.transform = 'translate(0, 0) rotate(0deg)';
+        }, index * 40 + 100);
+      }
+    });
+  }, []);
+
+  const splitTextIntoChars = (text: string) => {
+    return text.split('').map((char, index) => (
+      <span key={index} className="char inline-block">
+        {char === ' ' ? '\u00A0' : char}
+      </span>
+    ));
+  };
 
   return (
     <section id="portfolio" className="section-padding bg-secondary">
@@ -123,12 +167,23 @@ export const Portfolio = () => {
             Want to see more workflows?
           </p>
           <a
+            ref={linkRef}
             href="https://www.upwork.com/freelancers/~01ac0c23391406fb0d?nav_dir=pop"
             target="_blank"
             rel="noopener noreferrer"
-            className="text-xl font-bold text-primary hover:text-primary/80 hover:underline transition-all duration-300 inline-block mb-8"
+            className="text-xl font-bold text-primary inline-block mb-8 transition-all duration-300 hover:scale-105"
+            style={{
+              textShadow: '0 0 0 transparent',
+              transition: 'all 0.3s ease'
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.textShadow = '0 0 20px hsl(var(--primary) / 0.5)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.textShadow = '0 0 0 transparent';
+            }}
           >
-            View my Upwork profile
+            {splitTextIntoChars('View my Upwork profile')}
           </a>
           
           {/* Upwork Profile Preview Image */}
@@ -140,7 +195,7 @@ export const Portfolio = () => {
           >
             <div className="bg-background rounded-lg border-2 border-primary/30 shadow-lg shadow-primary/20 overflow-hidden transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl hover:shadow-primary/30 hover:border-primary/50">
               <img
-                src={new URL('../assets/upwork-profile-preview.png', import.meta.url).href}
+                src={new URL('../assets/upwork-profile-banner-clean.png', import.meta.url).href}
                 alt="Eleazar Sebastian M. – Upwork profile preview"
                 className="w-full h-auto"
               />
