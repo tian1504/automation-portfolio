@@ -209,6 +209,72 @@ All colors MUST be HSL.
     }
   }
 
+  /* Upwork link puzzle animation */
+  @keyframes upworkPuzzleIn {
+    0% {
+      opacity: 0;
+      transform: translate3d(20px, -20px, 0) rotate(-10deg) scale(0.8);
+    }
+    100% {
+      opacity: 1;
+      transform: translate3d(0, 0, 0) rotate(0deg) scale(1);
+    }
+  }
+
+  .upwork-link {
+    display: inline-block;
+    white-space: nowrap;
+    position: relative;
+    transition: transform 0.15s ease-out, text-shadow 0.15s ease-out;
+  }
+
+  .upwork-link:hover {
+    transform: scale(1.03);
+    text-shadow: 0 0 8px rgba(250, 204, 21, 0.8);
+  }
+
+  .upwork-char {
+    display: inline-block;
+    opacity: 0;
+    animation-name: upworkPuzzleIn;
+    animation-duration: 0.6s;
+    animation-fill-mode: forwards;
+    animation-timing-function: cubic-bezier(0.3, 0.7, 0.4, 1.2);
+  }
+
+  .upwork-char:nth-child(1)  { animation-delay: 0.00s; }
+  .upwork-char:nth-child(2)  { animation-delay: 0.03s; }
+  .upwork-char:nth-child(3)  { animation-delay: 0.06s; }
+  .upwork-char:nth-child(4)  { animation-delay: 0.09s; }
+  .upwork-char:nth-child(5)  { animation-delay: 0.12s; }
+  .upwork-char:nth-child(6)  { animation-delay: 0.15s; }
+  .upwork-char:nth-child(7)  { animation-delay: 0.18s; }
+  .upwork-char:nth-child(8)  { animation-delay: 0.21s; }
+  .upwork-char:nth-child(9)  { animation-delay: 0.24s; }
+  .upwork-char:nth-child(10) { animation-delay: 0.27s; }
+  .upwork-char:nth-child(11) { animation-delay: 0.30s; }
+  .upwork-char:nth-child(12) { animation-delay: 0.33s; }
+  .upwork-char:nth-child(13) { animation-delay: 0.36s; }
+  .upwork-char:nth-child(14) { animation-delay: 0.39s; }
+  .upwork-char:nth-child(15) { animation-delay: 0.42s; }
+  .upwork-char:nth-child(16) { animation-delay: 0.45s; }
+  .upwork-char:nth-child(17) { animation-delay: 0.48s; }
+  .upwork-char:nth-child(18) { animation-delay: 0.51s; }
+  .upwork-char:nth-child(19) { animation-delay: 0.54s; }
+  .upwork-char:nth-child(20) { animation-delay: 0.57s; }
+  .upwork-char:nth-child(21) { animation-delay: 0.60s; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .upwork-char {
+      animation: none;
+      opacity: 1;
+    }
+    
+    .upwork-link:hover {
+      transform: none;
+    }
+  }
+
   .animate-float {
     animation: float 3s ease-in-out infinite;
   }
