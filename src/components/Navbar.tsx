@@ -44,9 +44,10 @@ export const Navbar = () => {
           <a
             href="#home"
             onClick={(e) => handleNavClick(e, "#home")}
-            className="text-xl md:text-2xl font-bold text-foreground hover:text-primary transition-colors"
+            className="brand-logo"
           >
-            Eleazar Sebastian Martinez
+            <span className="brand-robot">🤖</span>
+            <span className="brand-text">AI Automation</span>
           </a>
 
           {/* Desktop Navigation */}
