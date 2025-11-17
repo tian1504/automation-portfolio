@@ -302,29 +302,33 @@ All colors MUST be HSL.
     letter-spacing: 0.03em;
   }
 
-  .brand-robot {
-    width: 36px;
-    height: 36px;
-    border-radius: 9999px;
-    background-color: #000000;
-    padding: 2px;
+  .brand-logo:hover {
+    transform: translateY(-1px);
+  }
+
+  /* Nav robot (before Home link) */
+  .nav-robot-wrapper {
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 0 10px hsl(45 93% 54% / 0.4);
-    overflow: hidden;
+    margin-right: 1.25rem;
   }
 
-  .brand-robot-img {
-    width: 100%;
-    height: 100%;
+  .nav-robot-img {
+    height: 44px;
+    width: 44px;
+    border-radius: 9999px;
+    background-color: #000000;
+    padding: 2px;
     object-fit: contain;
-    animation: robotBreathingGlow 2.6s ease-in-out infinite;
+    box-shadow: 0 0 10px hsl(45 93% 54% / 0.7);
+    animation: robotBreathingGlow 2.8s ease-in-out infinite;
     transform-origin: center center;
   }
 
-  .brand-logo:hover {
-    transform: translateY(-1px);
+  .nav-robot-wrapper:hover .nav-robot-img {
+    transform: scale(1.08);
+    transition: transform 0.15s ease-out;
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -337,7 +341,7 @@ All colors MUST be HSL.
       transform: none;
     }
 
-    .brand-robot-img {
+    .nav-robot-img {
       animation: none !important;
       filter: none !important;
       transform: none !important;

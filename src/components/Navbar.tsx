@@ -48,17 +48,19 @@ export const Navbar = () => {
             className="brand-logo"
           >
             <span className="brand-text">AI Automation</span>
-            <span className="brand-robot">
-              <img
-                src={robotNav}
-                alt="Friendly automation robot"
-                className="brand-robot-img"
-              />
-            </span>
           </a>
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center gap-8">
+            {/* Robot Icon */}
+            <div className="nav-robot-wrapper">
+              <img
+                src={robotNav}
+                alt="AI Automation robot"
+                className="nav-robot-img"
+              />
+            </div>
+            
             {navLinks.map((link) => (
               <a
                 key={link.href}
