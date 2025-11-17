@@ -183,6 +183,27 @@ All colors MUST be HSL.
     }
   }
 
+  /* Robot float animation */
+  @keyframes robotFloat {
+    0%   { transform: translateY(0); }
+    50%  { transform: translateY(-3px); }
+    100% { transform: translateY(0); }
+  }
+
+  /* AI brand glow pulse animation */
+  @keyframes aiGlowPulse {
+    0%, 100% {
+      color: hsl(45 93% 54%);
+      text-shadow: 0 0 0 hsl(45 93% 54% / 0.0);
+    }
+    50% {
+      color: hsl(45 93% 87%);
+      text-shadow:
+        0 0 6px hsl(45 93% 54% / 0.7),
+        0 0 12px hsl(45 93% 54% / 0.5);
+    }
+  }
+
   /* Jelly bounce animation */
   @keyframes jelly {
     0%, 100% {
@@ -264,6 +285,39 @@ All colors MUST be HSL.
   .upwork-char:nth-child(20) { animation-delay: 0.57s; }
   .upwork-char:nth-child(21) { animation-delay: 0.60s; }
 
+  /* Brand logo styles */
+  .brand-logo {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    text-decoration: none;
+    color: hsl(45 93% 54%);
+    font-weight: 700;
+    font-size: 1.05rem;
+    transition: transform 0.15s ease-out;
+  }
+
+  .brand-logo:hover {
+    text-decoration: none;
+    transform: scale(1.03);
+  }
+
+  .brand-robot {
+    font-size: 1.2rem;
+    filter: drop-shadow(0 0 6px hsl(45 93% 54% / 0.7));
+    animation: robotFloat 2.8s ease-in-out infinite;
+  }
+
+  .brand-text {
+    letter-spacing: 0.03em;
+    animation: aiGlowPulse 3.2s ease-in-out infinite;
+  }
+
+  .brand-logo:hover .brand-text,
+  .brand-logo:hover .brand-robot {
+    transform: translateY(-1px);
+  }
+
   @media (prefers-reduced-motion: reduce) {
     .upwork-char {
       animation: none;
@@ -272,6 +326,17 @@ All colors MUST be HSL.
     
     .upwork-link:hover {
       transform: none;
+    }
+
+    .brand-robot,
+    .brand-text {
+      animation: none !important;
+      text-shadow: none !important;
+      transform: none !important;
+    }
+
+    .brand-logo:hover {
+      transform: none !important;
     }
   }
 
