@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import robotNav from "@/assets/robot-nav.png";
 
 const navLinks = [
   { href: "#home", label: "Home" },
@@ -46,8 +47,14 @@ export const Navbar = () => {
             onClick={(e) => handleNavClick(e, "#home")}
             className="brand-logo"
           >
-            <span className="brand-robot">🤖</span>
             <span className="brand-text">AI Automation</span>
+            <span className="brand-robot">
+              <img
+                src={robotNav}
+                alt="Friendly automation robot"
+                className="brand-robot-img"
+              />
+            </span>
           </a>
 
           {/* Desktop Navigation */}

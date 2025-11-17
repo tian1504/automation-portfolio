@@ -183,26 +183,22 @@ All colors MUST be HSL.
     }
   }
 
-  /* Robot float animation */
-  @keyframes robotFloat {
-    0%   { transform: translateY(0); }
-    50%  { transform: translateY(-3px); }
-    100% { transform: translateY(0); }
-  }
-
-  /* AI brand glow pulse animation */
-  @keyframes aiGlowPulse {
-    0%, 100% {
-      color: hsl(45 93% 54%);
-      text-shadow: 0 0 0 hsl(45 93% 54% / 0.0);
+  /* Robot breathing glow animation */
+  @keyframes robotBreathingGlow {
+    0% {
+      transform: scale(1);
+      filter: drop-shadow(0 0 0 hsl(45 93% 54% / 0));
     }
     50% {
-      color: hsl(45 93% 87%);
-      text-shadow:
-        0 0 6px hsl(45 93% 54% / 0.7),
-        0 0 12px hsl(45 93% 54% / 0.5);
+      transform: scale(1.06);
+      filter: drop-shadow(0 0 10px hsl(45 93% 54% / 0.95));
+    }
+    100% {
+      transform: scale(1);
+      filter: drop-shadow(0 0 0 hsl(45 93% 54% / 0));
     }
   }
+
 
   /* Jelly bounce animation */
   @keyframes jelly {
@@ -302,19 +298,32 @@ All colors MUST be HSL.
     transform: scale(1.03);
   }
 
-  .brand-robot {
-    font-size: 1.2rem;
-    filter: drop-shadow(0 0 6px hsl(45 93% 54% / 0.7));
-    animation: robotFloat 2.8s ease-in-out infinite;
-  }
-
   .brand-text {
     letter-spacing: 0.03em;
-    animation: aiGlowPulse 3.2s ease-in-out infinite;
   }
 
-  .brand-logo:hover .brand-text,
-  .brand-logo:hover .brand-robot {
+  .brand-robot {
+    width: 36px;
+    height: 36px;
+    border-radius: 9999px;
+    background-color: #000000;
+    padding: 2px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 10px hsl(45 93% 54% / 0.4);
+    overflow: hidden;
+  }
+
+  .brand-robot-img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    animation: robotBreathingGlow 2.6s ease-in-out infinite;
+    transform-origin: center center;
+  }
+
+  .brand-logo:hover {
     transform: translateY(-1px);
   }
 
@@ -328,10 +337,9 @@ All colors MUST be HSL.
       transform: none;
     }
 
-    .brand-robot,
-    .brand-text {
+    .brand-robot-img {
       animation: none !important;
-      text-shadow: none !important;
+      filter: none !important;
       transform: none !important;
     }
 
