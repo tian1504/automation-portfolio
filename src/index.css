@@ -183,18 +183,15 @@ All colors MUST be HSL.
     }
   }
 
-  /* Robot breathing glow animation */
-  @keyframes robotBreathingGlow {
+  /* Robot eye glow animation - no scaling */
+  @keyframes robotEyesGlow {
     0% {
-      transform: scale(1);
       filter: drop-shadow(0 0 0 hsl(45 93% 54% / 0));
     }
     50% {
-      transform: scale(1.06);
-      filter: drop-shadow(0 0 10px hsl(45 93% 54% / 0.95));
+      filter: drop-shadow(0 0 10px hsl(45 93% 54% / 0.9));
     }
     100% {
-      transform: scale(1);
       filter: drop-shadow(0 0 0 hsl(45 93% 54% / 0));
     }
   }
@@ -315,17 +312,13 @@ All colors MUST be HSL.
   }
 
   .nav-robot-img {
-    height: 40px;
+    height: 56px;
     width: auto;
     object-fit: contain;
     background: transparent;
-    animation: robotBreathingGlow 2.8s ease-in-out infinite;
-    transform-origin: center center;
-  }
-
-  .nav-robot:hover .nav-robot-img {
-    transform: scale(1.08);
-    transition: transform 0.15s ease-out;
+    border: none;
+    box-shadow: none;
+    animation: robotEyesGlow 2.8s ease-in-out infinite;
   }
 
   @media (prefers-reduced-motion: reduce) {
