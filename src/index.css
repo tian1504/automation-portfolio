@@ -307,26 +307,23 @@ All colors MUST be HSL.
   }
 
   /* Nav robot (before Home link) */
-  .nav-robot-wrapper {
+  .nav-robot {
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-right: 1.25rem;
+    margin: 0 1.5rem;
   }
 
   .nav-robot-img {
-    height: 44px;
-    width: 44px;
-    border-radius: 9999px;
-    background-color: #000000;
-    padding: 2px;
+    height: 40px;
+    width: auto;
     object-fit: contain;
-    box-shadow: 0 0 10px hsl(45 93% 54% / 0.7);
+    background: transparent;
     animation: robotBreathingGlow 2.8s ease-in-out infinite;
     transform-origin: center center;
   }
 
-  .nav-robot-wrapper:hover .nav-robot-img {
+  .nav-robot:hover .nav-robot-img {
     transform: scale(1.08);
     transition: transform 0.15s ease-out;
   }
