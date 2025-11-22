@@ -295,16 +295,15 @@ All colors MUST be HSL.
   .nav-robots-strip {
     display: inline-flex;
     align-items: center;
-    justify-content: center;
-    gap: 14px;
-    flex-wrap: nowrap;
-    white-space: nowrap;
+    justify-content: space-evenly;
+    gap: 0;
+    width: 160px;
     margin: 0 1.25rem;
-    padding: 0;
+    flex-wrap: nowrap;
     background: transparent;
     border: none;
     box-shadow: none;
-    line-height: 1;
+    padding: 0;
   }
 
   .nav-robot-img {
@@ -324,7 +323,7 @@ All colors MUST be HSL.
       height: 28px;
     }
     .nav-robots-strip {
-      gap: 10px;
+      width: 120px;
       margin: 0 1rem;
     }
   }
