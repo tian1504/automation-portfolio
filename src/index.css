@@ -183,18 +183,6 @@ All colors MUST be HSL.
     }
   }
 
-  /* Robot eye glow animation - no scaling */
-  @keyframes robotEyesGlow {
-    0% {
-      filter: drop-shadow(0 0 0 hsl(45 93% 54% / 0));
-    }
-    50% {
-      filter: drop-shadow(0 0 10px hsl(45 93% 54% / 0.9));
-    }
-    100% {
-      filter: drop-shadow(0 0 0 hsl(45 93% 54% / 0));
-    }
-  }
 
 
   /* Jelly bounce animation */
@@ -303,22 +291,28 @@ All colors MUST be HSL.
     transform: translateY(-1px);
   }
 
-  /* Nav robot (before Home link) */
-  .nav-robot {
+  /* Nav robots strip - 3 separate robots */
+  .nav-robots-strip {
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: space-between;
+    gap: 18px;
     margin: 0 1.5rem;
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    padding: 0;
   }
 
   .nav-robot-img {
-    height: 56px;
+    height: 52px;
     width: auto;
     object-fit: contain;
     background: transparent;
     border: none;
     box-shadow: none;
-    animation: robotEyesGlow 2.8s ease-in-out infinite;
+    animation: none;
+    transform: none;
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -331,11 +325,6 @@ All colors MUST be HSL.
       transform: none;
     }
 
-    .nav-robot-img {
-      animation: none !important;
-      filter: none !important;
-      transform: none !important;
-    }
 
     .brand-logo:hover {
       transform: none !important;

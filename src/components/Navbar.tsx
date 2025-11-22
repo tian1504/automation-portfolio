@@ -52,11 +52,21 @@ export const Navbar = () => {
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center gap-8">
-            {/* Robot Icon */}
-            <div className="nav-robot">
+            {/* Robot Strip - 3 separate robots */}
+            <div className="nav-robots-strip">
               <img
                 src={robotNav}
-                alt="AI Automation robot"
+                alt="AI robot 1"
+                className="nav-robot-img"
+              />
+              <img
+                src={robotNav}
+                alt="AI robot 2"
+                className="nav-robot-img"
+              />
+              <img
+                src={robotNav}
+                alt="AI robot 3"
                 className="nav-robot-img"
               />
             </div>
