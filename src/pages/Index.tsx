@@ -4,7 +4,7 @@ import { TechStack } from "@/components/TechStack";
 import { Services } from "@/components/Services";
 import { Experience } from "@/components/Experience";
 import { Portfolio } from "@/components/Portfolio";
-import { Testimonials } from "@/components/Testimonials";
+import { Pricing } from "@/components/Pricing";
 import { Contact } from "@/components/Contact";
 
 const Index = () => {
@@ -16,7 +16,7 @@ const Index = () => {
       <Services />
       <Experience />
       <Portfolio />
-      <Testimonials />
+      <Pricing />
       <Contact />
     </div>
   );
