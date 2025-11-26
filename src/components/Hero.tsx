@@ -11,11 +11,16 @@ export const Hero = () => {
   };
 
   return (
-    <section id="home" className="min-h-screen flex items-center justify-center hero-gradient pt-20">
-      <div className="container-custom">
+    <section id="home" className="min-h-screen flex items-center justify-center hero-section pt-20">
+      <div className="container-custom relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center max-w-7xl mx-auto">
           {/* Left Column - Text Content */}
           <div className="order-2 lg:order-1 text-center lg:text-left">
+            {/* AI Automation Specialist Tag */}
+            <div className="hero-tag animate-fade-in mb-6 inline-flex">
+              AI Automation Specialist
+            </div>
+            
             {/* Main Headline */}
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-foreground mb-6 animate-slide-up">
               Eleazar Sebastian Martinez
@@ -78,12 +83,12 @@ export const Hero = () => {
 
           {/* Right Column - Portrait Image */}
           <div className="order-1 lg:order-2 flex justify-center lg:justify-end animate-fade-in [animation-delay:200ms]">
-            <div className="relative">
-              <div className="w-64 h-64 md:w-80 md:h-80 lg:w-96 lg:h-96 rounded-full border-4 border-primary overflow-hidden shadow-[0_0_40px_rgba(250,204,21,0.3)]">
+            <div className="hero-profile-wrapper">
+              <div className="hero-profile-aura">
                 <img
                   src={portraitImage}
                   alt="Portrait of Eleazar Sebastian Martinez"
-                  className="w-full h-full object-cover"
+                  className="hero-profile-img w-64 h-64 md:w-80 md:h-80 lg:w-96 lg:h-96 object-cover"
                 />
               </div>
             </div>

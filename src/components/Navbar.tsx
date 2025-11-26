@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import robotNav from "@/assets/robot-nav-black.png";
 
 const navLinks = [
   { href: "#home", label: "Home" },
@@ -52,25 +51,6 @@ export const Navbar = () => {
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center gap-8">
-            {/* Robot Strip - 3 separate robots */}
-            <div className="nav-robots-strip">
-              <img
-                src={robotNav}
-                alt="AI robot 1"
-                className="nav-robot-img"
-              />
-              <img
-                src={robotNav}
-                alt="AI robot 2"
-                className="nav-robot-img"
-              />
-              <img
-                src={robotNav}
-                alt="AI robot 3"
-                className="nav-robot-img"
-              />
-            </div>
-            
             {navLinks.map((link) => (
               <a
                 key={link.href}
