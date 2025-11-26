@@ -102,9 +102,95 @@ All colors MUST be HSL.
 }
 
 @layer components {
-  /* Hero gradient background */
-  .hero-gradient {
-    background: var(--gradient-hero);
+  /* Hero section with tech background */
+  .hero-section {
+    position: relative;
+    background: radial-gradient(circle at top left, #0f172a 0%, #020617 40%, #000000 100%);
+    overflow: hidden;
+  }
+
+  .hero-section::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image:
+      radial-gradient(circle at 10% 20%, rgba(56,189,248,0.12) 0, transparent 50%),
+      radial-gradient(circle at 80% 10%, rgba(250,204,21,0.08) 0, transparent 55%),
+      linear-gradient(135deg, rgba(148,163,184,0.08) 0, transparent 60%);
+    opacity: 1;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .hero-section::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(circle, rgba(148,163,184,0.08) 1px, transparent 1px);
+    background-size: 40px 40px;
+    opacity: 0.25;
+    mix-blend-mode: soft-light;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* AI Automation Specialist tag */
+  .hero-tag {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.35rem 0.9rem;
+    border-radius: 9999px;
+    font-size: 0.8rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    background: linear-gradient(90deg, #0ea5e9, #facc15);
+    color: #0b1120;
+    font-weight: 600;
+    box-shadow: 0 0 18px rgba(56,189,248,0.5);
+    transition: all 0.15s ease-out;
+  }
+
+  .hero-tag:hover {
+    box-shadow: 0 0 24px rgba(56,189,248,0.7);
+    transform: translateY(-1px);
+  }
+
+  /* Profile picture with aura */
+  .hero-profile-wrapper {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .hero-profile-aura {
+    position: relative;
+    border-radius: 9999px;
+    padding: 6px;
+    background: radial-gradient(circle at 30% 20%, #facc15, #f97316, #0f172a);
+    box-shadow:
+      0 0 25px rgba(250,204,21,0.55),
+      0 0 60px rgba(250,204,21,0.40);
+    animation: heroAuraPulse 5s ease-in-out infinite;
+    transition: box-shadow 0.2s ease-out, transform 0.2s ease-out;
+  }
+
+  .hero-profile-img {
+    display: block;
+    border-radius: 9999px;
+    border: 3px solid rgba(15,23,42,0.9);
+    transition: border-color 0.2s ease-out;
+  }
+
+  .hero-profile-wrapper:hover .hero-profile-aura {
+    box-shadow:
+      0 0 40px rgba(250,204,21,0.95),
+      0 0 100px rgba(250,204,21,0.8);
+    transform: scale(1.03);
+  }
+
+  .hero-profile-wrapper:hover .hero-profile-img {
+    border-color: rgba(15,23,42,0.6);
   }
 
   /* Card hover effect */
@@ -211,6 +297,20 @@ All colors MUST be HSL.
     }
   }
 
+  /* Hero aura pulse animation */
+  @keyframes heroAuraPulse {
+    0%, 100% {
+      box-shadow:
+        0 0 22px rgba(250,204,21,0.5),
+        0 0 48px rgba(250,204,21,0.35);
+    }
+    50% {
+      box-shadow:
+        0 0 30px rgba(250,204,21,0.9),
+        0 0 80px rgba(250,204,21,0.6);
+    }
+  }
+
   /* Upwork link puzzle animation */
   @keyframes upworkPuzzleIn {
     0% {
@@ -291,42 +391,6 @@ All colors MUST be HSL.
     transform: translateY(-1px);
   }
 
-  /* Nav robots strip - 3 separate robots */
-  .nav-robots-strip {
-    display: inline-flex;
-    align-items: center;
-    justify-content: space-evenly;
-    gap: 0;
-    width: 160px;
-    margin: 0 1.25rem;
-    flex-wrap: nowrap;
-    background: transparent;
-    border: none;
-    box-shadow: none;
-    padding: 0;
-  }
-
-  .nav-robot-img {
-    height: 34px;
-    width: auto;
-    object-fit: contain;
-    background: transparent;
-    border: none;
-    box-shadow: none;
-    animation: none;
-    transform: none;
-    display: block;
-  }
-
-  @media (max-width: 640px) {
-    .nav-robot-img {
-      height: 28px;
-    }
-    .nav-robots-strip {
-      width: 120px;
-      margin: 0 1rem;
-    }
-  }
 
   @media (prefers-reduced-motion: reduce) {
     .upwork-char {
@@ -338,9 +402,12 @@ All colors MUST be HSL.
       transform: none;
     }
 
-
     .brand-logo:hover {
       transform: none !important;
+    }
+
+    .hero-profile-aura {
+      animation: none !important;
     }
   }
 
