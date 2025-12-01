@@ -3,9 +3,21 @@ import { Card } from "@/components/ui/card";
 
 const experiences = [
   {
+    title: "Automation Specialist – Amazon Product Workflows",
+    company: "LB Ventures",
+    period: "Nov 2025 – Present",
+    responsibilities: [
+      "Built and maintained automation workflows for Amazon product operations (orders, tracking, status updates).",
+      "Connected email, Amazon notifications, and internal tools using platforms like Make.com, n8n, and Zapier to keep the team in sync.",
+      "Automated Slack/email alerts for key events (new orders, shipment updates, cancellations) to reduce manual checking.",
+      "Added logging and monitoring so failures are easy to track and debug.",
+    ],
+    skills: ["Make.com", "n8n", "Zapier", "Amazon", "Notifications"],
+  },
+  {
     title: "Web Scraping & Automation Specialist (Contract)",
     company: "CountySports USA",
-    period: "2025 - Present",
+    period: "Nov 2025 – Nov 2025",
     responsibilities: [
       "Build and maintain web scraping workflows to collect high school athlete stats and game data from public sites and databases.",
       "Clean, normalize, and structure scraped data so it can be used in automated graphics templates and social content.",
@@ -17,7 +29,7 @@ const experiences = [
   {
     title: "Social Media Web Scraping & Creative Content Automation",
     company: "Sanlava (E-commerce & Social Brand)",
-    period: "2025 - 2025",
+    period: "Sep 2025 – Nov 2025",
     responsibilities: [
       "Designed a \"creative intelligence\" workflow that scrapes ads, UGC, and reviews from platforms like TikTok, Instagram, Facebook, and Google.",
       "Structured data into Notion databases (Organic posts, Ads, Reviews, Trends, Hook Bank) to give the brand a single source of truth for creative ideas.",
