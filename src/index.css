@@ -422,4 +422,39 @@ All colors MUST be HSL.
   .animate-glow-pulse {
     animation: glow-pulse 2s ease-in-out infinite;
   }
+
+  /* Cursor aura with teal→yellow gradient matching hero tag */
+  .cursor-aura {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 90px;
+    height: 90px;
+    border-radius: 9999px;
+    pointer-events: none;
+    z-index: 9999;
+    background:
+      radial-gradient(
+        circle at 30% 30%,
+        rgba(56,189,248,0.75) 0%,
+        rgba(56,189,248,0.45) 25%,
+        rgba(250,204,21,0.65) 60%,
+        rgba(250,204,21,0.0) 100%
+      );
+    box-shadow:
+      0 0 24px rgba(56,189,248,0.45),
+      0 0 40px rgba(250,204,21,0.55);
+    mix-blend-mode: screen;
+    opacity: 0;
+    transform: translate(-50%, -50%);
+    transition: opacity 0.15s ease-out, transform 0.07s linear;
+  }
+
+  a:hover ~ .cursor-aura,
+  button:hover ~ .cursor-aura,
+  [role="button"]:hover ~ .cursor-aura {
+    box-shadow:
+      0 0 30px rgba(56,189,248,0.65),
+      0 0 55px rgba(250,204,21,0.75);
+  }
 }
