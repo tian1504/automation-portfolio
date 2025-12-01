@@ -35,9 +35,10 @@ export const CursorSpotlight = () => {
 
   return (
     <div
-      className="pointer-events-none fixed inset-0 z-50 transition-opacity duration-300"
+      className="cursor-aura"
       style={{
-        background: `radial-gradient(circle 600px at ${position.x}px ${position.y}px, hsl(45 93% 54% / 0.06), transparent 80%)`,
+        left: `${position.x}px`,
+        top: `${position.y}px`,
       }}
     />
   );
