@@ -40,14 +40,8 @@ export const Navbar = () => {
     >
       <div className="container-custom">
         <div className="flex items-center justify-between h-16 md:h-20">
-          {/* Logo/Name */}
-          <a
-            href="#home"
-            onClick={(e) => handleNavClick(e, "#home")}
-            className="brand-logo"
-          >
-            <span className="brand-text">AI Automation</span>
-          </a>
+          {/* Spacer for alignment */}
+          <div className="w-4"></div>
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center gap-8">
