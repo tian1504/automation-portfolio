@@ -79,6 +79,13 @@ All colors MUST be HSL.
     font-feature-settings: "rlig" 1, "calt" 1;
   }
 
+  /* Hide default cursor on desktop */
+  @media (min-width: 769px) {
+    body {
+      cursor: none;
+    }
+  }
+
   html {
     scroll-behavior: smooth;
   }
@@ -423,38 +430,55 @@ All colors MUST be HSL.
     animation: glow-pulse 2s ease-in-out infinite;
   }
 
-  /* Cursor aura with teal→yellow gradient matching hero tag */
+  /* Custom cursor aura with teal→yellow gradient matching hero tag */
   .cursor-aura {
     position: fixed;
     top: 0;
     left: 0;
     width: 90px;
     height: 90px;
-    border-radius: 9999px;
     pointer-events: none;
     z-index: 9999;
+    border-radius: 9999px;
+    transform: translate3d(-50%, -50%, 0);
+    mix-blend-mode: screen;
+    opacity: 0;
+    transition: opacity 0.15s ease-out;
     background:
       radial-gradient(
         circle at 30% 30%,
-        rgba(56,189,248,0.75) 0%,
-        rgba(56,189,248,0.45) 25%,
-        rgba(250,204,21,0.65) 60%,
-        rgba(250,204,21,0.0) 100%
+        rgba(56, 189, 248, 0.9) 0%,
+        rgba(56, 189, 248, 0.6) 25%,
+        rgba(250, 204, 21, 0.9) 60%,
+        rgba(250, 204, 21, 0.0) 100%
       );
     box-shadow:
-      0 0 24px rgba(56,189,248,0.45),
-      0 0 40px rgba(250,204,21,0.55);
-    mix-blend-mode: screen;
-    opacity: 0;
-    transform: translate(-50%, -50%);
-    transition: opacity 0.15s ease-out, transform 0.07s linear;
+      0 0 30px rgba(56, 189, 248, 0.6),
+      0 0 60px rgba(250, 204, 21, 0.7);
   }
 
-  a:hover ~ .cursor-aura,
-  button:hover ~ .cursor-aura,
-  [role="button"]:hover ~ .cursor-aura {
-    box-shadow:
-      0 0 30px rgba(56,189,248,0.65),
-      0 0 55px rgba(250,204,21,0.75);
+  /* Show aura on desktop only */
+  @media (min-width: 769px) {
+    .cursor-aura {
+      opacity: 1;
+    }
+  }
+
+  /* Hide aura on mobile/touch devices */
+  @media (max-width: 768px) {
+    .cursor-aura {
+      display: none;
+    }
+  }
+
+  /* Respect reduced motion preference */
+  @media (prefers-reduced-motion: reduce) {
+    body {
+      cursor: auto !important;
+    }
+
+    .cursor-aura {
+      display: none !important;
+    }
   }
 }
