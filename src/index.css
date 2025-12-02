@@ -428,37 +428,47 @@ All colors MUST be HSL.
     animation: glow-pulse 2s ease-in-out infinite;
   }
 
-  /* Custom cursor aura - flat soft glow matching hero tag colors */
+  /* Custom cursor aura - aurora borealis effect */
   .cursor-aura {
     position: fixed;
     top: 0;
     left: 0;
-    width: 120px;
-    height: 120px;
+    width: 300px;
+    height: 300px;
     pointer-events: none;
     z-index: 9999;
     border-radius: 9999px;
     transform: translate3d(-50%, -50%, 0);
     mix-blend-mode: screen;
 
-    /* FLAT SOFT GLOW, NOT A BALL */
+    /* Aurora borealis multi-color gradient */
     background:
-      radial-gradient(circle at center,
-        rgba(56, 189, 248, 0.30) 0%,      /* teal/blue glow */
-        rgba(56, 189, 248, 0.18) 30%,
-        rgba(250, 204, 21, 0.22) 60%,     /* yellow glow */
-        rgba(250, 204, 21, 0.0) 100%
+      radial-gradient(circle at 40% 40%,
+        rgba(168, 85, 247, 0.6) 0%,       /* vibrant purple */
+        rgba(236, 72, 153, 0.5) 20%,      /* magenta/pink */
+        rgba(56, 189, 248, 0.55) 40%,     /* teal/cyan */
+        rgba(250, 204, 21, 0.5) 60%,      /* yellow/orange */
+        rgba(168, 85, 247, 0.3) 80%,      /* purple fade */
+        rgba(0, 0, 0, 0) 100%
+      ),
+      radial-gradient(circle at 60% 60%,
+        rgba(250, 204, 21, 0.4) 0%,       /* yellow center */
+        rgba(249, 115, 22, 0.35) 30%,     /* orange */
+        rgba(236, 72, 153, 0.3) 60%,      /* pink */
+        rgba(0, 0, 0, 0) 100%
       );
 
-    /* Very light blur, no hard edge */
-    filter: blur(2px);
+    /* Heavy blur for aurora effect */
+    filter: blur(25px);
 
-    /* No strong 3D shadow – just a soft aura */
-    box-shadow: 0 0 40px rgba(56, 189, 248, 0.35),
-                0 0 70px rgba(250, 204, 21, 0.35);
+    /* Soft glowing shadows */
+    box-shadow: 
+      0 0 60px rgba(168, 85, 247, 0.4),
+      0 0 90px rgba(56, 189, 248, 0.35),
+      0 0 120px rgba(250, 204, 21, 0.3);
 
     opacity: 0;
-    transition: opacity 0.15s ease-out;
+    transition: opacity 0.2s ease-out;
   }
 
   /* Always visible on desktop when mouse is on the page */
@@ -471,9 +481,11 @@ All colors MUST be HSL.
     a:hover ~ .cursor-aura,
     button:hover ~ .cursor-aura,
     [role="button"]:hover ~ .cursor-aura {
-      box-shadow:
-        0 0 55px rgba(56, 189, 248, 0.55),
-        0 0 95px rgba(250, 204, 21, 0.55);
+      filter: blur(30px);
+      box-shadow: 
+        0 0 80px rgba(168, 85, 247, 0.6),
+        0 0 110px rgba(56, 189, 248, 0.5),
+        0 0 140px rgba(250, 204, 21, 0.45);
     }
   }
 
