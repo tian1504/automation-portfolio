@@ -1,10 +1,17 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useRef } from "react";
 
-const CursorAura: React.FC = () => {
-  const [pos, setPos] = useState({ x: -9999, y: -9999 });
-  const [visible, setVisible] = useState(false);
+/**
+ * CursorAura
+ * A soft smoky glow that follows the mouse cursor.
+ * Uses the same color palette as my AI Automation pill (blue → green → yellow).
+ */
+export function CursorAura() {
+  const auraRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
+    const el = auraRef.current;
+    if (!el) return;
+
     // Check if user prefers reduced motion
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     if (prefersReducedMotion) return;
@@ -13,50 +20,46 @@ const CursorAura: React.FC = () => {
     const hasMouse = window.matchMedia('(pointer: fine)').matches;
     if (!hasMouse) return;
 
-    let rafId: number;
-    let currentX = window.innerWidth / 2;
-    let currentY = window.innerHeight / 2;
+    const size = 220;
+    const half = size / 2;
 
-    const handleMove = (e: MouseEvent) => {
-      const targetX = e.clientX;
-      const targetY = e.clientY;
-      setVisible(true);
-
-      const animate = () => {
-        currentX += (targetX - currentX) * 0.2;
-        currentY += (targetY - currentY) * 0.2;
-        setPos({ x: currentX, y: currentY });
-        rafId = requestAnimationFrame(animate);
-      };
-
-      cancelAnimationFrame(rafId);
-      rafId = requestAnimationFrame(animate);
+    const handleMove = (event: MouseEvent) => {
+      const { clientX, clientY } = event;
+      el.style.opacity = "1";
+      el.style.transform = `translate3d(${clientX - half}px, ${clientY - half}px, 0)`;
     };
-
-    window.addEventListener("mousemove", handleMove);
 
     const handleLeave = () => {
-      cancelAnimationFrame(rafId);
-      setVisible(false);
+      el.style.opacity = "0";
     };
+
+    // Start hidden & offscreen
+    el.style.opacity = "0";
+    el.style.transform = "translate3d(-9999px, -9999px, 0)";
+
+    window.addEventListener("mousemove", handleMove);
     window.addEventListener("mouseleave", handleLeave);
 
     return () => {
       window.removeEventListener("mousemove", handleMove);
       window.removeEventListener("mouseleave", handleLeave);
-      cancelAnimationFrame(rafId);
     };
   }, []);
 
   return (
     <div
-      className="cursor-aura"
+      ref={auraRef}
+      className="pointer-events-none fixed top-0 left-0 z-50 rounded-full mix-blend-screen transition-opacity duration-200"
       style={{
-        transform: `translate3d(${pos.x}px, ${pos.y}px, 0)`,
-        opacity: visible ? 1 : 0
+        width: "220px",
+        height: "220px",
+        background:
+          "radial-gradient(circle at 30% 30%, rgba(56,189,248,0.9), rgba(52,211,153,0.7), rgba(250,204,21,0.5), transparent 70%)",
+        filter: "blur(22px)",
+        opacity: 0,
       }}
     />
   );
-};
+}
 
 export default CursorAura;
