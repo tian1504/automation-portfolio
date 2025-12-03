@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 
 const CursorAura: React.FC = () => {
-  const [pos, setPos] = useState({ x: 0, y: 0 });
+  const [pos, setPos] = useState({ x: -9999, y: -9999 });
+  const [visible, setVisible] = useState(false);
 
   useEffect(() => {
     // Check if user prefers reduced motion
@@ -19,6 +20,7 @@ const CursorAura: React.FC = () => {
     const handleMove = (e: MouseEvent) => {
       const targetX = e.clientX;
       const targetY = e.clientY;
+      setVisible(true);
 
       const animate = () => {
         currentX += (targetX - currentX) * 0.2;
@@ -35,6 +37,7 @@ const CursorAura: React.FC = () => {
 
     const handleLeave = () => {
       cancelAnimationFrame(rafId);
+      setVisible(false);
     };
     window.addEventListener("mouseleave", handleLeave);
 
@@ -49,7 +52,8 @@ const CursorAura: React.FC = () => {
     <div
       className="cursor-aura"
       style={{
-        transform: `translate3d(${pos.x}px, ${pos.y}px, 0)`
+        transform: `translate3d(${pos.x}px, ${pos.y}px, 0)`,
+        opacity: visible ? 1 : 0
       }}
     />
   );
