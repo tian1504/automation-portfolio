@@ -428,51 +428,36 @@ All colors MUST be HSL.
     animation: glow-pulse 2s ease-in-out infinite;
   }
 
-  /* Custom cursor aura - smoke style */
+  /* Smoke cursor aura – use same colors as AI AUTOMATION SPECIALIST pill */
   .cursor-aura {
     position: fixed;
     top: 0;
     left: 0;
-    width: 110px;
-    height: 110px;
+    width: 220px;
+    height: 220px;
     pointer-events: none;
-    z-index: 9999;
     border-radius: 9999px;
-    transform: translate3d(-50%, -50%, 0);
+    /* blue → green → yellow gradient, then fade out */
+    background: radial-gradient(
+      circle at 30% 30%,
+      rgba(56, 189, 248, 0.9),   /* cyan / sky */
+      rgba(52, 211, 153, 0.7),   /* green */
+      rgba(250, 204, 21, 0.5),   /* yellow */
+      transparent 70%
+    );
+    filter: blur(22px);
     mix-blend-mode: screen;
-    opacity: 0.9;
-    filter: blur(10px);
-
-    /* soft smokey gradient (blue -> green -> yellow) */
-    background:
-      radial-gradient(circle at 30% 30%,
-        rgba(56, 189, 248, 0.45) 0%,
-        rgba(56, 189, 248, 0.00) 40%),
-      radial-gradient(circle at 70% 70%,
-        rgba(34, 197, 94, 0.40) 0%,
-        rgba(234, 179, 8, 0.40) 30%,
-        rgba(234, 179, 8, 0.00) 65%);
-
-    box-shadow:
-      0 0 30px rgba(56, 189, 248, 0.35),
-      0 0 55px rgba(234, 179, 8, 0.35);
-
-    animation: cursorSmokePulse 6s ease-in-out infinite;
+    opacity: 0;                  /* hidden until mouse moves */
+    transform: translate3d(-50%, -50%, 0);
+    transition: opacity 0.25s ease-out;
+    z-index: 50;                 /* above content, below nav */
   }
 
-  @keyframes cursorSmokePulse {
-    0% {
-      transform: translate3d(-50%, -50%, 0) scale(0.9);
-      opacity: 0.75;
-    }
-    50% {
-      transform: translate3d(-50%, -50%, 0) scale(1.05);
-      opacity: 1;
-    }
-    100% {
-      transform: translate3d(-50%, -50%, 0) scale(0.9);
-      opacity: 0.75;
-    }
+  /* Make aura slightly larger on hover over clickable elements */
+  a:hover ~ .cursor-aura,
+  button:hover ~ .cursor-aura,
+  [role="button"]:hover ~ .cursor-aura {
+    filter: blur(26px);
   }
 
   /* Always visible on desktop when mouse is on the page */
