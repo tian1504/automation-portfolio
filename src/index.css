@@ -429,6 +429,40 @@ All colors MUST be HSL.
   }
 
   /* Smoke cursor aura – use same colors as AI AUTOMATION SPECIALIST pill */
+  /* Subtle smoke cursor glow */
+  .cursor-smoke {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 180px;
+    height: 180px;
+    pointer-events: none;
+    border-radius: 9999px;
+    background: radial-gradient(
+      circle at 30% 30%,
+      rgba(56, 189, 248, 0.25),
+      rgba(74, 222, 128, 0.18),
+      rgba(250, 204, 21, 0.08),
+      rgba(0, 0, 0, 0) 70%
+    );
+    filter: blur(28px);
+    mix-blend-mode: screen;
+    transform: translate3d(-9999px, -9999px, 0);
+    z-index: 50;
+  }
+
+  @media (max-width: 768px) {
+    .cursor-smoke {
+      display: none;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .cursor-smoke {
+      display: none !important;
+    }
+  }
+
   /* Clean dark background for "What I Do" section */
   .what-i-do-section {
     position: relative;
