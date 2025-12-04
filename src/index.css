@@ -429,69 +429,6 @@ All colors MUST be HSL.
   }
 
   /* Smoke cursor aura – use same colors as AI AUTOMATION SPECIALIST pill */
-  .cursor-aura {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 220px;
-    height: 220px;
-    pointer-events: none;
-    border-radius: 9999px;
-    /* blue → green → yellow gradient, then fade out */
-    background: radial-gradient(
-      circle at 30% 30%,
-      rgba(56, 189, 248, 0.9),   /* cyan / sky */
-      rgba(52, 211, 153, 0.7),   /* green */
-      rgba(250, 204, 21, 0.5),   /* yellow */
-      transparent 70%
-    );
-    filter: blur(22px);
-    mix-blend-mode: screen;
-    opacity: 0;                  /* hidden until mouse moves */
-    transform: translate3d(-50%, -50%, 0);
-    transition: opacity 0.25s ease-out;
-    z-index: 50;                 /* above content, below nav */
-  }
-
-  /* Make aura slightly larger on hover over clickable elements */
-  a:hover ~ .cursor-aura,
-  button:hover ~ .cursor-aura,
-  [role="button"]:hover ~ .cursor-aura {
-    filter: blur(26px);
-  }
-
-  /* Always visible on desktop when mouse is on the page */
-  @media (min-width: 769px) {
-    .cursor-aura {
-      opacity: 1;
-    }
-
-    /* Stronger glow when hovering on interactive elements */
-    a:hover ~ .cursor-aura,
-    button:hover ~ .cursor-aura,
-    [role="button"]:hover ~ .cursor-aura {
-      filter: blur(30px);
-      box-shadow: 
-        0 0 80px rgba(168, 85, 247, 0.6),
-        0 0 110px rgba(56, 189, 248, 0.5),
-        0 0 140px rgba(250, 204, 21, 0.45);
-    }
-  }
-
-  /* Hide aura on mobile/touch devices */
-  @media (max-width: 768px) {
-    .cursor-aura {
-      display: none;
-    }
-  }
-
-  /* Respect reduced motion preference */
-  @media (prefers-reduced-motion: reduce) {
-    .cursor-aura {
-      display: none !important;
-    }
-  }
-
   /* Clean dark background for "What I Do" section */
   .what-i-do-section {
     position: relative;
