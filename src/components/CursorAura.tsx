@@ -1,16 +1,19 @@
+"use client";
+
 import { useEffect, useRef } from "react";
 
 /**
  * CursorAura
- * A soft smoky glow that follows the mouse cursor.
- * Uses the same color palette as my AI Automation pill (blue → green → yellow).
+ * Canvas-based smokey cursor trail using blue → green → yellow colors.
+ * Draws multiple overlapping gradients along the recent mouse path
+ * so it looks like smoke instead of a single circle.
  */
 export function CursorAura() {
-  const auraRef = useRef<HTMLDivElement | null>(null);
+  const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
   useEffect(() => {
-    const el = auraRef.current;
-    if (!el) return;
+    const canvas = canvasRef.current;
+    if (!canvas) return;
 
     // Check if user prefers reduced motion
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -20,43 +23,99 @@ export function CursorAura() {
     const hasMouse = window.matchMedia('(pointer: fine)').matches;
     if (!hasMouse) return;
 
-    const size = 220;
-    const half = size / 2;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+
+    let width = window.innerWidth;
+    let height = window.innerHeight;
+    canvas.width = width;
+    canvas.height = height;
+
+    const handleResize = () => {
+      width = window.innerWidth;
+      height = window.innerHeight;
+      canvas.width = width;
+      canvas.height = height;
+    };
+
+    window.addEventListener("resize", handleResize);
+
+    // Keep the last N positions to draw a trailing "smoke" path
+    const trail: { x: number; y: number }[] = [];
+    const maxTrail = 16;
 
     const handleMove = (event: MouseEvent) => {
       const { clientX, clientY } = event;
-      el.style.opacity = "1";
-      el.style.transform = `translate3d(${clientX - half}px, ${clientY - half}px, 0)`;
+      trail.push({ x: clientX, y: clientY });
+      if (trail.length > maxTrail) {
+        trail.shift();
+      }
     };
-
-    const handleLeave = () => {
-      el.style.opacity = "0";
-    };
-
-    // Start hidden & offscreen
-    el.style.opacity = "0";
-    el.style.transform = "translate3d(-9999px, -9999px, 0)";
 
     window.addEventListener("mousemove", handleMove);
-    window.addEventListener("mouseleave", handleLeave);
+
+    let animationFrameId: number;
+
+    const render = () => {
+      // Slightly darken previous frame instead of fully clearing → smoky fade
+      ctx.fillStyle = "rgba(0, 0, 0, 0.18)";
+      ctx.fillRect(0, 0, width, height);
+
+      if (trail.length > 0) {
+        ctx.globalCompositeOperation = "lighter"; // add glows together
+
+        trail.forEach((p, index) => {
+          const t =
+            trail.length <= 1 ? 0 : index / (trail.length - 1); // 0 (head) → 1 (tail)
+          const radius = 220 - t * 160; // head bigger, tail smaller
+          const alpha = 0.85 - t * 0.7; // fade along the trail
+
+          const gradient = ctx.createRadialGradient(
+            p.x,
+            p.y,
+            0,
+            p.x,
+            p.y,
+            radius
+          );
+
+          // blue → green → yellow, same vibe as the AI Automation pill
+          gradient.addColorStop(0, `rgba(56, 189, 248, ${alpha})`); // sky blue
+          gradient.addColorStop(0.4, `rgba(52, 211, 153, ${alpha * 0.9})`); // teal/green
+          gradient.addColorStop(1, `rgba(250, 204, 21, ${alpha * 0.7})`); // soft yellow
+
+          ctx.fillStyle = gradient;
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, radius, 0, Math.PI * 2);
+          ctx.fill();
+        });
+
+        ctx.globalCompositeOperation = "source-over";
+      }
+
+      animationFrameId = requestAnimationFrame(render);
+    };
+
+    // Start with a blank dark frame
+    ctx.fillStyle = "rgba(0, 0, 0, 1)";
+    ctx.fillRect(0, 0, width, height);
+
+    render();
 
     return () => {
       window.removeEventListener("mousemove", handleMove);
-      window.removeEventListener("mouseleave", handleLeave);
+      window.removeEventListener("resize", handleResize);
+      cancelAnimationFrame(animationFrameId);
     };
   }, []);
 
   return (
-    <div
-      ref={auraRef}
-      className="pointer-events-none fixed top-0 left-0 z-50 rounded-full mix-blend-screen transition-opacity duration-200"
+    <canvas
+      ref={canvasRef}
+      className="pointer-events-none fixed inset-0 z-40"
       style={{
-        width: "220px",
-        height: "220px",
-        background:
-          "radial-gradient(circle at 30% 30%, rgba(56,189,248,0.9), rgba(52,211,153,0.7), rgba(250,204,21,0.5), transparent 70%)",
-        filter: "blur(22px)",
-        opacity: 0,
+        // Keep it subtle and blended into the dark background
+        mixBlendMode: "screen",
       }}
     />
   );
