@@ -1,7 +1,6 @@
 import { ArrowRight, Calendar } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import portraitImage from "@/assets/portrait.png";
-import Ballpit from "@/components/Ballpit";
 
 export const Hero = () => {
   const handleScroll = (id: string) => {
@@ -12,29 +11,7 @@ export const Hero = () => {
   };
 
   return (
-    <section id="home" className="min-h-screen flex items-center justify-center hero-section pt-20 relative overflow-hidden">
-      {/* Ballpit 3D Background */}
-      <div className="absolute inset-0 z-0">
-        <Ballpit
-          count={100}
-          gravity={0.3}
-          friction={0.99}
-          wallBounce={0.9}
-          followCursor={true}
-          colors={[0xfacc15, 0x38bdf8, 0x4ade80, 0xfacc15]}
-          ambientColor={0x111111}
-          ambientIntensity={0.5}
-          lightIntensity={150}
-          minSize={0.4}
-          maxSize={1.2}
-          materialParams={{
-            metalness: 0.6,
-            roughness: 0.3,
-            clearcoat: 1,
-            clearcoatRoughness: 0.1
-          }}
-        />
-      </div>
+    <section id="home" className="min-h-screen flex items-center justify-center hero-section pt-20">
       <div className="container-custom relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center max-w-7xl mx-auto">
           {/* Left Column - Text Content */}
