@@ -4,34 +4,18 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useState } from "react";
 
+import n8nWorkflowRAG from "@/assets/n8n-workflow-RAG.png";
+
 const projects = [
   {
-    title: "Asana–Xero Integration Workflow",
-    description: "Built a Make scenario that connects Asana and Xero, automating task creation, expense syncing, and invoice status updates so finance and operations stay aligned.",
-    image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&q=80",
-    tags: ["Make", "Asana", "Xero"],
-    filters: ["Make"],
-  },
-  {
-    title: "Gmail Automation with AI",
-    description: "Designed a Gmail automation in Make that reads incoming emails, classifies them with Google Gemini AI, extracts key details, and routes messages automatically to the right label or team.",
-    image: "https://images.unsplash.com/photo-1596526131083-e8c633c948d2?w=800&q=80",
-    tags: ["Make", "Gmail", "Gemini"],
-    filters: ["Make"],
-  },
-  {
-    title: "Creative Intelligence Engine (n8n)",
-    description: "Built an n8n workflow that pulls ads, UGC, and reviews into Notion, scores them, and uses AI to generate hooks and UGC briefs—saving hours of manual research for each campaign.",
-    image: "https://images.unsplash.com/photo-1531746790731-6c087fecd65a?w=800&q=80",
-    tags: ["n8n", "Notion", "AI"],
+    id: "rag-troubleshooting-copilot",
+    title: "Multi-Agent RAG Troubleshooting Copilot (n8n)",
+    subtitle: "AI copilot that guides users through IT troubleshooting using internal runbooks and RAG.",
+    description: "Built an n8n workflow that receives chat messages from users and routes them through a network of specialist AI agents (deductive, product profile, quick isolation, and full isolation). Each agent uses RAG against internal runbooks to generate step-by-step troubleshooting instructions. The result is faster triage, consistent fixes, and less load on L2/L3 engineers.",
+    image: n8nWorkflowRAG,
+    tags: ["n8n", "OpenAI", "RAG", "IT Support"],
     filters: ["n8n"],
-  },
-  {
-    title: "Lead Capture to CRM & Email Follow-up",
-    description: "Created a Zapier automation that takes leads from forms and Calendly, enriches the contact, adds them to the CRM, and triggers personalized email follow-ups automatically.",
-    image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&q=80",
-    tags: ["Zapier", "CRM", "Email"],
-    filters: ["Zapier"],
+    link: "#",
   },
 ];
 
@@ -88,6 +72,9 @@ export const Portfolio = () => {
               
               <CardHeader>
                 <CardTitle className="text-xl">{project.title}</CardTitle>
+                {project.subtitle && (
+                  <p className="text-sm text-primary font-medium mt-1">{project.subtitle}</p>
+                )}
               </CardHeader>
               
               <CardContent>
