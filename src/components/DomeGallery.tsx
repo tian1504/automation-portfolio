@@ -40,7 +40,7 @@ const DEFAULTS = {
   maxVerticalRotationDeg: 5,
   dragSensitivity: 20,
   enlargeTransitionMs: 300,
-  segments: 35
+  segments: 22
 };
 
 const clamp = (v: number, min: number, max: number) => Math.min(Math.max(v, min), max);
@@ -58,10 +58,10 @@ const getDataNumber = (el: HTMLElement, name: string, fallback: number) => {
 type GalleryImage = { src: string; alt?: string; thumbnail?: string };
 
 function buildItems(pool: GalleryImage[], seg: number) {
-  const xCols = Array.from({ length: seg }, (_, i) => -37 + i * 3);
+  const xCols = Array.from({ length: seg }, (_, i) => -25 + i * 5);
   // Fewer rows with more spacing to prevent overlap
-  const evenYs = [-4, 0, 4];
-  const oddYs = [-2, 2, 6];
+  const evenYs = [-5, 0, 5];
+  const oddYs = [-2.5, 2.5, 7.5];
 
   const coords = xCols.flatMap((x, c) => {
     const ys = c % 2 === 0 ? evenYs : oddYs;
