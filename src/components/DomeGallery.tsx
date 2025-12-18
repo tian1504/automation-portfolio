@@ -40,7 +40,7 @@ const DEFAULTS = {
   maxVerticalRotationDeg: 5,
   dragSensitivity: 20,
   enlargeTransitionMs: 300,
-  segments: 35
+  segments: 6
 };
 
 const clamp = (v: number, min: number, max: number) => Math.min(Math.max(v, min), max);
@@ -58,15 +58,16 @@ const getDataNumber = (el: HTMLElement, name: string, fallback: number) => {
 type GalleryImage = { src: string; alt?: string; thumbnail?: string };
 
 function buildItems(pool: GalleryImage[], seg: number) {
-  const xCols = Array.from({ length: seg }, (_, i) => -37 + i * 3);
-  // Fewer rows with more spacing to prevent overlap
+  // Sparse columns with wide spacing for curated gallery feel
+  const xCols = Array.from({ length: seg }, (_, i) => -10 + i * 5);
+  // 4-5 horizontal bands with generous vertical spacing
   const evenYs = [-4, 0, 4];
-  const oddYs = [-2, 2, 6];
+  const oddYs = [-2, 2];
 
   const coords = xCols.flatMap((x, c) => {
     const ys = c % 2 === 0 ? evenYs : oddYs;
-    // Make tiles LANDSCAPE: wider than tall (4x2 instead of 3x2)
-    return ys.map(y => ({ x, y, sizeX: 4, sizeY: 2 }));
+    // Landscape tiles: 3.5 wide x 2 tall for 16:9-ish feel
+    return ys.map(y => ({ x, y, sizeX: 3.5, sizeY: 2 }));
   });
 
   const totalSlots = coords.length;
