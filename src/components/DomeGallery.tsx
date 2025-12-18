@@ -548,6 +548,15 @@ export default function DomeGallery({
 
       overlay.style.transform = `translate(${tx0}px, ${ty0}px) scale(${validSx0}, ${validSy0})`;
 
+      // Populate viewer-meta with title
+      const metaRoot = viewerRef.current?.querySelector('.viewer-meta') as HTMLDivElement | null;
+      if (metaRoot) {
+        const title = el.getAttribute('aria-label') || el.getAttribute('title') || '';
+        metaRoot.innerHTML = title
+          ? `<div class="viewer-meta__title">${title}</div>`
+          : '';
+      }
+
       setTimeout(() => {
         if (!overlay.parentElement) return;
         overlay.style.opacity = '1';
@@ -681,6 +690,7 @@ export default function DomeGallery({
         <div className="viewer" ref={viewerRef}>
           <div ref={scrimRef} className="scrim" />
           <div ref={frameRef} className="frame" />
+          <div className="viewer-meta" />
         </div>
       </main>
     </div>
