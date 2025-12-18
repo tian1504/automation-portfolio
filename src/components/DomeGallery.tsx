@@ -55,7 +55,7 @@ const getDataNumber = (el: HTMLElement, name: string, fallback: number) => {
   return Number.isFinite(n) ? n : fallback;
 };
 
-type GalleryImage = { src: string; alt?: string };
+type GalleryImage = { src: string; alt?: string; thumbnail?: string };
 
 function buildItems(pool: GalleryImage[], seg: number) {
   const xCols = Array.from({ length: seg }, (_, i) => -37 + i * 3);
@@ -81,9 +81,9 @@ function buildItems(pool: GalleryImage[], seg: number) {
 
   const normalizedImages: GalleryImage[] = pool.map(image => {
     if (typeof image === 'string') {
-      return { src: image as string, alt: '' };
+      return { src: image as string, alt: '', thumbnail: '' };
     }
-    return { src: image.src || '', alt: image.alt || '' };
+    return { src: image.src || '', alt: image.alt || '', thumbnail: image.thumbnail || '' };
   });
 
   const usedImages = Array.from({ length: totalSlots }, (_, i) => normalizedImages[i % normalizedImages.length]);
@@ -104,7 +104,8 @@ function buildItems(pool: GalleryImage[], seg: number) {
   return coords.map((c, i) => ({
     ...c,
     src: usedImages[i].src,
-    alt: usedImages[i].alt
+    alt: usedImages[i].alt,
+    thumbnail: usedImages[i].thumbnail
   }));
 }
 
@@ -659,7 +660,7 @@ export default function DomeGallery({
                   onClick={onTileClick}
                   onPointerUp={onTilePointerUp}
                 >
-                  <img src={it.src} draggable={false} alt={it.alt} />
+                  <img src={it.thumbnail || it.src} draggable={false} alt={it.alt} />
                 </div>
               </div>
             ))}
