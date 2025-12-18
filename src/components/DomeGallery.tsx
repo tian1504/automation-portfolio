@@ -38,6 +38,7 @@ const DEFAULT_IMAGES = [
 
 const DEFAULTS = {
   maxVerticalRotationDeg: 5,
+  maxHorizontalRotationDeg: 75,
   dragSensitivity: 20,
   enlargeTransitionMs: 300,
   segments: 35
@@ -125,6 +126,7 @@ type DomeGalleryProps = {
   padFactor?: number;
   overlayBlurColor?: string;
   maxVerticalRotationDeg?: number;
+  maxHorizontalRotationDeg?: number;
   dragSensitivity?: number;
   enlargeTransitionMs?: number;
   segments?: number;
@@ -145,6 +147,7 @@ export default function DomeGallery({
   padFactor = 0.25,
   overlayBlurColor = '#060010',
   maxVerticalRotationDeg = DEFAULTS.maxVerticalRotationDeg,
+  maxHorizontalRotationDeg = DEFAULTS.maxHorizontalRotationDeg,
   dragSensitivity = DEFAULTS.dragSensitivity,
   enlargeTransitionMs = DEFAULTS.enlargeTransitionMs,
   segments = DEFAULTS.segments,
@@ -315,7 +318,8 @@ export default function DomeGallery({
           return;
         }
         const nextX = clamp(rotationRef.current.x - vY / 200, -maxVerticalRotationDeg, maxVerticalRotationDeg);
-        const nextY = wrapAngleSigned(rotationRef.current.y + vX / 200);
+        const rawNextY = rotationRef.current.y + vX / 200;
+        const nextY = clamp(rawNextY, -maxHorizontalRotationDeg, maxHorizontalRotationDeg);
         rotationRef.current = { x: nextX, y: nextY };
         applyTransform(nextX, nextY);
         inertiaRAF.current = requestAnimationFrame(step);
@@ -323,7 +327,7 @@ export default function DomeGallery({
       stopInertia();
       inertiaRAF.current = requestAnimationFrame(step);
     },
-    [dragDampening, maxVerticalRotationDeg, stopInertia]
+    [dragDampening, maxVerticalRotationDeg, maxHorizontalRotationDeg, stopInertia]
   );
 
   useGesture(
@@ -351,7 +355,8 @@ export default function DomeGallery({
           -maxVerticalRotationDeg,
           maxVerticalRotationDeg
         );
-        const nextY = wrapAngleSigned(startRotRef.current.y + dxTotal / dragSensitivity);
+        const rawNextY = startRotRef.current.y + dxTotal / dragSensitivity;
+        const nextY = clamp(rawNextY, -maxHorizontalRotationDeg, maxHorizontalRotationDeg);
         if (rotationRef.current.x !== nextX || rotationRef.current.y !== nextY) {
           rotationRef.current = { x: nextX, y: nextY };
           applyTransform(nextX, nextY);
