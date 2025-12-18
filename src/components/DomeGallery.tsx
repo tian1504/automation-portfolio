@@ -59,12 +59,14 @@ type GalleryImage = { src: string; alt?: string };
 
 function buildItems(pool: GalleryImage[], seg: number) {
   const xCols = Array.from({ length: seg }, (_, i) => -37 + i * 2);
-  const evenYs = [-4, -2, 0, 2, 4];
-  const oddYs = [-3, -1, 1, 3, 5];
+  // Fewer rows so each tile gets more vertical space
+  const evenYs = [-3, -1, 1, 3];
+  const oddYs = [-2, 0, 2, 4];
 
   const coords = xCols.flatMap((x, c) => {
     const ys = c % 2 === 0 ? evenYs : oddYs;
-    return ys.map(y => ({ x, y, sizeX: 2, sizeY: 2 }));
+    // Make tiles LANDSCAPE: wider than tall (3x2 instead of 2x2)
+    return ys.map(y => ({ x, y, sizeX: 3, sizeY: 2 }));
   });
 
   const totalSlots = coords.length;
