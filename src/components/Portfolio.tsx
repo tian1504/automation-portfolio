@@ -1,37 +1,28 @@
 import DomeGallery from '@/components/DomeGallery';
 import n8nLogo from '@/assets/logos/n8n.svg';
-import workflowRAG from '@/assets/workflows/n8n-workflow-RAG-2.png';
-import workflowOrganic from '@/assets/workflows/organic_workflows_labels_compact.png';
-import workflowApollo from '@/assets/workflows/Apollo_LeadScraper.png';
-import workflowHookBank from '@/assets/workflows/Hook_bank_UGC_-_N8N.png';
-import workflowStats from '@/assets/workflows/Stats_prompt_and_Image_Gen.png';
+
+// 7 workflow screenshots
+import workflowStatic from '@/assets/workflows/n8n-07.png';
+import workflowApollo from '@/assets/workflows/n8n-01.png';
+import workflowVideoGen from '@/assets/workflows/n8n-02.png';
+import workflowHookBank from '@/assets/workflows/n8n-03.png';
+import workflowInstagram from '@/assets/workflows/n8n-04.png';
+import workflowWeather from '@/assets/workflows/n8n-05.png';
+import workflowOrganic from '@/assets/workflows/n8n-06.png';
 
 const WORKFLOW_IMAGES = [
-  {
-    src: workflowRAG,
-    thumbnail: n8nLogo,
-    alt: 'Deductive-lab RAG System (n8n)'
-  },
-  {
-    src: workflowOrganic,
-    thumbnail: n8nLogo,
-    alt: 'Social Media Organic Workflows (n8n)'
-  },
-  {
-    src: workflowApollo,
-    thumbnail: n8nLogo,
-    alt: 'Apollo Lead Scraper (n8n)'
-  },
-  {
-    src: workflowHookBank,
-    thumbnail: n8nLogo,
-    alt: 'Hook Bank Builder & UGC (n8n)'
-  },
-  {
-    src: workflowStats,
-    thumbnail: n8nLogo,
-    alt: 'Static Prompt & Image Gen (n8n)'
-  }
+  { src: workflowStatic, thumbnail: n8nLogo, alt: 'Static Prompt & Image Engine (n8n)' },
+  { src: workflowApollo, thumbnail: n8nLogo, alt: 'Apollo Lead Scraper & Icebreakers' },
+  { src: workflowVideoGen, thumbnail: n8nLogo, alt: 'AI Video Generator & Facebook Uploader' },
+  { src: workflowHookBank, thumbnail: n8nLogo, alt: 'Hook Bank & UGC Brief Builder' },
+  { src: workflowInstagram, thumbnail: n8nLogo, alt: 'Instagram Scraper & Hook Idea Engine' },
+  { src: workflowWeather, thumbnail: n8nLogo, alt: 'Daily Weather Quote & Image Poster' },
+  { src: workflowOrganic, thumbnail: n8nLogo, alt: 'Multi-Channel Organic Content System' },
+  // Generic tiles
+  { src: n8nLogo, thumbnail: n8nLogo, alt: 'AI Automation' },
+  { src: n8nLogo, thumbnail: n8nLogo, alt: 'AI Automation' },
+  { src: n8nLogo, thumbnail: n8nLogo, alt: 'AI Automation' },
+  { src: n8nLogo, thumbnail: n8nLogo, alt: 'AI Automation' },
 ];
 
 export const Portfolio = () => {

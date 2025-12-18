@@ -116,6 +116,30 @@ main.sphere-main {
   filter: var(--image-filter, none);
 }
 
+.item__caption {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 6px 8px;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.75), transparent);
+  color: #ffffff;
+  font-size: 0.65rem;
+  line-height: 1.2;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 150ms ease-out;
+  border-radius: 0 0 var(--tile-radius, 20px) var(--tile-radius, 20px);
+}
+
+.item__image:hover .item__caption,
+.item__image:focus-visible .item__caption {
+  opacity: 1;
+}
+
 .viewer {
   position: absolute;
   inset: 0;
