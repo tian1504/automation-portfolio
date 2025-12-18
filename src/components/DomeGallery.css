@@ -89,7 +89,7 @@ main.sphere-main {
   display: flex;
   align-items: center;
   justify-content: center;
-  inset: 16px;
+  inset: 6px;
   border-radius: var(--tile-radius, 16px);
   background: rgba(20, 20, 30, 0.9);
   overflow: hidden;

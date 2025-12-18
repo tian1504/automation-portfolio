@@ -18,7 +18,10 @@ const WORKFLOW_IMAGES = [
   { src: workflowInstagram, thumbnail: AiAutomationDome, alt: 'Instagram Scraper & Hook Idea Engine' },
   { src: workflowWeather, thumbnail: AiAutomationDome, alt: 'Daily Weather Quote & Image Poster' },
   { src: workflowOrganic, thumbnail: AiAutomationDome, alt: 'Multi-Channel Organic Content System' },
-  // Generic AI Automation tiles (fewer for cleaner look)
+  // Generic AI Automation filler tiles
+  { src: AiAutomationDome, thumbnail: AiAutomationDome, alt: 'AI Automation' },
+  { src: AiAutomationDome, thumbnail: AiAutomationDome, alt: 'AI Automation' },
+  { src: AiAutomationDome, thumbnail: AiAutomationDome, alt: 'AI Automation' },
   { src: AiAutomationDome, thumbnail: AiAutomationDome, alt: 'AI Automation' },
   { src: AiAutomationDome, thumbnail: AiAutomationDome, alt: 'AI Automation' },
 ];
