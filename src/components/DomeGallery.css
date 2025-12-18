@@ -118,25 +118,23 @@ main.sphere-main {
 
 .item__caption {
   position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  padding: 6px 8px;
-  background: linear-gradient(to top, rgba(0, 0, 0, 0.75), transparent);
-  color: #ffffff;
-  font-size: 0.65rem;
-  line-height: 1.2;
-  text-overflow: ellipsis;
+  left: 50%;
+  bottom: 10px;
+  transform: translateX(-50%);
+  padding: 4px 12px;
+  background: rgba(250, 204, 21, 0.12);
+  border-radius: 999px;
+  border: 1px solid rgba(250, 204, 21, 0.65);
+  color: #facc15;
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  text-align: center;
+  max-width: 80%;
   white-space: nowrap;
   overflow: hidden;
+  text-overflow: ellipsis;
   pointer-events: none;
-  opacity: 0;
-  transition: opacity 150ms ease-out;
-  border-radius: 0 0 var(--tile-radius, 20px) var(--tile-radius, 20px);
-}
-
-.item__image:hover .item__caption,
-.item__image:focus-visible .item__caption {
   opacity: 1;
 }
 
