@@ -1,41 +1,36 @@
 import DomeGallery from '@/components/DomeGallery';
+import n8nLogo from '@/assets/logos/n8n.svg';
+import workflowRAG from '@/assets/workflows/n8n-workflow-RAG-2.png';
+import workflowOrganic from '@/assets/workflows/organic_workflows_labels_compact.png';
+import workflowApollo from '@/assets/workflows/Apollo_LeadScraper.png';
+import workflowHookBank from '@/assets/workflows/Hook_bank_UGC_-_N8N.png';
+import workflowStats from '@/assets/workflows/Stats_prompt_and_Image_Gen.png';
 
 const WORKFLOW_IMAGES = [
   {
-    src: 'https://images.unsplash.com/photo-1526498460520-4c246339dccb?q=80&w=900&auto=format&fit=crop',
-    alt: 'Multi-Agent RAG Troubleshooting Copilot (n8n)'
+    src: workflowRAG,
+    thumbnail: n8nLogo,
+    alt: 'Deductive-lab RAG System (n8n)'
   },
   {
-    src: 'https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=900&auto=format&fit=crop',
-    alt: 'Creative Intelligence Engine – ad, UGC, and review scoring (n8n)'
+    src: workflowOrganic,
+    thumbnail: n8nLogo,
+    alt: 'Social Media Organic Workflows (n8n)'
   },
   {
-    src: 'https://images.unsplash.com/photo-1526498460520-4c246339dccb?q=80&w=900&auto=format&fit=crop',
-    alt: 'UGC Brief Generator Pipeline (n8n)'
+    src: workflowApollo,
+    thumbnail: n8nLogo,
+    alt: 'Apollo Lead Scraper (n8n)'
   },
   {
-    src: 'https://images.unsplash.com/photo-1581090700227-1e37b190418e?q=80&w=900&auto=format&fit=crop',
-    alt: 'Gmail → Notion → Slack intelligence for orders (n8n)'
+    src: workflowHookBank,
+    thumbnail: n8nLogo,
+    alt: 'Hook Bank Builder & UGC (n8n)'
   },
   {
-    src: 'https://images.unsplash.com/photo-1519389950473-47ba0277781c?q=80&w=900&auto=format&fit=crop',
-    alt: 'Order Alert Engine – Shopify to Slack (Zapier)'
-  },
-  {
-    src: 'https://images.unsplash.com/photo-1553877522-43269d4ea984?q=80&w=900&auto=format&fit=crop',
-    alt: 'Lead Qualification + CRM Enrichment (Zapier)'
-  },
-  {
-    src: 'https://images.unsplash.com/photo-1545239351-1141bd82e8a6?q=80&w=900&auto=format&fit=crop',
-    alt: 'Calendar & Meeting Pack Builder (Zapier)'
-  },
-  {
-    src: 'https://images.unsplash.com/photo-1581090700227-1e37b190418e?q=80&w=900&auto=format&fit=crop',
-    alt: 'Invoice & Receipt Auto-Filer (Make.com)'
-  },
-  {
-    src: 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?q=80&w=900&auto=format&fit=crop',
-    alt: 'Inventory Replenishment Notifier (Make.com)'
+    src: workflowStats,
+    thumbnail: n8nLogo,
+    alt: 'Static Prompt & Image Gen (n8n)'
   }
 ];
 
@@ -57,9 +52,9 @@ export const Portfolio = () => {
           <DomeGallery
             images={WORKFLOW_IMAGES}
             overlayBlurColor="#05030F"
-            grayscale={true}
-            openedImageWidth="720px"
-            openedImageHeight="420px"
+            grayscale={false}
+            openedImageWidth="900px"
+            openedImageHeight="520px"
           />
         </div>
 
