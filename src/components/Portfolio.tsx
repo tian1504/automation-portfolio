@@ -1,5 +1,4 @@
 import DomeGallery from '@/components/DomeGallery';
-import n8nLogo from '@/assets/logos/n8n.svg';
 import AiAutomationDome from '@/assets/AI-AutomationDome.png';
 
 // 7 workflow screenshots
@@ -12,13 +11,13 @@ import workflowWeather from '@/assets/workflows/n8n-05.png';
 import workflowOrganic from '@/assets/workflows/n8n-06.png';
 
 const WORKFLOW_IMAGES = [
-  { src: workflowStatic, thumbnail: n8nLogo, alt: 'Static Prompt & Image Engine (n8n)' },
-  { src: workflowApollo, thumbnail: n8nLogo, alt: 'Apollo Lead Scraper & Icebreakers' },
-  { src: workflowVideoGen, thumbnail: n8nLogo, alt: 'AI Video Generator & Facebook Uploader' },
-  { src: workflowHookBank, thumbnail: n8nLogo, alt: 'Hook Bank & UGC Brief Builder' },
-  { src: workflowInstagram, thumbnail: n8nLogo, alt: 'Instagram Scraper & Hook Idea Engine' },
-  { src: workflowWeather, thumbnail: n8nLogo, alt: 'Daily Weather Quote & Image Poster' },
-  { src: workflowOrganic, thumbnail: n8nLogo, alt: 'Multi-Channel Organic Content System' },
+  { src: workflowStatic, thumbnail: AiAutomationDome, alt: 'Static Prompt & Image Engine (n8n)' },
+  { src: workflowApollo, thumbnail: AiAutomationDome, alt: 'Apollo Lead Scraper & Icebreakers' },
+  { src: workflowVideoGen, thumbnail: AiAutomationDome, alt: 'AI Video Generator & Facebook Uploader' },
+  { src: workflowHookBank, thumbnail: AiAutomationDome, alt: 'Hook Bank & UGC Brief Builder' },
+  { src: workflowInstagram, thumbnail: AiAutomationDome, alt: 'Instagram Scraper & Hook Idea Engine' },
+  { src: workflowWeather, thumbnail: AiAutomationDome, alt: 'Daily Weather Quote & Image Poster' },
+  { src: workflowOrganic, thumbnail: AiAutomationDome, alt: 'Multi-Channel Organic Content System' },
   // Generic AI Automation tiles
   { src: AiAutomationDome, thumbnail: AiAutomationDome, alt: 'AI Automation' },
   { src: AiAutomationDome, thumbnail: AiAutomationDome, alt: 'AI Automation' },
