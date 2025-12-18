@@ -40,7 +40,7 @@ const DEFAULTS = {
   maxVerticalRotationDeg: 5,
   dragSensitivity: 20,
   enlargeTransitionMs: 300,
-  segments: 16
+  segments: 35
 };
 
 const clamp = (v: number, min: number, max: number) => Math.min(Math.max(v, min), max);
@@ -58,29 +58,16 @@ const getDataNumber = (el: HTMLElement, name: string, fallback: number) => {
 type GalleryImage = { src: string; alt?: string; thumbnail?: string };
 
 function buildItems(pool: GalleryImage[], seg: number) {
-  // Create a clean grid: 8 columns around the sphere, 5 rows vertically
-  // Using integer offsets that work with the segment-based rotation math
-  const cols = 8;
-  const rows = 5;
-  
-  // Tile size: 2 wide x 1.5 tall for landscape proportions
-  const tileW = 2;
-  const tileH = 1.5;
-  
-  const coords: { x: number; y: number; sizeX: number; sizeY: number }[] = [];
-  
-  for (let row = 0; row < rows; row++) {
-    // Offset every other row for a brick-like pattern
-    const rowOffset = row % 2 === 0 ? 0 : 1;
-    for (let col = 0; col < cols; col++) {
-      coords.push({
-        x: (col - cols / 2) * tileW + rowOffset,
-        y: (row - Math.floor(rows / 2)) * tileH,
-        sizeX: tileW,
-        sizeY: tileH
-      });
-    }
-  }
+  const xCols = Array.from({ length: seg }, (_, i) => -37 + i * 3);
+  // Fewer rows with more spacing to prevent overlap
+  const evenYs = [-4, 0, 4];
+  const oddYs = [-2, 2, 6];
+
+  const coords = xCols.flatMap((x, c) => {
+    const ys = c % 2 === 0 ? evenYs : oddYs;
+    // Make tiles LANDSCAPE: wider than tall (4x2 instead of 3x2)
+    return ys.map(y => ({ x, y, sizeX: 4, sizeY: 2 }));
+  });
 
   const totalSlots = coords.length;
   if (pool.length === 0) {
