@@ -48,10 +48,6 @@ export const Portfolio = () => {
             grayscale={false}
             openedImageWidth="900px"
             openedImageHeight="520px"
-            segments={26}
-            fit={0.55}
-            padFactor={0.2}
-            maxHorizontalRotationDeg={75}
           />
         </div>
 
