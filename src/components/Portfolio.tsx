@@ -1,5 +1,6 @@
 import DomeGallery from '@/components/DomeGallery';
 import n8nLogo from '@/assets/logos/n8n.svg';
+import AiAutomationDome from '@/assets/AI-AutomationDome.png';
 
 // 7 workflow screenshots
 import workflowStatic from '@/assets/workflows/n8n-07.png';
@@ -18,11 +19,13 @@ const WORKFLOW_IMAGES = [
   { src: workflowInstagram, thumbnail: n8nLogo, alt: 'Instagram Scraper & Hook Idea Engine' },
   { src: workflowWeather, thumbnail: n8nLogo, alt: 'Daily Weather Quote & Image Poster' },
   { src: workflowOrganic, thumbnail: n8nLogo, alt: 'Multi-Channel Organic Content System' },
-  // Generic tiles
-  { src: n8nLogo, thumbnail: n8nLogo, alt: 'AI Automation' },
-  { src: n8nLogo, thumbnail: n8nLogo, alt: 'AI Automation' },
-  { src: n8nLogo, thumbnail: n8nLogo, alt: 'AI Automation' },
-  { src: n8nLogo, thumbnail: n8nLogo, alt: 'AI Automation' },
+  // Generic AI Automation tiles
+  { src: AiAutomationDome, thumbnail: AiAutomationDome, alt: 'AI Automation' },
+  { src: AiAutomationDome, thumbnail: AiAutomationDome, alt: 'AI Automation' },
+  { src: AiAutomationDome, thumbnail: AiAutomationDome, alt: 'AI Automation' },
+  { src: AiAutomationDome, thumbnail: AiAutomationDome, alt: 'AI Automation' },
+  { src: AiAutomationDome, thumbnail: AiAutomationDome, alt: 'AI Automation' },
+  { src: AiAutomationDome, thumbnail: AiAutomationDome, alt: 'AI Automation' },
 ];
 
 export const Portfolio = () => {
