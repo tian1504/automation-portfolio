@@ -58,8 +58,8 @@ export const Portfolio = () => {
             images={WORKFLOW_IMAGES}
             overlayBlurColor="#05030F"
             grayscale={true}
-            openedImageWidth="640px"
-            openedImageHeight="400px"
+            openedImageWidth="720px"
+            openedImageHeight="420px"
           />
         </div>
 
