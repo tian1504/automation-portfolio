@@ -58,16 +58,36 @@ const getDataNumber = (el: HTMLElement, name: string, fallback: number) => {
 type GalleryImage = { src: string; alt?: string; thumbnail?: string };
 
 function buildItems(pool: GalleryImage[], seg: number) {
-  const xCols = Array.from({ length: seg }, (_, i) => -25 + i * 5);
-  // Fewer rows with more spacing to prevent overlap
-  const evenYs = [-5, 0, 5];
-  const oddYs = [-2.5, 2.5, 7.5];
+  // IMPORTANT:
+  // - CSS uses --rot-y/--rot-x based on (360/segments)/2.
+  // - Therefore offset units are "half-segments".
+  // - To guarantee equal spacing and zero overlap, we place tiles on a uniform grid in these units
+  //   and add an explicit gap between them.
 
-  const coords = xCols.flatMap((x, c) => {
-    const ys = c % 2 === 0 ? evenYs : oddYs;
-    // Make tiles LANDSCAPE: wider than tall (4x2 instead of 3x2)
-    return ys.map(y => ({ x, y, sizeX: 4, sizeY: 2 }));
-  });
+  // Landscape cards
+  const tileSizeX = 2; // width in "segment" units (each unit == --item-width)
+  const tileSizeY = 1;
+
+  // Gap between tiles in "segment" units
+  const gapX = 1;
+  const gapY = 1;
+
+  // Each segment == 2 half-segments
+  // We step by (tile + gap) to ensure a consistent angular gap.
+  const stepX = (tileSizeX + gapX) * 2;
+  const stepY = (tileSizeY + gapY) * 2;
+
+  // Horizontal: fit without overlap
+  const cols = Math.max(1, Math.floor(seg / (tileSizeX + gapX)));
+  const xStart = -Math.floor(cols / 2) * stepX;
+  const xCols = Array.from({ length: cols }, (_, i) => xStart + i * stepX);
+
+  // Vertical: 3 centered rows with equal spacing
+  const rows = 3;
+  const yStart = -Math.floor(rows / 2) * stepY;
+  const yRows = Array.from({ length: rows }, (_, i) => yStart + i * stepY);
+
+  const coords = xCols.flatMap(x => yRows.map(y => ({ x, y, sizeX: tileSizeX, sizeY: tileSizeY })));
 
   const totalSlots = coords.length;
   if (pool.length === 0) {
