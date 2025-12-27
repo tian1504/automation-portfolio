@@ -1,12 +1,10 @@
 .glitch {
   position: relative;
   font-weight: 700;
-  color: #facc15; /* yellow text to match your UI */
-  text-transform: uppercase;
-  letter-spacing: 0.22em;
+  /* no fixed color or letter-spacing – it will inherit from parent */
 }
 
-/* copies for the glitch effect */
+/* Copies for the glitch effect */
 .glitch::before,
 .glitch::after {
   content: attr(data-text);
@@ -16,19 +14,21 @@
   pointer-events: none;
 }
 
+/* top “layer” (cyan by default via CSS var) */
 .glitch::before {
   text-shadow: var(--before-shadow, 5px 0 cyan);
   clip-path: inset(0 0 50% 0);
   animation: glitch-before var(--before-duration, 2s) infinite linear alternate-reverse;
 }
 
+/* bottom “layer” (yellow instead of red) */
 .glitch::after {
-  text-shadow: var(--after-shadow, -5px 0 red);
+  text-shadow: var(--after-shadow, -5px 0 #facc15);
   clip-path: inset(50% 0 0 0);
   animation: glitch-after var(--after-duration, 3s) infinite linear alternate-reverse;
 }
 
-/* only show glitch when hovered (if enabled) */
+/* Only show glitch when hovered, if enabled */
 .glitch.enable-on-hover::before,
 .glitch.enable-on-hover::after {
   opacity: 0;
@@ -39,20 +39,45 @@
   opacity: 1;
 }
 
+/* Keyframes (same feel as the original demo) */
 @keyframes glitch-before {
-  0%   { transform: translate(0, 0); }
-  20%  { transform: translate(-2px, -1px); }
-  40%  { transform: translate(2px, 1px); }
-  60%  { transform: translate(-1px, 1px); }
-  80%  { transform: translate(1px, -1px); }
-  100% { transform: translate(0, 0); }
+  0% {
+    transform: translate(0, 0);
+  }
+  20% {
+    transform: translate(-2px, -2px);
+  }
+  40% {
+    transform: translate(-1px, 1px);
+  }
+  60% {
+    transform: translate(-3px, -1px);
+  }
+  80% {
+    transform: translate(2px, 2px);
+  }
+  100% {
+    transform: translate(0, 0);
+  }
 }
 
 @keyframes glitch-after {
-  0%   { transform: translate(0, 0); }
-  20%  { transform: translate(2px, 1px); }
-  40%  { transform: translate(-2px, -1px); }
-  60%  { transform: translate(1px, -2px); }
-  80%  { transform: translate(-1px, 2px); }
-  100% { transform: translate(0, 0); }
+  0% {
+    transform: translate(0, 0);
+  }
+  20% {
+    transform: translate(2px, 2px);
+  }
+  40% {
+    transform: translate(1px, -1px);
+  }
+  60% {
+    transform: translate(3px, 1px);
+  }
+  80% {
+    transform: translate(-2px, -2px);
+  }
+  100% {
+    transform: translate(0, 0);
+  }
 }
