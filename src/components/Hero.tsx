@@ -1,7 +1,6 @@
 import { ArrowRight, Calendar } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import portraitImage from "@/assets/portrait.png";
-import RotatingText from "@/components/RotatingText";
 
 export const Hero = () => {
   const handleScroll = (id: string) => {
@@ -23,29 +22,9 @@ export const Hero = () => {
             </div>
             
             {/* Main Headline */}
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-foreground mb-4 animate-slide-up">
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-foreground mb-6 animate-slide-up">
               Eleazar Sebastian Martinez
             </h1>
-
-            {/* Rotating AI automation line */}
-            <div className="flex justify-center lg:justify-start mb-6 animate-slide-up [animation-delay:50ms]">
-              <RotatingText
-                texts={[
-                  'Creative automations',
-                  'Creative workflows',
-                  'Creative systems',
-                ]}
-                mainClassName="px-4 sm:px-5 md:px-6 bg-gradient-to-r from-[#00f2ff] via-[#ffe66d] to-[#ff4ecd] text-slate-950 overflow-hidden py-1.5 sm:py-2 justify-center rounded-full shadow-[0_0_30px_rgba(0,0,0,0.45)] text-lg md:text-xl lg:text-2xl font-semibold"
-                staggerFrom="last"
-                initial={{ y: '100%', opacity: 0 }}
-                animate={{ y: 0, opacity: 1 }}
-                exit={{ y: '-120%', opacity: 0 }}
-                staggerDuration={0.03}
-                splitLevelClassName="overflow-hidden pb-0.5 md:pb-1"
-                transition={{ type: 'spring', damping: 30, stiffness: 400 }}
-                rotationInterval={2200}
-              />
-            </div>
 
             {/* Subheadline */}
             <h2 className="text-2xl md:text-3xl font-semibold mb-6 animate-slide-up [animation-delay:100ms]">

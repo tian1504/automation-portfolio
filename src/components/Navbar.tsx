@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from "react";
-import RotatingText from "./RotatingText";
+import { useState, useEffect } from "react";
 import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
@@ -36,31 +35,13 @@ export const Navbar = () => {
   return (
     <nav
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        scrolled
-          ? "bg-background/95 backdrop-blur-md shadow-md border-b border-border"
-          : "bg-background/80 backdrop-blur-sm"
+        scrolled ? "bg-background/95 backdrop-blur-md shadow-md border-b border-border" : "bg-background/80 backdrop-blur-sm"
       }`}
     >
       <div className="container-custom">
         <div className="flex items-center justify-between h-16 md:h-20">
-          {/* LEFT: rotating tagline */}
-          <div className="flex items-center gap-3">
-            <span className="hidden sm:inline text-xs font-semibold tracking-[0.2em] text-muted-foreground uppercase">
-              Creative
-            </span>
-
-            <RotatingText
-              texts={["automations", "workflows", "systems"]}
-              mainClassName="px-3 sm:px-4 py-1 rounded-full bg-black/90 border border-yellow-400/80 text-yellow-300 text-xs sm:text-sm font-semibold shadow-[0_0_16px_rgba(250,204,21,0.35)]"
-              staggerFrom={"last"}
-              initial={{ y: "100%" }}
-              animate={{ y: 0 }}
-              exit={{ y: "-120%" }}
-              staggerDuration={0.025}
-              splitLevelClassName="overflow-hidden pb-0.5"
-              rotationInterval={2000}
-            />
-          </div>
+          {/* Spacer for alignment */}
+          <div className="w-4"></div>
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center gap-8">
