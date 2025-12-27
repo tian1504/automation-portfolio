@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
-
-import GlitchText from "./GlitchText";
-import n8nLogo from "@/assets/logos/n8n.svg";
+import TrueFocus from "./TrueFocus";
 
 const navLinks = [
   { href: "#home", label: "Home" },
@@ -43,19 +41,24 @@ export const Navbar = () => {
           : "bg-background/80 backdrop-blur-sm"
       }`}
     >
-      <div className="container-custom flex items-center justify-between py-4">
-        <div className="px-6">
-          <GlitchText
-            speed={1}
-            enableShadows
-            enableOnHover
-            className="text-xs sm:text-sm font-semibold tracking-[0.18em] uppercase"
-          >
-            Automate. Optimize. Scale.
-          </GlitchText>
+      <div className="container-custom flex items-center justify-between h-16 md:h-20">
+        {/* Left: True Focus tagline pill */}
+        <div className="flex items-center">
+          <div className="rounded-full border border-yellow-400/70 bg-black/80 px-5 py-1.5 shadow-[0_0_20px_rgba(250,204,21,0.35)]">
+            <TrueFocus
+              sentence="AUTOMATE. OPTIMIZE. SCALE."
+              manualMode={false}
+              blurAmount={5}
+              borderColor="#facc15"
+              glowColor="rgba(250,204,21,0.6)"
+              animationDuration={0.7}
+              pauseBetweenAnimations={1.1}
+              className="text-[0.7rem] md:text-xs"
+            />
+          </div>
         </div>
 
-        {/* Desktop links */}
+        {/* Right: existing desktop nav links */}
         <div className="hidden md:flex items-center gap-8">
           {navLinks.map((link) => (
             <a
