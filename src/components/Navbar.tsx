@@ -43,22 +43,17 @@ export const Navbar = () => {
           : "bg-background/80 backdrop-blur-sm"
       }`}
     >
-      <div className="container-custom">
-        <div className="flex items-center justify-between h-16 md:h-20">
-          {/* LEFT: Glitch tag + n8n logo */}
-          <div className="flex items-center gap-3">
-            <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-black/90 border border-yellow-400/70 shadow-[0_0_16px_rgba(250,204,21,0.35)]">
-              <img src={n8nLogo} alt="n8n workflow automations" className="h-5 w-5 rounded-full" />
-              <GlitchText
-                speed={1}
-                enableShadows={true}
-                enableOnHover={true}
-                className="text-xs sm:text-sm font-semibold tracking-[0.22em]"
-              >
-                Low-Code Automation
-              </GlitchText>
-            </div>
-          </div>
+<div className="inline-flex items-center rounded-full px-6 py-2 border border-yellow-400/60 bg-gradient-to-r from-yellow-400/10 via-pink-500/10 to-sky-500/10">
+  <GlitchText
+    speed={1}
+    enableShadows
+    enableOnHover
+    className="text-xs sm:text-sm font-semibold tracking-[0.18em] uppercase"
+  >
+    Automate. Optimize. Scale.
+  </GlitchText>
+</div>
+
 
           {/* Desktop links */}
           <div className="hidden md:flex items-center gap-8">
