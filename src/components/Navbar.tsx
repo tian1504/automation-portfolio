@@ -43,7 +43,8 @@ export const Navbar = () => {
           : "bg-background/80 backdrop-blur-sm"
       }`}
     >
-      <div className="px-6">
+      <div className="container-custom flex items-center justify-between py-4">
+        <div className="px-6">
           <GlitchText
             speed={1}
             enableShadows
