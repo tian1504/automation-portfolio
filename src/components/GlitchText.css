@@ -1,0 +1,58 @@
+.glitch {
+  position: relative;
+  font-weight: 700;
+  color: #facc15; /* yellow text to match your UI */
+  text-transform: uppercase;
+  letter-spacing: 0.22em;
+}
+
+/* copies for the glitch effect */
+.glitch::before,
+.glitch::after {
+  content: attr(data-text);
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  pointer-events: none;
+}
+
+.glitch::before {
+  text-shadow: var(--before-shadow, 5px 0 cyan);
+  clip-path: inset(0 0 50% 0);
+  animation: glitch-before var(--before-duration, 2s) infinite linear alternate-reverse;
+}
+
+.glitch::after {
+  text-shadow: var(--after-shadow, -5px 0 red);
+  clip-path: inset(50% 0 0 0);
+  animation: glitch-after var(--after-duration, 3s) infinite linear alternate-reverse;
+}
+
+/* only show glitch when hovered (if enabled) */
+.glitch.enable-on-hover::before,
+.glitch.enable-on-hover::after {
+  opacity: 0;
+}
+
+.glitch.enable-on-hover:hover::before,
+.glitch.enable-on-hover:hover::after {
+  opacity: 1;
+}
+
+@keyframes glitch-before {
+  0%   { transform: translate(0, 0); }
+  20%  { transform: translate(-2px, -1px); }
+  40%  { transform: translate(2px, 1px); }
+  60%  { transform: translate(-1px, 1px); }
+  80%  { transform: translate(1px, -1px); }
+  100% { transform: translate(0, 0); }
+}
+
+@keyframes glitch-after {
+  0%   { transform: translate(0, 0); }
+  20%  { transform: translate(2px, 1px); }
+  40%  { transform: translate(-2px, -1px); }
+  60%  { transform: translate(1px, -2px); }
+  80%  { transform: translate(-1px, 2px); }
+  100% { transform: translate(0, 0); }
+}
