@@ -43,61 +43,60 @@ export const Navbar = () => {
           : "bg-background/80 backdrop-blur-sm"
       }`}
     >
-<div className="inline-flex items-center rounded-full px-6 py-2 border border-yellow-400/60 bg-gradient-to-r from-yellow-400/10 via-pink-500/10 to-sky-500/10">
-  <GlitchText
-    speed={1}
-    enableShadows
-    enableOnHover
-    className="text-xs sm:text-sm font-semibold tracking-[0.18em] uppercase"
-  >
-    Automate. Optimize. Scale.
-  </GlitchText>
-</div>
+      <div className="container-custom flex items-center justify-between py-4">
+        <div className="inline-flex items-center rounded-full px-6 py-2 border border-yellow-400/60 bg-gradient-to-r from-yellow-400/10 via-pink-500/10 to-sky-500/10">
+          <GlitchText
+            speed={1}
+            enableShadows
+            enableOnHover
+            className="text-xs sm:text-sm font-semibold tracking-[0.18em] uppercase"
+          >
+            Automate. Optimize. Scale.
+          </GlitchText>
+        </div>
 
+        {/* Desktop links */}
+        <div className="hidden md:flex items-center gap-8">
+          {navLinks.map((link) => (
+            <a
+              key={link.href}
+              href={link.href}
+              onClick={(e) => handleNavClick(e, link.href)}
+              className="text-sm font-medium text-foreground hover:text-primary transition-all duration-300 relative after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[2px] after:bg-primary after:transition-all after:duration-300 hover:after:w-full pb-1"
+            >
+              {link.label}
+            </a>
+          ))}
+        </div>
 
-          {/* Desktop links */}
-          <div className="hidden md:flex items-center gap-8">
+        {/* Mobile menu button */}
+        <Button
+          variant="ghost"
+          size="icon"
+          className="md:hidden text-foreground hover:text-primary"
+          onClick={() => setIsOpen(!isOpen)}
+        >
+          {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+        </Button>
+      </div>
+
+      {/* Mobile nav drawer */}
+      {isOpen && (
+        <div className="md:hidden absolute top-full left-0 right-0 bg-background/98 backdrop-blur-md border-b border-border shadow-lg animate-slide-up">
+          <div className="container-custom py-4 flex flex-col gap-4">
             {navLinks.map((link) => (
               <a
                 key={link.href}
                 href={link.href}
                 onClick={(e) => handleNavClick(e, link.href)}
-                className="text-sm font-medium text-foreground hover:text-primary transition-all duration-300 relative after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[2px] after:bg-primary after:transition-all after:duration-300 hover:after:w-full pb-1"
+                className="text-base font-medium text-foreground hover:text-primary transition-all duration-300 py-2"
               >
                 {link.label}
               </a>
             ))}
           </div>
-
-          {/* Mobile menu button */}
-          <Button
-            variant="ghost"
-            size="icon"
-            className="md:hidden text-foreground hover:text-primary"
-            onClick={() => setIsOpen(!isOpen)}
-          >
-            {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-          </Button>
         </div>
-
-        {/* Mobile nav drawer */}
-        {isOpen && (
-          <div className="md:hidden absolute top-full left-0 right-0 bg-background/98 backdrop-blur-md border-b border-border shadow-lg animate-slide-up">
-            <div className="container-custom py-4 flex flex-col gap-4">
-              {navLinks.map((link) => (
-                <a
-                  key={link.href}
-                  href={link.href}
-                  onClick={(e) => handleNavClick(e, link.href)}
-                  className="text-base font-medium text-foreground hover:text-primary transition-all duration-300 py-2"
-                >
-                  {link.label}
-                </a>
-              ))}
-            </div>
-          </div>
-        )}
-      </div>
+      )}
     </nav>
   );
 };
