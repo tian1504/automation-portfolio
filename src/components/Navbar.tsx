@@ -1,4 +1,6 @@
-import { useState, useEffect } from "react";
+import RotatingText from "./RotatingText";
+
+import { useState, useEffect, MouseEvent } from "react";
 import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
@@ -23,7 +25,7 @@ export const Navbar = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+  const handleNavClick = (e: MouseEvent<HTMLAnchorElement>, href: string) => {
     e.preventDefault();
     const element = document.querySelector(href);
     if (element) {
@@ -35,13 +37,26 @@ export const Navbar = () => {
   return (
     <nav
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        scrolled ? "bg-background/95 backdrop-blur-md shadow-md border-b border-border" : "bg-background/80 backdrop-blur-sm"
+        scrolled
+          ? "bg-background/95 backdrop-blur-md shadow-md border-b border-border"
+          : "bg-background/80 backdrop-blur-sm"
       }`}
     >
       <div className="container-custom">
         <div className="flex items-center justify-between h-16 md:h-20">
-          {/* Spacer for alignment */}
-          <div className="w-4"></div>
+          {/* LEFT: rotating AI tagline in the top black bar */}
+          <RotatingText
+            texts={["Creative automations", "Creative workflows", "Creative systems"]}
+            mainClassName="px-3 sm:px-4 py-1 rounded-full bg-gradient-to-r from-[#00f2ff] via-[#ffe66d] to-[#ff4ecd] text-slate-950 text-xs sm:text-sm md:text-base font-semibold overflow-hidden shadow-md shadow-primary/30"
+            staggerFrom="last"
+            initial={{ y: "100%", opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            exit={{ y: "-120%", opacity: 0 }}
+            staggerDuration={0.03}
+            splitLevelClassName="overflow-hidden"
+            transition={{ type: "spring", damping: 30, stiffness: 400 }}
+            rotationInterval={2200}
+          />
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center gap-8">
