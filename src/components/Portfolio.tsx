@@ -76,7 +76,7 @@ export const Portfolio = () => {
             rel="noopener noreferrer"
             className="block max-w-4xl mx-auto group"
           >
-            <div className="bg-background rounded-lg border-2 border-primary/30 shadow-lg shadow-primary/20 overflow-hidden transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl hover:shadow-primary/30 hover:border-primary/50">
+            <div className="bg-black rounded-lg border-2 border-primary/30 shadow-lg shadow-primary/20 overflow-hidden transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl hover:shadow-primary/30 hover:border-primary/50">
               <img
                 src={new URL('../assets/upwork-profile-banner-clean.png', import.meta.url).href}
                 alt="Eleazar Sebastian M. – Upwork profile preview"
