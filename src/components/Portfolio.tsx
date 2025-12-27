@@ -81,6 +81,7 @@ export const Portfolio = () => {
                 src={new URL('../assets/upwork-profile-banner-clean.png', import.meta.url).href}
                 alt="Eleazar Sebastian M. – Upwork profile preview"
                 className="w-full h-auto"
+                style={{ marginLeft: '-3px', width: 'calc(100% + 3px)' }}
               />
             </div>
           </a>
