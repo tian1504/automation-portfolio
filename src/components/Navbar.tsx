@@ -1,6 +1,5 @@
+import React, { useState, useEffect } from "react";
 import RotatingText from "./RotatingText";
-
-import { useState, useEffect, MouseEvent } from "react";
 import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
@@ -25,7 +24,7 @@ export const Navbar = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const handleNavClick = (e: MouseEvent<HTMLAnchorElement>, href: string) => {
+  const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
     e.preventDefault();
     const element = document.querySelector(href);
     if (element) {
@@ -44,19 +43,24 @@ export const Navbar = () => {
     >
       <div className="container-custom">
         <div className="flex items-center justify-between h-16 md:h-20">
-          {/* LEFT: rotating AI tagline in the top black bar */}
-          <RotatingText
-            texts={["Creative automations", "Creative workflows", "Creative systems"]}
-            mainClassName="px-3 sm:px-4 py-1 rounded-full bg-gradient-to-r from-[#00f2ff] via-[#ffe66d] to-[#ff4ecd] text-slate-950 text-xs sm:text-sm md:text-base font-semibold overflow-hidden shadow-md shadow-primary/30"
-            staggerFrom="last"
-            initial={{ y: "100%", opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            exit={{ y: "-120%", opacity: 0 }}
-            staggerDuration={0.03}
-            splitLevelClassName="overflow-hidden"
-            transition={{ type: "spring", damping: 30, stiffness: 400 }}
-            rotationInterval={2200}
-          />
+          {/* LEFT: rotating tagline */}
+          <div className="flex items-center gap-3">
+            <span className="hidden sm:inline text-xs font-semibold tracking-[0.2em] text-muted-foreground uppercase">
+              Creative
+            </span>
+
+            <RotatingText
+              texts={["automations", "workflows", "systems"]}
+              mainClassName="px-3 sm:px-4 py-1 rounded-full bg-black/90 border border-yellow-400/80 text-yellow-300 text-xs sm:text-sm font-semibold shadow-[0_0_16px_rgba(250,204,21,0.35)]"
+              staggerFrom={"last"}
+              initial={{ y: "100%" }}
+              animate={{ y: 0 }}
+              exit={{ y: "-120%" }}
+              staggerDuration={0.025}
+              splitLevelClassName="overflow-hidden pb-0.5"
+              rotationInterval={2000}
+            />
+          </div>
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center gap-8">
