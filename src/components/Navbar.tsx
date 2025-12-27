@@ -3,7 +3,7 @@ import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 import GlitchText from "./GlitchText";
-import n8nLogo from "@/assets/logos/n8n-nav-black.png"; // adjust filename if needed
+import n8nLogo from "@/assets/logos/n8n.svg";
 
 const navLinks = [
   { href: "#home", label: "Home" },
