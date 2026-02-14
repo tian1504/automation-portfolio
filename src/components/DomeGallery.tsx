@@ -71,7 +71,7 @@ function buildItems(pool: GalleryImage[], seg: number) {
 
     // ↓↓↓ this is the key change: cards are slightly smaller than their grid cell
     // which introduces clean spacing horizontally & vertically
-    return ys.map((y) => ({ x, y, sizeX: 1.6, sizeY: 1.4 }));
+    return ys.map((y) => ({ x, y, sizeX: 2.2, sizeY: 1.8 }));
   });
 
   const totalSlots = coords.length;
