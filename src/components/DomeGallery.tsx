@@ -1,7 +1,7 @@
 // @ts-nocheck
 "use client";
 
-import React, { useEffect, useMemo, useRef, useCallback } from "react";
+import React, { useEffect, useMemo, useRef, useCallback, useState } from "react";
 import { useGesture } from "@use-gesture/react";
 import "./DomeGallery.css";
 
@@ -180,8 +180,8 @@ export default function DomeGallery({
   const openingRef = useRef(false);
   const openStartedAtRef = useRef(0);
   const lastDragEndAt = useRef(0);
-  const hoveredRef = useRef(false);
   const autoRotateRAF = useRef<number | null>(null);
+  const [visibleCaptionId, setVisibleCaptionId] = useState<number | null>(null);
 
   const scrollLockedRef = useRef(false);
   const lockScroll = useCallback(() => {
@@ -303,7 +303,7 @@ export default function DomeGallery({
       const dt = now - lastTime;
       lastTime = now;
       if (
-        !hoveredRef.current &&
+        visibleCaptionId === null &&
         !draggingRef.current &&
         !focusedElRef.current &&
         !inertiaRAF.current
@@ -634,11 +634,7 @@ export default function DomeGallery({
   );
 
   const hideAllCaptions = useCallback(() => {
-    rootRef.current?.querySelectorAll('.item__caption').forEach((el) => {
-      const caption = el as HTMLElement;
-      caption.style.opacity = '0';
-      caption.style.transform = 'translateX(-50%) translateY(6px)';
-    });
+    setVisibleCaptionId(null);
   }, []);
 
   const onTileClick = useCallback(
@@ -666,20 +662,17 @@ export default function DomeGallery({
     [openItemFromElement, hideAllCaptions],
   );
 
-  // Safety net: hide orphaned captions when pointer leaves the sphere entirely
+  // Safety net: hide captions when pointer leaves the gallery
   useEffect(() => {
     const root = rootRef.current;
     if (!root) return;
-    const onLeave = () => {
-      hoveredRef.current = false;
-      hideAllCaptions();
-    };
-    root.addEventListener('pointerleave', onLeave, { passive: true });
+    const onLeave = () => setVisibleCaptionId(null);
+    root.addEventListener('mouseleave', onLeave, { passive: true });
     return () => {
-      root.removeEventListener('pointerleave', onLeave);
+      root.removeEventListener('mouseleave', onLeave);
       document.body.classList.remove("dg-scroll-lock");
     };
-  }, [hideAllCaptions]);
+  }, []);
 
   return (
     <div
@@ -721,25 +714,21 @@ export default function DomeGallery({
                   aria-label={it.alt || "Open image"}
                   onClick={onTileClick}
                   onPointerUp={onTilePointerUp}
-                  onMouseEnter={(e) => {
-                    hoveredRef.current = true;
-                    hideAllCaptions();
-                    const caption = e.currentTarget.querySelector('.item__caption') as HTMLElement;
-                    if (caption) { caption.style.opacity = '1'; caption.style.transform = 'translateX(-50%) translateY(0)'; }
-                  }}
-                  onMouseLeave={(e) => {
-                    hoveredRef.current = false;
-                    const caption = e.currentTarget.querySelector('.item__caption') as HTMLElement;
-                    if (caption) { caption.style.opacity = '0'; caption.style.transform = 'translateX(-50%) translateY(6px)'; }
-                  }}
-                  onPointerLeave={(e) => {
-                    hoveredRef.current = false;
-                    const caption = e.currentTarget.querySelector('.item__caption') as HTMLElement;
-                    if (caption) { caption.style.opacity = '0'; caption.style.transform = 'translateX(-50%) translateY(6px)'; }
-                  }}
+                  onMouseEnter={() => setVisibleCaptionId(i)}
+                  onMouseLeave={() => setVisibleCaptionId((prev) => prev === i ? null : prev)}
                 >
                   <img src={it.thumbnail || it.src} draggable={false} alt={it.alt} />
-                  {it.alt && <div className="item__caption">{it.alt}</div>}
+                  {it.alt && (
+                    <div
+                      className="item__caption"
+                      style={{
+                        opacity: visibleCaptionId === i ? 1 : 0,
+                        transform: `translateX(-50%) translateY(${visibleCaptionId === i ? '0' : '6px'})`,
+                      }}
+                    >
+                      {it.alt}
+                    </div>
+                  )}
                 </div>
               </div>
             ))}
