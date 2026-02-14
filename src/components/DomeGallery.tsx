@@ -666,11 +666,22 @@ export default function DomeGallery({
     [openItemFromElement, hideAllCaptions],
   );
 
+  // Safety net: periodically hide orphaned captions when not hovering any tile
   useEffect(() => {
+    const root = rootRef.current;
+    if (!root) return;
+    const onMove = (e: PointerEvent) => {
+      const target = e.target as HTMLElement;
+      if (!target.closest('.item__image')) {
+        hideAllCaptions();
+      }
+    };
+    root.addEventListener('pointermove', onMove, { passive: true });
     return () => {
+      root.removeEventListener('pointermove', onMove);
       document.body.classList.remove("dg-scroll-lock");
     };
-  }, []);
+  }, [hideAllCaptions]);
 
   return (
     <div
@@ -714,15 +725,19 @@ export default function DomeGallery({
                   onPointerUp={onTilePointerUp}
                   onMouseEnter={(e) => {
                     hoveredRef.current = true;
+                    hideAllCaptions();
                     const caption = e.currentTarget.querySelector('.item__caption') as HTMLElement;
-                    if (caption) caption.style.opacity = '1';
-                    if (caption) caption.style.transform = 'translateX(-50%) translateY(0)';
+                    if (caption) { caption.style.opacity = '1'; caption.style.transform = 'translateX(-50%) translateY(0)'; }
                   }}
                   onMouseLeave={(e) => {
                     hoveredRef.current = false;
                     const caption = e.currentTarget.querySelector('.item__caption') as HTMLElement;
-                    if (caption) caption.style.opacity = '0';
-                    if (caption) caption.style.transform = 'translateX(-50%) translateY(6px)';
+                    if (caption) { caption.style.opacity = '0'; caption.style.transform = 'translateX(-50%) translateY(6px)'; }
+                  }}
+                  onPointerLeave={(e) => {
+                    hoveredRef.current = false;
+                    const caption = e.currentTarget.querySelector('.item__caption') as HTMLElement;
+                    if (caption) { caption.style.opacity = '0'; caption.style.transform = 'translateX(-50%) translateY(6px)'; }
                   }}
                 >
                   <img src={it.thumbnail || it.src} draggable={false} alt={it.alt} />
