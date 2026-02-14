@@ -1,4 +1,6 @@
-import React, { useEffect, useRef } from 'react';
+'use client';
+
+import React, { useEffect, useRef, useCallback } from 'react';
 
 export function TubesCursor() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -39,17 +41,41 @@ export function TubesCursor() {
     };
   }, []);
 
-  const handleClick = () => {
-    if (appRef.current) {
-      const newTubeColors = randomColors(3);
-      const newLightColors = randomColors(4);
-      appRef.current.tubes.setColors(newTubeColors);
-      appRef.current.tubes.setLightsColors(newLightColors);
-    }
-  };
+  // Forward pointer/mouse events from document.body to the canvas
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    const forward = (e: MouseEvent | PointerEvent) => {
+      const cloned = new (e.constructor as typeof MouseEvent)(e.type, e);
+      canvas.dispatchEvent(cloned);
+    };
+
+    const events = ['pointermove', 'pointerdown', 'pointerup', 'mousemove', 'mousedown', 'mouseup'] as const;
+    events.forEach((evt) => document.body.addEventListener(evt, forward as EventListener));
+
+    return () => {
+      events.forEach((evt) => document.body.removeEventListener(evt, forward as EventListener));
+    };
+  }, []);
+
+  // Color change on background click
+  useEffect(() => {
+    const handleClick = () => {
+      if (appRef.current) {
+        const newTubeColors = randomColors(3);
+        const newLightColors = randomColors(4);
+        appRef.current.tubes.setColors(newTubeColors);
+        appRef.current.tubes.setLightsColors(newLightColors);
+      }
+    };
+
+    document.body.addEventListener('click', handleClick);
+    return () => document.body.removeEventListener('click', handleClick);
+  }, []);
 
   return (
-    <div className="relative w-full h-full cursor-pointer" onClick={handleClick}>
+    <div className="relative w-full h-full">
       <canvas ref={canvasRef} className="absolute inset-0 w-full h-full" />
     </div>
   );
