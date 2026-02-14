@@ -59,13 +59,13 @@ main.sphere-main {
 }
 
 .overlay {
-  background-image: radial-gradient(rgba(235, 235, 235, 0) 40%, var(--overlay-blur-color, #0d0a1a) 100%);
+  background-image: radial-gradient(rgba(235, 235, 235, 0) 40%, var(--overlay-blur-color, #000000) 100%);
 }
 
 .overlay--blur {
-  -webkit-mask-image: radial-gradient(rgba(235, 235, 235, 0) 45%, var(--overlay-blur-color, #0d0a1a) 80%);
-  mask-image: radial-gradient(rgba(235, 235, 235, 0) 45%, var(--overlay-blur-color, #0d0a1a) 80%);
-  background: radial-gradient(rgba(0,0,0,0) 45%, var(--overlay-blur-color, #0d0a1a) 85%);
+  -webkit-mask-image: radial-gradient(rgba(235, 235, 235, 0) 45%, var(--overlay-blur-color, #000000) 80%);
+  mask-image: radial-gradient(rgba(235, 235, 235, 0) 45%, var(--overlay-blur-color, #000000) 80%);
+  background: radial-gradient(rgba(0,0,0,0) 45%, var(--overlay-blur-color, #000000) 85%);
 }
 
 /* ── Tile container ── */
@@ -356,7 +356,7 @@ main.sphere-main {
   width: 100%;
   height: 100%;
   object-fit: contain;
-  background: #0d0a1a;
+  background: #000000;
 }
 
 .sphere-root .enlarge-closing img {
@@ -371,7 +371,7 @@ main.sphere-main {
   height: 140px;
   z-index: 5;
   pointer-events: none;
-  background: linear-gradient(to bottom, transparent, var(--overlay-blur-color, #0d0a1a));
+  background: linear-gradient(to bottom, transparent, var(--overlay-blur-color, #000000));
 }
 
 .edge-fade--top {
