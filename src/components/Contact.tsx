@@ -10,7 +10,7 @@ const contactMethods = [
     icon: Mail,
     title: "Email",
     value: "tian1504@gmail.com",
-    link: "mailto:tian1504@gmail.com",
+    link: "https://mail.google.com/mail/?view=cm&to=tian1504@gmail.com",
   },
   {
     icon: Linkedin,
