@@ -276,12 +276,11 @@ main.sphere-main {
 /* ── Viewer / enlarged view ── */
 .viewer-meta {
   position: absolute;
+  bottom: 24px;
   right: 24px;
-  top: 50%;
-  transform: translateY(-50%);
   z-index: 35;
   pointer-events: none;
-  max-width: 280px;
+  max-width: 300px;
   opacity: 0;
   animation: metaFadeIn 400ms 300ms ease forwards;
 }
@@ -292,8 +291,8 @@ main.sphere-main {
 }
 
 @keyframes metaFadeIn {
-  from { opacity: 0; transform: translateY(-50%) translateX(12px); }
-  to { opacity: 1; transform: translateY(-50%) translateX(0); }
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 .viewer-meta__panel {
@@ -352,19 +351,11 @@ main.sphere-main {
   border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
-/* Responsive: stack below on smaller screens */
 @media (max-width: 900px) {
   .viewer-meta {
-    right: auto;
-    top: auto;
-    bottom: 16px;
-    left: 50%;
-    transform: translateX(-50%);
+    right: 50%;
+    transform: translateX(50%);
     max-width: 90%;
-  }
-  @keyframes metaFadeIn {
-    from { opacity: 0; transform: translateX(-50%) translateY(12px); }
-    to { opacity: 1; transform: translateX(-50%) translateY(0); }
   }
 }
 
