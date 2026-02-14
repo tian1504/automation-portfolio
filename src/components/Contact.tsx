@@ -34,7 +34,7 @@ const contactMethods = [
 
 export const Contact = () => {
   return (
-    <section id="contact" className="section-padding bg-gradient-to-b from-secondary to-background">
+    <section id="contact" className="section-padding">
       <div className="container-custom">
         <div className="text-center mb-12 md:mb-16">
           <h2 className="text-3xl md:text-5xl font-bold text-foreground mb-4">

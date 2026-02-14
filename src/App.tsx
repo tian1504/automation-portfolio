@@ -4,7 +4,6 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import DotGrid from "@/components/DotGrid";
-import { TubesCursor } from "@/components/ui/tubes-cursor";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 
@@ -35,10 +34,6 @@ const App = () => (
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
-      </div>
-      {/* Global TubesCursor overlay */}
-      <div className="fixed inset-0 z-10 pointer-events-none mix-blend-screen opacity-80">
-        <TubesCursor />
       </div>
     </TooltipProvider>
   </QueryClientProvider>

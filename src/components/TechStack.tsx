@@ -25,20 +25,7 @@ export const TechStack = () => {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
 
   return (
-    <section className="section-padding bg-background relative overflow-hidden">
-      {/* Subtle pattern background */}
-      <div className="absolute inset-0 opacity-[0.02]">
-        <div className="absolute inset-0" style={{
-          backgroundImage: `repeating-linear-gradient(
-            45deg,
-            transparent,
-            transparent 10px,
-            hsl(45 93% 54%) 10px,
-            hsl(45 93% 54%) 11px
-          )`
-        }} />
-      </div>
-
+    <section className="section-padding relative overflow-hidden">
       <div className="container-custom relative z-10">
         <div className="text-center mb-12 md:mb-16">
           <h2 className="text-3xl md:text-5xl font-bold text-foreground mb-4">

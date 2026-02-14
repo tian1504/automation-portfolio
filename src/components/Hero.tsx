@@ -11,7 +11,7 @@ export const Hero = () => {
   };
 
   return (
-    <section id="home" className="min-h-screen flex items-center justify-center hero-section pt-20">
+    <section id="home" className="min-h-screen flex items-center justify-center pt-20">
       <div className="container-custom">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center max-w-7xl mx-auto">
           {/* Left Column - Text Content */}
