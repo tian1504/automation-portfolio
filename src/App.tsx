@@ -12,7 +12,7 @@ const queryClient = new QueryClient();
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
-      <SplashCursor />
+      {/* <SplashCursor /> */}
       <Toaster />
       <Sonner />
       <BrowserRouter>
