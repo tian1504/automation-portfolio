@@ -18,6 +18,10 @@ export function TubesCursor() {
         .then((module: any) => {
           const TubesCursorLib = module.default;
           if (canvasRef.current) {
+            // Request transparent WebGL context
+            const gl = canvasRef.current.getContext('webgl2', { alpha: true, premultipliedAlpha: false })
+              || canvasRef.current.getContext('webgl', { alpha: true, premultipliedAlpha: false });
+
             const app = TubesCursorLib(canvasRef.current, {
               tubes: {
                 colors: ["#5e72e4", "#8965e0", "#f5365c"],
@@ -27,6 +31,11 @@ export function TubesCursor() {
                 }
               }
             });
+
+            // Clear to transparent after init
+            if (app && app.renderer) {
+              app.renderer.setClearColor(0x000000, 0);
+            }
             appRef.current = app;
           }
         })
