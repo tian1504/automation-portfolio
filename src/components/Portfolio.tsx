@@ -9,27 +9,29 @@ import workflowHookBank from '@/assets/workflows/n8n-03.png';
 import workflowInstagram from '@/assets/workflows/n8n-04.png';
 import workflowWeather from '@/assets/workflows/n8n-05.png';
 import workflowOrganic from '@/assets/workflows/n8n-06.png';
+import workflowRAG from '@/assets/workflows/n8n-workflow-RAG-2.png';
+import workflowMultiAgent from '@/assets/workflows/multiagent_n8n.png';
+import workflowInternalGPT from '@/assets/workflows/InternalChatGPT-N8N.png';
 
 const WORKFLOW_IMAGES = [
-  { src: workflowStatic, thumbnail: AiAutomationDome, alt: 'Static Prompt & Image Engine (n8n)' },
-  { src: workflowApollo, thumbnail: AiAutomationDome, alt: 'Apollo Lead Scraper & Icebreakers' },
-  { src: workflowVideoGen, thumbnail: AiAutomationDome, alt: 'AI Video Generator & Facebook Uploader' },
-  { src: workflowHookBank, thumbnail: AiAutomationDome, alt: 'Hook Bank & UGC Brief Builder' },
-  { src: workflowInstagram, thumbnail: AiAutomationDome, alt: 'Instagram Scraper & Hook Idea Engine' },
-  { src: workflowWeather, thumbnail: AiAutomationDome, alt: 'Daily Weather Quote & Image Poster' },
-  { src: workflowOrganic, thumbnail: AiAutomationDome, alt: 'Multi-Channel Organic Content System' },
-  // Generic AI Automation tiles
-  { src: AiAutomationDome, thumbnail: AiAutomationDome, alt: 'AI Automation' },
-  { src: AiAutomationDome, thumbnail: AiAutomationDome, alt: 'AI Automation' },
-  { src: AiAutomationDome, thumbnail: AiAutomationDome, alt: 'AI Automation' },
-  { src: AiAutomationDome, thumbnail: AiAutomationDome, alt: 'AI Automation' },
+  { src: workflowStatic, thumbnail: workflowStatic, alt: 'Static Prompt & Image Engine (n8n)' },
+  { src: workflowApollo, thumbnail: workflowApollo, alt: 'Apollo Lead Scraper & Icebreakers' },
+  { src: workflowVideoGen, thumbnail: workflowVideoGen, alt: 'AI Video Generator & Facebook Uploader' },
+  { src: workflowHookBank, thumbnail: workflowHookBank, alt: 'Hook Bank & UGC Brief Builder' },
+  { src: workflowInstagram, thumbnail: workflowInstagram, alt: 'Instagram Scraper & Hook Idea Engine' },
+  { src: workflowWeather, thumbnail: workflowWeather, alt: 'Daily Weather Quote & Image Poster' },
+  { src: workflowOrganic, thumbnail: workflowOrganic, alt: 'Multi-Channel Organic Content System' },
+  { src: workflowRAG, thumbnail: workflowRAG, alt: 'RAG Knowledge Base Pipeline' },
+  { src: workflowMultiAgent, thumbnail: workflowMultiAgent, alt: 'Multi-Agent AI System' },
+  { src: workflowInternalGPT, thumbnail: workflowInternalGPT, alt: 'Internal ChatGPT Assistant' },
+  // Minimal focal point icons
   { src: AiAutomationDome, thumbnail: AiAutomationDome, alt: 'AI Automation' },
   { src: AiAutomationDome, thumbnail: AiAutomationDome, alt: 'AI Automation' },
 ];
 
 export const Portfolio = () => {
   return (
-    <section id="portfolio" className="section-padding bg-secondary">
+    <section id="portfolio" className="section-padding relative overflow-hidden" style={{ background: 'linear-gradient(180deg, #0a0f1e 0%, #1a0f2e 100%)' }}>
       <div className="container-custom">
         <div className="text-center mb-12 md:mb-16">
           <h2 className="text-3xl md:text-5xl font-bold text-foreground mb-4">
@@ -41,13 +43,14 @@ export const Portfolio = () => {
         </div>
 
         {/* Dome Gallery */}
-        <div className="mx-auto max-w-6xl" style={{ height: '650px' }}>
+        <div className="mx-auto max-w-6xl" style={{ height: '700px' }}>
           <DomeGallery
             images={WORKFLOW_IMAGES}
-            overlayBlurColor="#05030F"
+            overlayBlurColor="#0d0a1a"
             grayscale={false}
             openedImageWidth="900px"
             openedImageHeight="520px"
+            imageBorderRadius="16px"
           />
         </div>
 
