@@ -420,6 +420,9 @@ export default function DomeGallery({
       if (!el) return;
       const parent = el.parentElement as HTMLElement;
       const overlay = viewerRef.current?.querySelector(".enlarge") as HTMLDivElement | null;
+      // Clear viewer-meta title
+      const metaRoot = viewerRef.current?.querySelector(".viewer-meta") as HTMLDivElement | null;
+      if (metaRoot) metaRoot.innerHTML = "";
       if (!overlay) return;
       const refDiv = parent.querySelector(".item__image--reference") as HTMLDivElement | null;
       const originalPos = originalTilePositionRef.current;
