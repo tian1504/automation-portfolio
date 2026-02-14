@@ -35,7 +35,7 @@ const WORKFLOW_IMAGES = [
 
 export const Portfolio = () => {
   return (
-    <section id="portfolio" className="section-padding relative overflow-hidden" style={{ background: 'linear-gradient(180deg, #0a0f1e 0%, #1a0f2e 100%)' }}>
+    <section id="portfolio" className="section-padding relative overflow-hidden">
       {/* Subtle network grid background */}
       <div className="absolute inset-0 pointer-events-none" style={{
         backgroundImage: `
