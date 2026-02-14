@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 
 // Update this URL when you have your Calendly/TidyCal link
-const BOOKING_URL = "#";
+const BOOKING_URL = "https://calendly.com/tian1504/30min";
 
 const contactMethods = [
   {
