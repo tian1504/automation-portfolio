@@ -55,7 +55,7 @@ const getDataNumber = (el: HTMLElement, name: string, fallback: number) => {
   return Number.isFinite(n) ? n : fallback;
 };
 
-type GalleryImage = { src: string; alt?: string; thumbnail?: string; category?: string };
+type GalleryImage = { src: string; alt?: string; thumbnail?: string; category?: string; description?: string; tools?: string[] };
 
 function buildItems(pool: GalleryImage[], seg: number) {
   // columns around the sphere – keep them aligned with the CSS segments
@@ -85,8 +85,8 @@ function buildItems(pool: GalleryImage[], seg: number) {
   }
 
   const normalizedImages = pool.map((image) => {
-    if (typeof image === "string") return { src: image, alt: "", category: "" };
-    return { src: image.src || "", alt: image.alt || "", category: image.category || "" };
+    if (typeof image === "string") return { src: image, alt: "", category: "", description: "", tools: [] as string[] };
+    return { src: image.src || "", alt: image.alt || "", category: image.category || "", description: image.description || "", tools: image.tools || [] };
   });
 
   const usedImages = Array.from({ length: totalSlots }, (_, i) => normalizedImages[i % normalizedImages.length]);
@@ -109,6 +109,8 @@ function buildItems(pool: GalleryImage[], seg: number) {
     src: usedImages[i].src,
     alt: usedImages[i].alt,
     category: usedImages[i].category || '',
+    description: usedImages[i].description || '',
+    tools: usedImages[i].tools || [],
   }));
 }
 
@@ -586,11 +588,38 @@ export default function DomeGallery({
 
       overlay.style.transform = `translate(${tx0}px, ${ty0}px) scale(${validSx0}, ${validSy0})`;
 
-      // Populate viewer-meta with title
+      // Populate viewer-meta with rich description panel
       const metaRoot = viewerRef.current?.querySelector(".viewer-meta") as HTMLDivElement | null;
       if (metaRoot) {
         const title = el.getAttribute("aria-label") || el.getAttribute("title") || "";
-        metaRoot.innerHTML = title ? `<div class="viewer-meta__title">${title}</div>` : "";
+        const category = parent.dataset.category || "";
+        const description = parent.dataset.description || "";
+        const toolsStr = parent.dataset.tools || "";
+        const tools = toolsStr ? toolsStr.split(",") : [];
+        
+        const categoryColors: Record<string, string> = {
+          data: '#4ade80',
+          communication: '#60a5fa',
+          automation: '#fb923c',
+        };
+        const accentColor = categoryColors[category] || '#a78bfa';
+        const categoryLabel = category.charAt(0).toUpperCase() + category.slice(1);
+        
+        let html = `<div class="viewer-meta__panel" style="--meta-accent: ${accentColor}">`;
+        if (category && category !== 'ai-focal') {
+          html += `<span class="viewer-meta__badge">${categoryLabel}</span>`;
+        }
+        if (title) {
+          html += `<h3 class="viewer-meta__heading">${title}</h3>`;
+        }
+        if (description) {
+          html += `<p class="viewer-meta__desc">${description}</p>`;
+        }
+        if (tools.length > 0) {
+          html += `<div class="viewer-meta__tools">${tools.map(t => `<span class="viewer-meta__tool">${t.trim()}</span>`).join('')}</div>`;
+        }
+        html += `</div>`;
+        metaRoot.innerHTML = html;
       }
 
       setTimeout(() => {
@@ -703,6 +732,8 @@ export default function DomeGallery({
                 data-size-x={it.sizeX}
                 data-size-y={it.sizeY}
                 data-category={it.category || ''}
+                data-description={it.description || ''}
+                data-tools={it.tools?.join(',') || ''}
                 style={{
                   ["--offset-x" as any]: it.x,
                   ["--offset-y" as any]: it.y,
