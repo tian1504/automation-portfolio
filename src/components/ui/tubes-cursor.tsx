@@ -49,8 +49,8 @@ export function TubesCursor() {
   };
 
   return (
-    <div className="fixed inset-0 z-50 pointer-events-none" onClick={handleClick}>
-      <canvas ref={canvasRef} className="w-full h-full pointer-events-auto" style={{ mixBlendMode: 'screen' }} />
+    <div className="relative w-full h-full cursor-pointer" onClick={handleClick}>
+      <canvas ref={canvasRef} className="absolute inset-0 w-full h-full" />
     </div>
   );
 }
