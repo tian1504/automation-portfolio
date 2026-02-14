@@ -666,19 +666,17 @@ export default function DomeGallery({
     [openItemFromElement, hideAllCaptions],
   );
 
-  // Safety net: periodically hide orphaned captions when not hovering any tile
+  // Safety net: hide orphaned captions when pointer leaves the sphere entirely
   useEffect(() => {
     const root = rootRef.current;
     if (!root) return;
-    const onMove = (e: PointerEvent) => {
-      const target = e.target as HTMLElement;
-      if (!target.closest('.item__image')) {
-        hideAllCaptions();
-      }
+    const onLeave = () => {
+      hoveredRef.current = false;
+      hideAllCaptions();
     };
-    root.addEventListener('pointermove', onMove, { passive: true });
+    root.addEventListener('pointerleave', onLeave, { passive: true });
     return () => {
-      root.removeEventListener('pointermove', onMove);
+      root.removeEventListener('pointerleave', onLeave);
       document.body.classList.remove("dg-scroll-lock");
     };
   }, [hideAllCaptions]);
