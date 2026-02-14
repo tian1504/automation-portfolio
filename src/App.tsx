@@ -13,12 +13,8 @@ const queryClient = new QueryClient();
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
-      {/* Global TubesCursor background */}
-      <div className="fixed inset-0 z-0 pointer-events-none">
-        <TubesCursor />
-      </div>
       {/* <SplashCursor /> */}
-      <div className="relative z-10">
+      <div className="relative z-0">
         <Toaster />
         <Sonner />
         <BrowserRouter>
@@ -28,6 +24,10 @@ const App = () => (
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
+      </div>
+      {/* Global TubesCursor overlay */}
+      <div className="fixed inset-0 z-10 pointer-events-none mix-blend-screen opacity-80">
+        <TubesCursor />
       </div>
     </TooltipProvider>
   </QueryClientProvider>
