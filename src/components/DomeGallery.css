@@ -248,8 +248,7 @@ main.sphere-main {
   bottom: 10px;
   transform: translateX(-50%) translateY(6px);
   padding: 6px 14px;
-  background: linear-gradient(135deg, rgba(10, 15, 30, 0.92), rgba(26, 15, 46, 0.95));
-  backdrop-filter: blur(16px);
+  background: linear-gradient(135deg, rgba(10, 15, 30, 0.95), rgba(26, 15, 46, 0.98));
   border-radius: 10px;
   border: 1px solid rgba(100, 150, 255, 0.15);
   color: #e2e8f0;
