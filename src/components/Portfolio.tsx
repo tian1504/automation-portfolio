@@ -75,7 +75,7 @@ export const Portfolio = () => {
         <div className="mx-auto max-w-6xl" style={{ height: '700px' }}>
           <DomeGallery
             images={WORKFLOW_IMAGES}
-            overlayBlurColor="#0d0a1a"
+            overlayBlurColor="#000000"
             grayscale={false}
             openedImageWidth="900px"
             openedImageHeight="520px"
