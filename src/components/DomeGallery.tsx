@@ -55,7 +55,7 @@ const getDataNumber = (el: HTMLElement, name: string, fallback: number) => {
   return Number.isFinite(n) ? n : fallback;
 };
 
-type GalleryImage = { src: string; alt?: string; thumbnail?: string };
+type GalleryImage = { src: string; alt?: string; thumbnail?: string; category?: string };
 
 function buildItems(pool: GalleryImage[], seg: number) {
   // columns around the sphere – keep them aligned with the CSS segments
@@ -85,8 +85,8 @@ function buildItems(pool: GalleryImage[], seg: number) {
   }
 
   const normalizedImages = pool.map((image) => {
-    if (typeof image === "string") return { src: image, alt: "" };
-    return { src: image.src || "", alt: image.alt || "" };
+    if (typeof image === "string") return { src: image, alt: "", category: "" };
+    return { src: image.src || "", alt: image.alt || "", category: image.category || "" };
   });
 
   const usedImages = Array.from({ length: totalSlots }, (_, i) => normalizedImages[i % normalizedImages.length]);
@@ -108,6 +108,7 @@ function buildItems(pool: GalleryImage[], seg: number) {
     ...c,
     src: usedImages[i].src,
     alt: usedImages[i].alt,
+    category: usedImages[i].category || '',
   }));
 }
 
@@ -136,6 +137,8 @@ type DomeGalleryProps = {
   imageBorderRadius?: string;
   openedImageBorderRadius?: string;
   grayscale?: boolean;
+  autoRotate?: boolean;
+  autoRotateSpeed?: number;
 };
 
 export default function DomeGallery({
@@ -156,6 +159,8 @@ export default function DomeGallery({
   imageBorderRadius = "30px",
   openedImageBorderRadius = "30px",
   grayscale = true,
+  autoRotate = false,
+  autoRotateSpeed = 0.15,
 }: DomeGalleryProps) {
   const rootRef = useRef<HTMLDivElement | null>(null);
   const mainRef = useRef<HTMLElement | null>(null);
@@ -175,6 +180,8 @@ export default function DomeGallery({
   const openingRef = useRef(false);
   const openStartedAtRef = useRef(0);
   const lastDragEndAt = useRef(0);
+  const hoveredRef = useRef(false);
+  const autoRotateRAF = useRef<number | null>(null);
 
   const scrollLockedRef = useRef(false);
   const lockScroll = useCallback(() => {
@@ -287,6 +294,31 @@ export default function DomeGallery({
   useEffect(() => {
     applyTransform(rotationRef.current.x, rotationRef.current.y);
   }, []);
+
+  // Auto-rotation with pause on hover/drag
+  useEffect(() => {
+    if (!autoRotate) return;
+    let lastTime = performance.now();
+    const step = (now: number) => {
+      const dt = now - lastTime;
+      lastTime = now;
+      if (
+        !hoveredRef.current &&
+        !draggingRef.current &&
+        !focusedElRef.current &&
+        !inertiaRAF.current
+      ) {
+        const nextY = wrapAngleSigned(rotationRef.current.y + autoRotateSpeed * (dt / 16));
+        rotationRef.current = { ...rotationRef.current, y: nextY };
+        applyTransform(rotationRef.current.x, nextY);
+      }
+      autoRotateRAF.current = requestAnimationFrame(step);
+    };
+    autoRotateRAF.current = requestAnimationFrame(step);
+    return () => {
+      if (autoRotateRAF.current) cancelAnimationFrame(autoRotateRAF.current);
+    };
+  }, [autoRotate, autoRotateSpeed]);
 
   const stopInertia = useCallback(() => {
     if (inertiaRAF.current) {
@@ -654,6 +686,7 @@ export default function DomeGallery({
                 data-offset-y={it.y}
                 data-size-x={it.sizeX}
                 data-size-y={it.sizeY}
+                data-category={it.category || ''}
                 style={{
                   ["--offset-x" as any]: it.x,
                   ["--offset-y" as any]: it.y,
@@ -669,6 +702,8 @@ export default function DomeGallery({
                   title={it.alt || "Open image"}
                   onClick={onTileClick}
                   onPointerUp={onTilePointerUp}
+                  onMouseEnter={() => { hoveredRef.current = true; }}
+                  onMouseLeave={() => { hoveredRef.current = false; }}
                 >
                   <img src={it.thumbnail || it.src} draggable={false} alt={it.alt} />
                   {it.alt && <div className="item__caption">{it.alt}</div>}
