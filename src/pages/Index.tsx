@@ -1,6 +1,6 @@
 import { Navbar } from "@/components/Navbar";
 import { Hero } from "@/components/Hero";
-import { TubesHero } from "@/components/hero/TubesHero";
+import { TubesCursor } from "@/components/ui/tubes-cursor";
 import { TechStack } from "@/components/TechStack";
 import { Services } from "@/components/Services";
 import { Experience } from "@/components/Experience";
@@ -11,8 +11,8 @@ import { Contact } from "@/components/Contact";
 const Index = () => {
   return (
     <div className="min-h-screen">
+      <TubesCursor />
       <Navbar />
-      <TubesHero />
       <Hero />
       <TechStack />
       <Services />
