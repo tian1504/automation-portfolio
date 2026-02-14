@@ -1,6 +1,7 @@
 import { ArrowRight, Calendar } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import portraitImage from "@/assets/portrait.png";
+import { TubesCursor } from "@/components/ui/tubes-cursor";
 
 export const Hero = () => {
   const handleScroll = (id: string) => {
@@ -11,7 +12,11 @@ export const Hero = () => {
   };
 
   return (
-    <section id="home" className="min-h-screen flex items-center justify-center hero-section pt-20">
+    <section id="home" className="min-h-screen flex items-center justify-center hero-section pt-20 relative overflow-hidden">
+      {/* TubesCursor background layer */}
+      <div className="absolute inset-0 z-0 pointer-events-none">
+        <TubesCursor />
+      </div>
       <div className="container-custom relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center max-w-7xl mx-auto">
           {/* Left Column - Text Content */}
