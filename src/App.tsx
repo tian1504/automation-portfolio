@@ -3,7 +3,7 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import SplashCursor from "@/components/SplashCursor";
+import DotGrid from "@/components/DotGrid";
 import { TubesCursor } from "@/components/ui/tubes-cursor";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
@@ -13,14 +13,25 @@ const queryClient = new QueryClient();
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
-      {/* <SplashCursor /> */}
-      <div className="relative z-0">
+      {/* Fixed DotGrid background */}
+      <div className="fixed inset-0 z-0">
+        <DotGrid
+          dotSize={4}
+          gap={28}
+          baseColor="#1a1a2e"
+          activeColor="#5227FF"
+          proximity={120}
+          shockRadius={200}
+          shockStrength={4}
+        />
+      </div>
+      {/* Site content */}
+      <div className="relative z-[1]">
         <Toaster />
         <Sonner />
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<Index />} />
-            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
