@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 
-export default function TubesCursor() {
+export function TubesCursor() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const appRef = useRef<any>(null);
 
