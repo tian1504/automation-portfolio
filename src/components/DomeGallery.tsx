@@ -699,11 +699,20 @@ export default function DomeGallery({
                   role="button"
                   tabIndex={0}
                   aria-label={it.alt || "Open image"}
-                  title={it.alt || "Open image"}
                   onClick={onTileClick}
                   onPointerUp={onTilePointerUp}
-                  onMouseEnter={() => { hoveredRef.current = true; }}
-                  onMouseLeave={() => { hoveredRef.current = false; }}
+                  onMouseEnter={(e) => {
+                    hoveredRef.current = true;
+                    const caption = e.currentTarget.querySelector('.item__caption') as HTMLElement;
+                    if (caption) caption.style.opacity = '1';
+                    if (caption) caption.style.transform = 'translateX(-50%) translateY(0)';
+                  }}
+                  onMouseLeave={(e) => {
+                    hoveredRef.current = false;
+                    const caption = e.currentTarget.querySelector('.item__caption') as HTMLElement;
+                    if (caption) caption.style.opacity = '0';
+                    if (caption) caption.style.transform = 'translateX(-50%) translateY(6px)';
+                  }}
                 >
                   <img src={it.thumbnail || it.src} draggable={false} alt={it.alt} />
                   {it.alt && <div className="item__caption">{it.alt}</div>}

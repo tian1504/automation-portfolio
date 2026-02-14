@@ -273,11 +273,7 @@ main.sphere-main {
 .item[data-category="automation"] .item__caption { border-color: rgba(251, 146, 60, 0.25); }
 .item[data-category="ai-focal"] .item__caption { border-color: rgba(168, 85, 247, 0.25); }
 
-.item__image:hover .item__caption,
-.item__image:focus-visible .item__caption {
-  opacity: 1;
-  transform: translateX(-50%) translateY(0);
-}
+/* Tooltips controlled via JS mouse events — no CSS hover rule */
 
 /* ── Viewer / enlarged view ── */
 .viewer-meta {

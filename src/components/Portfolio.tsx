@@ -80,8 +80,7 @@ export const Portfolio = () => {
             openedImageWidth="900px"
             openedImageHeight="520px"
             imageBorderRadius="16px"
-            autoRotate
-            autoRotateSpeed={0.15}
+            autoRotate={false}
           />
         </div>
 
