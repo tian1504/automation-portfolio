@@ -40,7 +40,7 @@ const DEFAULTS = {
   maxVerticalRotationDeg: 5,
   dragSensitivity: 20,
   enlargeTransitionMs: 300,
-  segments: 14,
+  segments: 22,
 };
 
 const clamp = (v: number, min: number, max: number) => Math.min(Math.max(v, min), max);
@@ -60,12 +60,11 @@ type GalleryImage = { src: string; alt?: string; thumbnail?: string; category?: 
 function buildItems(pool: GalleryImage[], seg: number) {
   // columns around the sphere – keep them aligned with the CSS segments
   const start = -(seg - 1);
-  const colSpacing = Math.max(2, Math.round(50 / seg));
-  const xCols = Array.from({ length: seg }, (_, i) => start + i * colSpacing);
+  const xCols = Array.from({ length: seg }, (_, i) => start + i * 2);
 
   // vertical “bands” on the dome – enough rows, but not so dense that they overlap
-  const evenYs = [-3, -1, 1, 3];
-  const oddYs = [-2, 0, 2];
+  const evenYs = [-4, -2, 0, 2, 4];
+  const oddYs = [-3, -1, 1, 3];
 
   const coords = xCols.flatMap((x, c) => {
     const ys = c % 2 === 0 ? evenYs : oddYs;
@@ -310,7 +309,7 @@ export default function DomeGallery({
         !inertiaRAF.current
       ) {
         const nextY = wrapAngleSigned(rotationRef.current.y + autoRotateSpeed * (dt / 16));
-        rotationRef.current.y = nextY;
+        rotationRef.current = { ...rotationRef.current, y: nextY };
         applyTransform(rotationRef.current.x, nextY);
       }
       autoRotateRAF.current = requestAnimationFrame(step);
@@ -706,7 +705,7 @@ export default function DomeGallery({
                   onMouseEnter={() => { hoveredRef.current = true; }}
                   onMouseLeave={() => { hoveredRef.current = false; }}
                 >
-                  <img src={it.thumbnail || it.src} draggable={false} alt={it.alt} loading="lazy" decoding="async" />
+                  <img src={it.thumbnail || it.src} draggable={false} alt={it.alt} />
                   {it.alt && <div className="item__caption">{it.alt}</div>}
                 </div>
               </div>
