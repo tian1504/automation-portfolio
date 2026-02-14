@@ -368,6 +368,7 @@ export default function DomeGallery({
         const evt = event as PointerEvent;
         draggingRef.current = true;
         movedRef.current = false;
+        hideAllCaptions();
         startRotRef.current = { ...rotationRef.current };
         startPosRef.current = { x: evt.clientX, y: evt.clientY };
       },
@@ -632,15 +633,24 @@ export default function DomeGallery({
     [enlargeTransitionMs, lockScroll, openedImageHeight, openedImageWidth, segments, unlockScroll],
   );
 
+  const hideAllCaptions = useCallback(() => {
+    rootRef.current?.querySelectorAll('.item__caption').forEach((el) => {
+      const caption = el as HTMLElement;
+      caption.style.opacity = '0';
+      caption.style.transform = 'translateX(-50%) translateY(6px)';
+    });
+  }, []);
+
   const onTileClick = useCallback(
     (e: React.MouseEvent<HTMLDivElement>) => {
       if (draggingRef.current) return;
       if (movedRef.current) return;
       if (performance.now() - lastDragEndAt.current < 80) return;
       if (openingRef.current) return;
+      hideAllCaptions();
       openItemFromElement(e.currentTarget);
     },
-    [openItemFromElement],
+    [openItemFromElement, hideAllCaptions],
   );
 
   const onTilePointerUp = useCallback(
@@ -650,9 +660,10 @@ export default function DomeGallery({
       if (movedRef.current) return;
       if (performance.now() - lastDragEndAt.current < 80) return;
       if (openingRef.current) return;
+      hideAllCaptions();
       openItemFromElement(e.currentTarget);
     },
-    [openItemFromElement],
+    [openItemFromElement, hideAllCaptions],
   );
 
   useEffect(() => {
