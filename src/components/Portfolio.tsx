@@ -36,16 +36,6 @@ const WORKFLOW_IMAGES = [
 export const Portfolio = () => {
   return (
     <section id="portfolio" className="section-padding relative overflow-hidden">
-      {/* Subtle network grid background */}
-      <div className="absolute inset-0 pointer-events-none" style={{
-        backgroundImage: `
-          radial-gradient(circle at 20% 30%, rgba(100, 150, 255, 0.06) 0%, transparent 50%),
-          radial-gradient(circle at 80% 70%, rgba(168, 85, 247, 0.05) 0%, transparent 50%),
-          radial-gradient(circle at 50% 50%, rgba(100, 150, 255, 0.03) 1px, transparent 1px)
-        `,
-        backgroundSize: '100% 100%, 100% 100%, 30px 30px',
-      }} />
-      
       <div className="container-custom relative z-10">
         <div className="text-center mb-12 md:mb-16">
           <h2 className="text-3xl md:text-5xl font-bold text-foreground mb-4">
