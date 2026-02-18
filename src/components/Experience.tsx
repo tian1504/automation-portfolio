@@ -12,7 +12,7 @@ const experiences = [
       "Automated Slack/email alerts for key events (new orders, shipment updates, cancellations) to reduce manual checking.",
       "Added logging and monitoring so failures are easy to track and debug.",
     ],
-    skills: ["Slack Bot", "n8n", "OpenAI", "Amazon", "Notifications"],
+    skills: ["Slack Bot", "n8n", "OpenAI", "Amazon", "Prompt Engineering"],
   },
   {
     title: "Web Scraping & Automation Specialist (Contract)",
