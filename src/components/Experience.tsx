@@ -16,7 +16,7 @@ const experiences = [
   },
   {
     title: "Web Scraping & Automation Specialist (Contract)",
-    company: "CountySports USA",
+    company: "Freelance",
     period: "Nov 2025 – Nov 2025",
     responsibilities: [
       "Build and maintain web scraping workflows to collect high school athlete stats and game data from public sites and databases.",
