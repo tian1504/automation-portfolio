@@ -39,8 +39,8 @@ export const Hero = () => {
               <span className="font-semibold text-foreground">n8n</span>,{" "}
               <span className="font-semibold text-foreground">Make</span>,{" "}
               <span className="font-semibold text-foreground">Zapier</span>,{" "}
-              <span className="font-semibold text-foreground">Apify</span>, and{" "}
-              <span className="font-semibold text-foreground">Notion</span>.
+              <span className="font-semibold text-foreground">Claude</span>, and{" "}
+              <span className="font-semibold text-foreground">CRMs</span>.
             </p>
 
             {/* CTAs */}
@@ -48,8 +48,8 @@ export const Hero = () => {
               <Button
                 size="lg"
                 className="bg-primary hover:bg-background hover:text-primary hover:border-primary border-2 border-primary text-primary-foreground shadow-lg transition-all group"
-                onClick={() => handleScroll("#portfolio")}
-              >
+                onClick={() => handleScroll("#portfolio")}>
+
                 View My Work
                 <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
               </Button>
@@ -57,8 +57,8 @@ export const Hero = () => {
                 size="lg"
                 variant="outline"
                 className="border-2 border-primary text-primary hover:bg-primary hover:text-primary-foreground transition-all"
-                onClick={() => handleScroll("#contact")}
-              >
+                onClick={() => handleScroll("#contact")}>
+
                 <Calendar className="mr-2 h-5 w-5" />
                 Book a Call
               </Button>
@@ -88,13 +88,13 @@ export const Hero = () => {
                 <img
                   src={portraitImage}
                   alt="Portrait of Eleazar Sebastian Martinez"
-                  className="hero-profile-img w-64 h-64 md:w-80 md:h-80 lg:w-96 lg:h-96 object-cover"
-                />
+                  className="hero-profile-img w-64 h-64 md:w-80 md:h-80 lg:w-96 lg:h-96 object-cover" />
+
               </div>
             </div>
           </div>
         </div>
       </div>
-    </section>
-  );
+    </section>);
+
 };
