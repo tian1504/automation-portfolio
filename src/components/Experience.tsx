@@ -24,7 +24,7 @@ const experiences = [
       "Use tools like Google sheets, Python, and automation platforms (Zapier) to schedule scrapes, handle errors, and keep data feeds reliable.",
       "Collaborate with the owner/CEO to ensure data is accurate, on time, and ready to power high-engagement posts.",
     ],
-    skills: ["Python", "Make.com", "Web Scraping", "Data Pipelines", "Photoshop & Datasets"],
+    skills: ["Python", "Zapier", "Web Scraping", "Data Pipelines", "Photoshop & Datasets"],
   },
   {
     title: "Social Media Web Scraping & Creative Content Automation",
