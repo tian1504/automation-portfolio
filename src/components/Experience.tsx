@@ -4,7 +4,7 @@ import { Card } from "@/components/ui/card";
 const experiences = [
   {
     title: "Automation Specialist – Amazon Product Workflows",
-    company: "LB Ventures",
+    company: "Freelance",
     period: "Nov 2025 – Present",
     responsibilities: [
       "Built and maintained automation workflows for Amazon product operations (orders, tracking, status updates).",
