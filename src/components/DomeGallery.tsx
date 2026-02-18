@@ -6,47 +6,47 @@ import { useGesture } from "@use-gesture/react";
 import "./DomeGallery.css";
 
 const DEFAULT_IMAGES = [
-  {
-    src: "https://images.unsplash.com/photo-1755331039789-7e5680e26e8f?q=80&w=774&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    alt: "Abstract art",
-  },
-  {
-    src: "https://images.unsplash.com/photo-1755569309049-98410b94f66d?q=80&w=772&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    alt: "Modern sculpture",
-  },
-  {
-    src: "https://images.unsplash.com/photo-1755497595318-7e5e3523854f?q=80&w=774&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    alt: "Digital artwork",
-  },
-  {
-    src: "https://images.unsplash.com/photo-1755353985163-c2a0fe5ac3d8?q=80&w=774&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    alt: "Contemporary art",
-  },
-  {
-    src: "https://images.unsplash.com/photo-1745965976680-d00be7dc0377?q=80&w=774&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    alt: "Geometric pattern",
-  },
-  {
-    src: "https://images.unsplash.com/photo-1752588975228-21f44630bb3c?q=80&w=774&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    alt: "Textured surface",
-  },
-  {
-    src: "https://pbs.twimg.com/media/Gyla7NnXMAAXSo_?format=jpg&name=large",
-    alt: "Social media image",
-  },
-];
+{
+  src: "https://images.unsplash.com/photo-1755331039789-7e5680e26e8f?q=80&w=774&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+  alt: "Abstract art"
+},
+{
+  src: "https://images.unsplash.com/photo-1755569309049-98410b94f66d?q=80&w=772&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+  alt: "Modern sculpture"
+},
+{
+  src: "https://images.unsplash.com/photo-1755497595318-7e5e3523854f?q=80&w=774&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+  alt: "Digital artwork"
+},
+{
+  src: "https://images.unsplash.com/photo-1755353985163-c2a0fe5ac3d8?q=80&w=774&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+  alt: "Contemporary art"
+},
+{
+  src: "https://images.unsplash.com/photo-1745965976680-d00be7dc0377?q=80&w=774&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+  alt: "Geometric pattern"
+},
+{
+  src: "https://images.unsplash.com/photo-1752588975228-21f44630bb3c?q=80&w=774&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+  alt: "Textured surface"
+},
+{
+  src: "https://pbs.twimg.com/media/Gyla7NnXMAAXSo_?format=jpg&name=large",
+  alt: "Social media image"
+}];
+
 
 const DEFAULTS = {
   maxVerticalRotationDeg: 5,
   dragSensitivity: 20,
   enlargeTransitionMs: 300,
-  segments: 22,
+  segments: 22
 };
 
 const clamp = (v: number, min: number, max: number) => Math.min(Math.max(v, min), max);
-const normalizeAngle = (d: number) => ((d % 360) + 360) % 360;
+const normalizeAngle = (d: number) => (d % 360 + 360) % 360;
 const wrapAngleSigned = (deg: number) => {
-  const a = (((deg + 180) % 360) + 360) % 360;
+  const a = ((deg + 180) % 360 + 360) % 360;
   return a - 180;
 };
 const getDataNumber = (el: HTMLElement, name: string, fallback: number) => {
@@ -55,7 +55,7 @@ const getDataNumber = (el: HTMLElement, name: string, fallback: number) => {
   return Number.isFinite(n) ? n : fallback;
 };
 
-type GalleryImage = { src: string; alt?: string; thumbnail?: string; category?: string; description?: string; tools?: string[] };
+type GalleryImage = {src: string;alt?: string;thumbnail?: string;category?: string;description?: string;tools?: string[];};
 
 function buildItems(pool: GalleryImage[], seg: number) {
   // columns around the sphere – keep them aligned with the CSS segments
@@ -80,7 +80,7 @@ function buildItems(pool: GalleryImage[], seg: number) {
   }
   if (pool.length > totalSlots) {
     console.warn(
-      `[DomeGallery] Provided image count (${pool.length}) exceeds available tiles (${totalSlots}). Some images will not be shown.`,
+      `[DomeGallery] Provided image count (${pool.length}) exceeds available tiles (${totalSlots}). Some images will not be shown.`
     );
   }
 
@@ -110,7 +110,7 @@ function buildItems(pool: GalleryImage[], seg: number) {
     alt: usedImages[i].alt,
     category: usedImages[i].category || '',
     description: usedImages[i].description || '',
-    tools: usedImages[i].tools || [],
+    tools: usedImages[i].tools || []
   }));
 }
 
@@ -162,7 +162,7 @@ export default function DomeGallery({
   openedImageBorderRadius = "30px",
   grayscale = true,
   autoRotate = false,
-  autoRotateSpeed = 0.15,
+  autoRotateSpeed = 0.15
 }: DomeGalleryProps) {
   const rootRef = useRef<HTMLDivElement | null>(null);
   const mainRef = useRef<HTMLElement | null>(null);
@@ -171,11 +171,11 @@ export default function DomeGallery({
   const viewerRef = useRef<HTMLDivElement | null>(null);
   const scrimRef = useRef<HTMLDivElement | null>(null);
   const focusedElRef = useRef<HTMLDivElement | null>(null);
-  const originalTilePositionRef = useRef<{ left: number; top: number; width: number; height: number } | null>(null);
+  const originalTilePositionRef = useRef<{left: number;top: number;width: number;height: number;} | null>(null);
 
   const rotationRef = useRef({ x: 0, y: 0 });
   const startRotRef = useRef({ x: 0, y: 0 });
-  const startPosRef = useRef<{ x: number; y: number } | null>(null);
+  const startPosRef = useRef<{x: number;y: number;} | null>(null);
   const draggingRef = useRef(false);
   const movedRef = useRef(false);
   const inertiaRAF = useRef<number | null>(null);
@@ -280,18 +280,18 @@ export default function DomeGallery({
     ro.observe(root);
     return () => ro.disconnect();
   }, [
-    fit,
-    fitBasis,
-    minRadius,
-    maxRadius,
-    padFactor,
-    overlayBlurColor,
-    grayscale,
-    imageBorderRadius,
-    openedImageBorderRadius,
-    openedImageWidth,
-    openedImageHeight,
-  ]);
+  fit,
+  fitBasis,
+  minRadius,
+  maxRadius,
+  padFactor,
+  overlayBlurColor,
+  grayscale,
+  imageBorderRadius,
+  openedImageBorderRadius,
+  openedImageWidth,
+  openedImageHeight]
+  );
 
   useEffect(() => {
     applyTransform(rotationRef.current.x, rotationRef.current.y);
@@ -305,11 +305,11 @@ export default function DomeGallery({
       const dt = now - lastTime;
       lastTime = now;
       if (
-        visibleCaptionId === null &&
-        !draggingRef.current &&
-        !focusedElRef.current &&
-        !inertiaRAF.current
-      ) {
+      visibleCaptionId === null &&
+      !draggingRef.current &&
+      !focusedElRef.current &&
+      !inertiaRAF.current)
+      {
         const nextY = wrapAngleSigned(rotationRef.current.y + autoRotateSpeed * (dt / 16));
         rotationRef.current = { ...rotationRef.current, y: nextY };
         applyTransform(rotationRef.current.x, nextY);
@@ -359,7 +359,7 @@ export default function DomeGallery({
       stopInertia();
       inertiaRAF.current = requestAnimationFrame(step);
     },
-    [dragDampening, maxVerticalRotationDeg, stopInertia],
+    [dragDampening, maxVerticalRotationDeg, stopInertia]
   );
 
   useGesture(
@@ -386,7 +386,7 @@ export default function DomeGallery({
         const nextX = clamp(
           startRotRef.current.x - dyTotal / dragSensitivity,
           -maxVerticalRotationDeg,
-          maxVerticalRotationDeg,
+          maxVerticalRotationDeg
         );
         const nextY = wrapAngleSigned(startRotRef.current.y + dxTotal / dragSensitivity);
         if (rotationRef.current.x !== nextX || rotationRef.current.y !== nextY) {
@@ -401,16 +401,16 @@ export default function DomeGallery({
           let vy = vMagY * dirY;
           if (Math.abs(vx) < 0.001 && Math.abs(vy) < 0.001 && Array.isArray(movement)) {
             const [mx, my] = movement as number[];
-            vx = clamp((mx / dragSensitivity) * 0.02, -1.2, 1.2);
-            vy = clamp((my / dragSensitivity) * 0.02, -1.2, 1.2);
+            vx = clamp(mx / dragSensitivity * 0.02, -1.2, 1.2);
+            vy = clamp(my / dragSensitivity * 0.02, -1.2, 1.2);
           }
           if (Math.abs(vx) > 0.005 || Math.abs(vy) > 0.005) startInertia(vx, vy);
           if (movedRef.current) lastDragEndAt.current = performance.now();
           movedRef.current = false;
         }
-      },
+      }
     },
-    { target: mainRef, eventOptions: { passive: true } },
+    { target: mainRef, eventOptions: { passive: true } }
   );
 
   useEffect(() => {
@@ -447,13 +447,13 @@ export default function DomeGallery({
         left: originalPos.left - rootRect.left,
         top: originalPos.top - rootRect.top,
         width: originalPos.width,
-        height: originalPos.height,
+        height: originalPos.height
       };
       const overlayRelativeToRoot = {
         left: currentRect.left - rootRect.left,
         top: currentRect.top - rootRect.top,
         width: currentRect.width,
-        height: currentRect.height,
+        height: currentRect.height
       };
       const animatingOverlay = document.createElement("div");
       animatingOverlay.className = "enlarge-closing";
@@ -498,7 +498,7 @@ export default function DomeGallery({
                 (el.style as any).opacity = "";
                 openingRef.current = false;
                 if (!draggingRef.current && rootRef.current?.getAttribute("data-enlarging") !== "true")
-                  document.body.classList.remove("dg-scroll-lock");
+                document.body.classList.remove("dg-scroll-lock");
               }, 300);
             });
           });
@@ -596,15 +596,15 @@ export default function DomeGallery({
         const description = parent.dataset.description || "";
         const toolsStr = parent.dataset.tools || "";
         const tools = toolsStr ? toolsStr.split(",") : [];
-        
+
         const categoryColors: Record<string, string> = {
           data: '#4ade80',
           communication: '#60a5fa',
-          automation: '#fb923c',
+          automation: '#fb923c'
         };
         const accentColor = categoryColors[category] || '#a78bfa';
         const categoryLabel = category.charAt(0).toUpperCase() + category.slice(1);
-        
+
         let html = `<div class="viewer-meta__panel" style="--meta-accent: ${accentColor}">`;
         if (category && category !== 'ai-focal') {
           html += `<span class="viewer-meta__badge">${categoryLabel}</span>`;
@@ -616,7 +616,7 @@ export default function DomeGallery({
           html += `<p class="viewer-meta__desc">${description}</p>`;
         }
         if (tools.length > 0) {
-          html += `<div class="viewer-meta__tools">${tools.map(t => `<span class="viewer-meta__tool">${t.trim()}</span>`).join('')}</div>`;
+          html += `<div class="viewer-meta__tools">${tools.map((t) => `<span class="viewer-meta__tool">${t.trim()}</span>`).join('')}</div>`;
         }
         html += `</div>`;
         metaRoot.innerHTML = html;
@@ -662,7 +662,7 @@ export default function DomeGallery({
         overlay.addEventListener("transitionend", onFirstEnd);
       }
     },
-    [enlargeTransitionMs, lockScroll, openedImageHeight, openedImageWidth, segments, unlockScroll],
+    [enlargeTransitionMs, lockScroll, openedImageHeight, openedImageWidth, segments, unlockScroll]
   );
 
   const hideAllCaptions = useCallback(() => {
@@ -678,7 +678,7 @@ export default function DomeGallery({
       hideAllCaptions();
       openItemFromElement(e.currentTarget);
     },
-    [openItemFromElement, hideAllCaptions],
+    [openItemFromElement, hideAllCaptions]
   );
 
   const onTilePointerUp = useCallback(
@@ -691,7 +691,7 @@ export default function DomeGallery({
       hideAllCaptions();
       openItemFromElement(e.currentTarget);
     },
-    [openItemFromElement, hideAllCaptions],
+    [openItemFromElement, hideAllCaptions]
   );
 
   // Safety net: hide captions when pointer leaves the gallery
@@ -716,56 +716,56 @@ export default function DomeGallery({
         ["--overlay-blur-color" as any]: overlayBlurColor,
         ["--tile-radius" as any]: imageBorderRadius,
         ["--enlarge-radius" as any]: openedImageBorderRadius,
-        ["--image-filter" as any]: grayscale ? "grayscale(1)" : "none",
-      }}
-    >
+        ["--image-filter" as any]: grayscale ? "grayscale(1)" : "none"
+      }}>
+
       <main ref={mainRef} className="sphere-main">
         <div className="stage">
           <div ref={sphereRef} className="sphere">
-            {items.map((it, i) => (
-              <div
-                key={`${it.x},${it.y},${i}`}
-                className="item"
-                data-src={it.src}
-                data-offset-x={it.x}
-                data-offset-y={it.y}
-                data-size-x={it.sizeX}
-                data-size-y={it.sizeY}
-                data-category={it.category || ''}
-                data-description={it.description || ''}
-                data-tools={it.tools?.join(',') || ''}
-                style={{
-                  ["--offset-x" as any]: it.x,
-                  ["--offset-y" as any]: it.y,
-                  ["--item-size-x" as any]: it.sizeX,
-                  ["--item-size-y" as any]: it.sizeY,
-                }}
-              >
+            {items.map((it, i) =>
+            <div
+              key={`${it.x},${it.y},${i}`}
+              className="item"
+              data-src={it.src}
+              data-offset-x={it.x}
+              data-offset-y={it.y}
+              data-size-x={it.sizeX}
+              data-size-y={it.sizeY}
+              data-category={it.category || ''}
+              data-description={it.description || ''}
+              data-tools={it.tools?.join(',') || ''}
+              style={{
+                ["--offset-x" as any]: it.x,
+                ["--offset-y" as any]: it.y,
+                ["--item-size-x" as any]: it.sizeX,
+                ["--item-size-y" as any]: it.sizeY
+              }}>
+
                 <div
-                  className="item__image"
-                  role="button"
-                  tabIndex={0}
-                  aria-label={it.alt || "Open image"}
-                  onClick={onTileClick}
-                  onPointerUp={onTilePointerUp}
-                  onMouseEnter={() => setVisibleCaptionId(i)}
-                  onMouseLeave={() => setVisibleCaptionId((prev) => prev === i ? null : prev)}
-                >
+                className="item__image rounded-full"
+                role="button"
+                tabIndex={0}
+                aria-label={it.alt || "Open image"}
+                onClick={onTileClick}
+                onPointerUp={onTilePointerUp}
+                onMouseEnter={() => setVisibleCaptionId(i)}
+                onMouseLeave={() => setVisibleCaptionId((prev) => prev === i ? null : prev)}>
+
                   <img src={it.thumbnail || it.src} draggable={false} alt={it.alt} />
-                  {it.alt && (
-                    <div
-                      className="item__caption"
-                      style={{
-                        opacity: visibleCaptionId === i ? 1 : 0,
-                        transform: `translateX(-50%) translateY(${visibleCaptionId === i ? '0' : '6px'})`,
-                      }}
-                    >
+                  {it.alt &&
+                <div
+                  className="item__caption"
+                  style={{
+                    opacity: visibleCaptionId === i ? 1 : 0,
+                    transform: `translateX(-50%) translateY(${visibleCaptionId === i ? '0' : '6px'})`
+                  }}>
+
                       {it.alt}
                     </div>
-                  )}
+                }
                 </div>
               </div>
-            ))}
+            )}
           </div>
         </div>
 
@@ -780,6 +780,6 @@ export default function DomeGallery({
           <div className="viewer-meta" />
         </div>
       </main>
-    </div>
-  );
+    </div>);
+
 }
