@@ -1,51 +1,53 @@
+@import "@fontsource-variable/geist/index.css";
+@import "@fontsource-variable/geist-mono/index.css";
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
-All colors MUST be HSL.
-*/
+/* Design system: warm-dark editorial palette + Geist type stack.
+   All colors MUST be HSL. */
 
 @layer base {
   :root {
-    --background: 0 0% 2%;
-    --foreground: 0 0% 100%;
+    /* Warm near-black background, slight warmth in foreground for editorial feel */
+    --background: 30 8% 4%;
+    --foreground: 40 25% 96%;
 
-    --card: 0 0% 5%;
-    --card-foreground: 0 0% 100%;
+    --card: 30 8% 6%;
+    --card-foreground: 40 25% 96%;
 
-    --popover: 0 0% 5%;
-    --popover-foreground: 0 0% 100%;
+    --popover: 30 8% 6%;
+    --popover-foreground: 40 25% 96%;
 
-    /* Rich yellow for primary accent */
+    /* Signature yellow — single source of truth across the brand */
     --primary: 45 93% 54%;
-    --primary-foreground: 0 0% 0%;
+    --primary-foreground: 30 8% 4%;
     --primary-glow: 45 93% 64%;
 
-    /* Dark secondary */
-    --secondary: 0 0% 10%;
-    --secondary-foreground: 0 0% 100%;
+    --secondary: 30 6% 10%;
+    --secondary-foreground: 40 25% 96%;
 
-    --muted: 0 0% 15%;
-    --muted-foreground: 0 0% 83%;
+    --muted: 30 6% 14%;
+    --muted-foreground: 35 8% 68%;
 
-    /* Yellow accent */
+    /* Accent matches primary — no second hue fighting the brand */
     --accent: 45 93% 54%;
-    --accent-foreground: 0 0% 0%;
+    --accent-foreground: 30 8% 4%;
 
     --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 0 0% 100%;
+    --destructive-foreground: 40 25% 96%;
 
-    --border: 0 0% 20%;
-    --input: 0 0% 20%;
+    --border: 30 6% 16%;
+    --input: 30 6% 16%;
     --ring: 45 93% 54%;
 
     --radius: 0.5rem;
 
-    /* Gradients */
+    /* Gradients — yellow-only, no second hue */
     --gradient-primary: linear-gradient(135deg, hsl(45 93% 54%), hsl(45 93% 64%));
     --gradient-accent: linear-gradient(135deg, hsl(45 93% 54%), hsl(45 93% 64%));
-    --gradient-hero: linear-gradient(135deg, hsl(0 0% 2%), hsl(0 0% 5%));
+    --gradient-hero: linear-gradient(135deg, hsl(30 8% 4%), hsl(30 8% 6%));
 
     /* Shadows */
     --shadow-subtle: 0 1px 3px 0 hsl(0 0% 0% / 0.3);
@@ -75,11 +77,17 @@ All colors MUST be HSL.
   }
 
   body {
-    @apply bg-background text-foreground antialiased;
-    font-feature-settings: "rlig" 1, "calt" 1;
+    @apply bg-background text-foreground antialiased font-sans;
+    font-feature-settings: "rlig" 1, "calt" 1, "ss01" 1, "ss03" 1;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 
-  /* Show normal cursor */
+  h1, h2, h3, h4 {
+    @apply font-display tracking-tighter-2;
+    font-feature-settings: "rlig" 1, "calt" 1, "ss01" 1;
+  }
+
   body {
     cursor: auto;
   }
@@ -107,104 +115,51 @@ All colors MUST be HSL.
 }
 
 @layer components {
-  /* Hero section with tech background */
-  .hero-section {
-    position: relative;
-    background: radial-gradient(circle at top left, #0f172a 0%, #020617 40%, #000000 100%);
-    overflow: hidden;
-  }
-
-  .hero-section::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background-image:
-      radial-gradient(circle at 10% 20%, rgba(56,189,248,0.12) 0, transparent 50%),
-      radial-gradient(circle at 80% 10%, rgba(250,204,21,0.08) 0, transparent 55%),
-      linear-gradient(135deg, rgba(148,163,184,0.08) 0, transparent 60%);
-    opacity: 1;
-    pointer-events: none;
-    z-index: 0;
-  }
-
-  .hero-section::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background-image: radial-gradient(circle, rgba(148,163,184,0.08) 1px, transparent 1px);
-    background-size: 40px 40px;
-    opacity: 0.25;
-    mix-blend-mode: soft-light;
-    pointer-events: none;
-    z-index: 0;
-  }
-
-  /* AI Automation Specialist tag */
+  /* "AI Automation Engineer" hero tag — quiet, monospace, single-hue */
   .hero-tag {
     display: inline-flex;
     align-items: center;
-    padding: 0.35rem 0.9rem;
+    gap: 0.5rem;
+    padding: 0.35rem 0.85rem;
     border-radius: 9999px;
-    font-size: 0.8rem;
-    letter-spacing: 0.06em;
+    font-family: var(--font-mono, 'Geist Mono Variable', 'Geist Mono', ui-monospace, monospace);
+    font-size: 0.72rem;
+    letter-spacing: 0.14em;
     text-transform: uppercase;
-    background: linear-gradient(90deg, #0ea5e9, #facc15);
-    color: #0b1120;
-    font-weight: 600;
-    box-shadow: 0 0 18px rgba(56,189,248,0.5);
-    transition: all 0.15s ease-out;
+    background: hsl(45 93% 54% / 0.08);
+    color: hsl(45 93% 54%);
+    border: 1px solid hsl(45 93% 54% / 0.35);
+    font-weight: 500;
+    transition: all 0.2s ease-out;
+  }
+
+  .hero-tag::before {
+    content: "";
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    border-radius: 9999px;
+    background: hsl(45 93% 54%);
+    box-shadow: 0 0 8px hsl(45 93% 54% / 0.8);
   }
 
   .hero-tag:hover {
-    box-shadow: 0 0 24px rgba(56,189,248,0.7);
+    background: hsl(45 93% 54% / 0.12);
+    border-color: hsl(45 93% 54% / 0.6);
     transform: translateY(-1px);
   }
 
-  /* Profile picture with aura */
-  .hero-profile-wrapper {
-    position: relative;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .hero-profile-aura {
-    position: relative;
-    border-radius: 9999px;
-    padding: 6px;
-    background: radial-gradient(circle at 30% 20%, #facc15, #f97316, #0f172a);
-    box-shadow:
-      0 0 25px rgba(250,204,21,0.55),
-      0 0 60px rgba(250,204,21,0.40);
-    animation: heroAuraPulse 5s ease-in-out infinite;
-    transition: box-shadow 0.2s ease-out, transform 0.2s ease-out;
-  }
-
-  .hero-profile-img {
-    display: block;
-    border-radius: 9999px;
-    border: 3px solid rgba(15,23,42,0.9);
-    transition: border-color 0.2s ease-out;
-  }
-
-  .hero-profile-wrapper:hover .hero-profile-aura {
-    box-shadow:
-      0 0 40px rgba(250,204,21,0.95),
-      0 0 100px rgba(250,204,21,0.8);
-    transform: scale(1.03);
-  }
-
-  .hero-profile-wrapper:hover .hero-profile-img {
-    border-color: rgba(15,23,42,0.6);
-  }
-
-  /* Card hover effect */
+  /* Card hover used by Experience section cards */
   .card-hover {
-    @apply transition-all duration-300 hover:shadow-lg hover:-translate-y-1 hover:border-primary/50 hover:scale-[1.02];
+    @apply transition-all duration-300 hover:border-primary/50;
   }
 
-  /* Glowing effect */
+  /* Glow utility (used by Pricing) */
   .glow-effect {
+    box-shadow: var(--shadow-glow);
+  }
+
+  .shadow-glow {
     box-shadow: var(--shadow-glow);
   }
 
@@ -220,7 +175,6 @@ All colors MUST be HSL.
 }
 
 @layer utilities {
-  /* Fade in animation */
   .animate-fade-in {
     animation: fadeIn 0.6s ease-out forwards;
   }
@@ -234,186 +188,35 @@ All colors MUST be HSL.
   }
 
   @keyframes fadeIn {
-    from {
-      opacity: 0;
-    }
-    to {
-      opacity: 1;
-    }
+    from { opacity: 0; }
+    to   { opacity: 1; }
   }
 
   @keyframes slideUp {
-    from {
-      opacity: 0;
-      transform: translateY(30px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
+    from { opacity: 0; transform: translateY(30px); }
+    to   { opacity: 1; transform: translateY(0); }
   }
 
   @keyframes slideInRight {
-    from {
-      opacity: 0;
-      transform: translateX(-30px);
-    }
-    to {
-      opacity: 1;
-      transform: translateX(0);
-    }
+    from { opacity: 0; transform: translateX(-30px); }
+    to   { opacity: 1; transform: translateX(0); }
   }
 
-  /* Float animation for tech icons */
   @keyframes float {
-    0%, 100% {
-      transform: translateY(0px);
-    }
-    50% {
-      transform: translateY(-10px);
-    }
+    0%, 100% { transform: translateY(0px); }
+    50%      { transform: translateY(-10px); }
   }
 
-
-
-  /* Jelly bounce animation */
   @keyframes jelly {
-    0%, 100% {
-      transform: scale(1, 1) rotate(0deg);
-    }
-    25% {
-      transform: scale(0.9, 1.1) rotate(-2deg);
-    }
-    50% {
-      transform: scale(1.1, 0.9) rotate(2deg);
-    }
-    75% {
-      transform: scale(0.95, 1.05) rotate(-1deg);
-    }
+    0%, 100% { transform: scale(1, 1) rotate(0deg); }
+    25%      { transform: scale(0.9, 1.1) rotate(-2deg); }
+    50%      { transform: scale(1.1, 0.9) rotate(2deg); }
+    75%      { transform: scale(0.95, 1.05) rotate(-1deg); }
   }
 
-  /* Glow pulse */
   @keyframes glow-pulse {
-    0%, 100% {
-      box-shadow: 0 0 20px hsl(45 93% 54% / 0.3);
-    }
-    50% {
-      box-shadow: 0 0 30px hsl(45 93% 54% / 0.5);
-    }
-  }
-
-  /* Hero aura pulse animation */
-  @keyframes heroAuraPulse {
-    0%, 100% {
-      box-shadow:
-        0 0 22px rgba(250,204,21,0.5),
-        0 0 48px rgba(250,204,21,0.35);
-    }
-    50% {
-      box-shadow:
-        0 0 30px rgba(250,204,21,0.9),
-        0 0 80px rgba(250,204,21,0.6);
-    }
-  }
-
-  /* Upwork link puzzle animation */
-  @keyframes upworkPuzzleIn {
-    0% {
-      opacity: 0;
-      transform: translate3d(20px, -20px, 0) rotate(-10deg) scale(0.8);
-    }
-    100% {
-      opacity: 1;
-      transform: translate3d(0, 0, 0) rotate(0deg) scale(1);
-    }
-  }
-
-  .upwork-link {
-    display: inline-block;
-    white-space: nowrap;
-    position: relative;
-    transition: transform 0.15s ease-out, text-shadow 0.15s ease-out;
-  }
-
-  .upwork-link:hover {
-    transform: scale(1.03);
-    text-shadow: 0 0 8px rgba(250, 204, 21, 0.8);
-  }
-
-  .upwork-char {
-    display: inline-block;
-    opacity: 0;
-    animation-name: upworkPuzzleIn;
-    animation-duration: 0.6s;
-    animation-fill-mode: forwards;
-    animation-timing-function: cubic-bezier(0.3, 0.7, 0.4, 1.2);
-  }
-
-  .upwork-char:nth-child(1)  { animation-delay: 0.00s; }
-  .upwork-char:nth-child(2)  { animation-delay: 0.03s; }
-  .upwork-char:nth-child(3)  { animation-delay: 0.06s; }
-  .upwork-char:nth-child(4)  { animation-delay: 0.09s; }
-  .upwork-char:nth-child(5)  { animation-delay: 0.12s; }
-  .upwork-char:nth-child(6)  { animation-delay: 0.15s; }
-  .upwork-char:nth-child(7)  { animation-delay: 0.18s; }
-  .upwork-char:nth-child(8)  { animation-delay: 0.21s; }
-  .upwork-char:nth-child(9)  { animation-delay: 0.24s; }
-  .upwork-char:nth-child(10) { animation-delay: 0.27s; }
-  .upwork-char:nth-child(11) { animation-delay: 0.30s; }
-  .upwork-char:nth-child(12) { animation-delay: 0.33s; }
-  .upwork-char:nth-child(13) { animation-delay: 0.36s; }
-  .upwork-char:nth-child(14) { animation-delay: 0.39s; }
-  .upwork-char:nth-child(15) { animation-delay: 0.42s; }
-  .upwork-char:nth-child(16) { animation-delay: 0.45s; }
-  .upwork-char:nth-child(17) { animation-delay: 0.48s; }
-  .upwork-char:nth-child(18) { animation-delay: 0.51s; }
-  .upwork-char:nth-child(19) { animation-delay: 0.54s; }
-  .upwork-char:nth-child(20) { animation-delay: 0.57s; }
-  .upwork-char:nth-child(21) { animation-delay: 0.60s; }
-
-  /* Brand logo styles */
-  .brand-logo {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    text-decoration: none;
-    color: hsl(45 93% 54%);
-    font-weight: 700;
-    font-size: 1.05rem;
-    transition: transform 0.15s ease-out;
-  }
-
-  .brand-logo:hover {
-    text-decoration: none;
-    transform: scale(1.03);
-  }
-
-  .brand-text {
-    letter-spacing: 0.03em;
-  }
-
-  .brand-logo:hover {
-    transform: translateY(-1px);
-  }
-
-
-  @media (prefers-reduced-motion: reduce) {
-    .upwork-char {
-      animation: none;
-      opacity: 1;
-    }
-    
-    .upwork-link:hover {
-      transform: none;
-    }
-
-    .brand-logo:hover {
-      transform: none !important;
-    }
-
-    .hero-profile-aura {
-      animation: none !important;
-    }
+    0%, 100% { box-shadow: 0 0 20px hsl(45 93% 54% / 0.3); }
+    50%      { box-shadow: 0 0 30px hsl(45 93% 54% / 0.5); }
   }
 
   .animate-float {
@@ -427,17 +230,13 @@ All colors MUST be HSL.
   .animate-glow-pulse {
     animation: glow-pulse 2s ease-in-out infinite;
   }
-  /* Clean dark background for "What I Do" section */
-  .what-i-do-section {
-    position: relative;
-    background-color: hsl(0 0% 2%);
+
+  @keyframes cursorBlink {
+    0%, 49%   { opacity: 1; }
+    50%, 100% { opacity: 0; }
   }
 
-  .what-i-do-section::before,
-  .what-i-do-section::after {
-    content: none !important;
-    background: none !important;
-    box-shadow: none !important;
-    filter: none !important;
+  .animate-cursor-blink {
+    animation: cursorBlink 1s steps(2, start) infinite;
   }
 }

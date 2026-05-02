@@ -1,105 +1,143 @@
-import { Mail, Linkedin, Github, Calendar } from "lucide-react";
+import { ArrowUpRight, Calendar } from "lucide-react";
+import { motion } from "motion/react";
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
+import { SectionHeading } from "@/components/SectionHeading";
+import portraitImage from "@/assets/portrait.png";
 
-// Update this URL when you have your Calendly/TidyCal link
 const BOOKING_URL = "https://calendly.com/tian1504/30min";
 
-const contactMethods = [
+const channels = [
   {
-    icon: Mail,
-    title: "Email",
-    value: "tian1504@gmail.com",
-    link: "https://mail.google.com/mail/?view=cm&to=tian1504@gmail.com",
+    label: "Email",
+    handle: "tian1504@gmail.com",
+    href: "https://mail.google.com/mail/?view=cm&to=tian1504@gmail.com",
   },
   {
-    icon: Linkedin,
-    title: "LinkedIn",
-    value: "Connect on LinkedIn",
-    link: "https://www.linkedin.com/in/eleazar-sebastian-martinez-76210983/",
+    label: "LinkedIn",
+    handle: "in/eleazar-sebastian-martinez",
+    href: "https://www.linkedin.com/in/eleazar-sebastian-martinez-76210983/",
   },
   {
-    icon: Github,
-    title: "GitHub",
-    value: "View my repositories",
-    link: "https://github.com",
+    label: "GitHub",
+    handle: "tian1504",
+    href: "https://github.com/tian1504",
   },
   {
-    icon: Calendar,
-    title: "Schedule a Call",
-    value: "Book a meeting",
-    link: BOOKING_URL,
+    label: "Upwork",
+    handle: "Top Rated",
+    href: "https://www.upwork.com/freelancers/~01ac0c23391406fb0d?nav_dir=pop",
   },
 ];
 
 export const Contact = () => {
   return (
-    <section id="contact" className="section-padding">
+    <section id="contact" className="section-padding relative">
       <div className="container-custom">
-        <div className="text-center mb-12 md:mb-16">
-          <h2 className="text-3xl md:text-5xl font-bold text-foreground mb-4">
-            Let's Work Together
-          </h2>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Ready to automate your workflows and scale your operations? Let's discuss how I can help transform your business.
-          </p>
-        </div>
+        <SectionHeading
+          number="09"
+          label="Contact"
+          title="Let's talk."
+          description="Best way is a quick call — I usually reply within 24 hours. Tell me what's leaking time and I'll tell you if I can help."
+        />
 
-        <div className="max-w-4xl mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
-            {contactMethods.map((method, index) => {
-              const Icon = method.icon;
-              return (
-                <Card key={index} className="p-6 card-hover border-border group">
-                  <a
-                    href={method.link}
-                    target={method.link.startsWith('http') ? '_blank' : undefined}
-                    rel={method.link.startsWith('http') ? 'noopener noreferrer' : undefined}
-                    className="flex items-start gap-4"
-                  >
-                    <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center shrink-0 group-hover:bg-primary/20 transition-colors">
-                      <Icon className="h-6 w-6 text-primary" />
-                    </div>
-                    <div>
-                      <h3 className="font-semibold text-foreground mb-1">{method.title}</h3>
-                      <p className="text-muted-foreground text-sm">{method.value}</p>
-                    </div>
-                  </a>
-                </Card>
-              );
-            })}
+        <div className="grid grid-cols-1 lg:grid-cols-[1.2fr_1fr] gap-10 lg:gap-16 items-start">
+          {/* Channels list */}
+          <div className="border-t border-border">
+            {channels.map((channel, index) => (
+              <motion.a
+                key={channel.label}
+                href={channel.href}
+                target={channel.href.startsWith("http") ? "_blank" : undefined}
+                rel={channel.href.startsWith("http") ? "noopener noreferrer" : undefined}
+                initial={{ opacity: 0, y: 12 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-40px" }}
+                transition={{ duration: 0.4, delay: index * 0.05 }}
+                className="group flex items-center justify-between py-5 border-b border-border hover:border-primary/40 transition-colors"
+              >
+                <div className="flex items-center gap-6">
+                  <span className="font-mono text-[11px] text-primary tracking-[0.25em] uppercase w-20">
+                    {channel.label}
+                  </span>
+                  <span className="text-base md:text-lg text-foreground/85 group-hover:text-foreground transition-colors">
+                    {channel.handle}
+                  </span>
+                </div>
+                <ArrowUpRight className="h-4 w-4 text-muted-foreground/40 group-hover:text-primary group-hover:-translate-y-0.5 group-hover:translate-x-0.5 transition-all" />
+              </motion.a>
+            ))}
           </div>
 
-          <Card className="p-8 md:p-12 text-center bg-gradient-to-br from-primary/5 to-accent/5 border-primary/20">
-            <h3 className="text-2xl md:text-3xl font-bold text-foreground mb-4">
-              Ready to Automate Your Business?
-            </h3>
-            <p className="text-muted-foreground mb-8 max-w-xl mx-auto">
-              I typically respond within 24 hours. Let's schedule a call to discuss your automation needs and how I can help you achieve your goals.
-            </p>
-            <Button
-              size="lg"
-              className="bg-accent hover:bg-accent/90 text-accent-foreground shadow-lg hover:shadow-xl transition-all"
-              asChild
-            >
-              <a href={BOOKING_URL}>
-                <Calendar className="mr-2 h-5 w-5" />
-                Schedule a Discovery Call
-              </a>
-            </Button>
-          </Card>
+          {/* Booking card */}
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-40px" }}
+            transition={{ duration: 0.5, delay: 0.1 }}
+            className="relative border border-primary/30 bg-primary/[0.04] p-8 lg:p-10 rounded-sm overflow-hidden"
+          >
+            <div
+              aria-hidden
+              className="absolute -top-20 -right-20 w-40 h-40 rounded-full opacity-30 blur-3xl"
+              style={{ background: "radial-gradient(circle, hsl(45 93% 54% / 0.5), transparent 70%)" }}
+            />
+            <div className="relative">
+              {/* Editorial portrait with availability indicator */}
+              <div className="relative inline-block mb-6">
+                <div className="relative w-24 h-24 md:w-28 md:h-28 overflow-hidden rounded-sm border border-border bg-card/40">
+                  <img
+                    src={portraitImage}
+                    alt="Eleazar Sebastian Martinez"
+                    className="w-full h-full object-cover"
+                    loading="lazy"
+                  />
+                </div>
+                {/* Green availability dot, sits on the bottom-right corner of the portrait */}
+                <span
+                  className="absolute -bottom-1 -right-1 flex h-4 w-4"
+                  aria-label="Currently available for new projects"
+                >
+                  <span className="absolute inline-flex h-full w-full rounded-full bg-emerald-400/70 animate-ping" />
+                  <span className="relative inline-flex h-4 w-4 rounded-full bg-emerald-400 border-[2.5px] border-background" />
+                </span>
+              </div>
+
+              <div className="font-mono text-[11px] text-primary tracking-[0.25em] uppercase mb-4">
+                Booking
+              </div>
+              <h3 className="text-2xl md:text-3xl font-bold text-foreground mb-3 tracking-tight leading-tight">
+                Book a 30-min discovery call.
+              </h3>
+              <p className="text-sm md:text-base text-muted-foreground mb-7 leading-relaxed">
+                Tell me what your team is doing manually right now. I'll come back with a quick automation plan or a referral if it's outside my lane.
+              </p>
+              <Button
+                size="lg"
+                className="bg-primary text-primary-foreground hover:bg-primary/90 font-medium h-11 px-5 group"
+                asChild
+              >
+                <a href={BOOKING_URL} target="_blank" rel="noopener noreferrer">
+                  <Calendar className="mr-2 h-4 w-4" />
+                  Schedule on Calendly
+                  <ArrowUpRight className="ml-2 h-4 w-4 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 transition-transform" />
+                </a>
+              </Button>
+            </div>
+          </motion.div>
         </div>
       </div>
 
       {/* Footer */}
-      <div className="mt-16 pt-8 border-t border-border">
-        <div className="container-custom">
-          <div className="text-center text-sm text-muted-foreground">
-            <p>© {new Date().getFullYear()} Eleazar Sebastian Martinez. All rights reserved.</p>
-            <p className="mt-2">Built with modern web technologies and a passion for automation.</p>
-          </div>
+      <footer className="mt-24 md:mt-32 border-t border-border">
+        <div className="container-custom py-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs font-mono text-muted-foreground">
+          <span>
+            © {new Date().getFullYear()} — Eleazar Sebastian Martinez.
+          </span>
+          <span className="text-muted-foreground/70">
+            Built in React + Tailwind, with entirely too much n8n.
+          </span>
         </div>
-      </div>
+      </footer>
     </section>
   );
 };

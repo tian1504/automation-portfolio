@@ -1,73 +1,42 @@
-# Welcome to your Lovable project
+# eleazarai.dev
 
-## Project info
+Personal site for **Eleazar Sebastian Martinez** — freelance AI automation engineer.
+Live at [eleazarai.dev](https://eleazarai.dev/).
 
-**URL**: https://lovable.dev/projects/3069f53b-c616-4dcf-92db-a2edb4114bda
+## Stack
 
-## How can I edit this code?
+- Vite + React 18 + TypeScript
+- Tailwind CSS + shadcn/ui (Radix primitives)
+- Framer Motion + GSAP for animations
+- Geist + Geist Mono typography
+- Two-way synced with Lovable for visual editing
 
-There are several ways of editing your application.
+## Local development
 
-**Use Lovable**
-
-Simply visit the [Lovable Project](https://lovable.dev/projects/3069f53b-c616-4dcf-92db-a2edb4114bda) and start prompting.
-
-Changes made via Lovable will be committed automatically to this repo.
-
-**Use your preferred IDE**
-
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
-
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
-
-Follow these steps:
+Requires Node.js 18+ and npm.
 
 ```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
-
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
+npm install
+npm run dev      # http://localhost:8080
+npm run build    # production build
+npm run lint     # eslint
 ```
 
-**Edit a file directly in GitHub**
+## Project layout
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+```
+src/
+  pages/            route components (Index, NotFound)
+  components/       section components (Hero, Services, Portfolio, ...)
+  components/ui/    shadcn primitives
+  index.css         design tokens (palette, type, animations)
+  assets/           portrait + workflow screenshots
+```
 
-**Use GitHub Codespaces**
+## Deploy
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+Pushed commits sync automatically to Lovable; production deploys via Lovable's hosting at the custom domain `eleazarai.dev`.
 
-## What technologies are used for this project?
+## Contact
 
-This project is built with:
-
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
-
-## How can I deploy this project?
-
-Simply open [Lovable](https://lovable.dev/projects/3069f53b-c616-4dcf-92db-a2edb4114bda) and click on Share -> Publish.
-
-## Can I connect a custom domain to my Lovable project?
-
-Yes, you can!
-
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+[tian1504@gmail.com](mailto:tian1504@gmail.com) · [LinkedIn](https://www.linkedin.com/in/eleazar-sebastian-martinez-76210983/) · [Upwork](https://www.upwork.com/freelancers/~01ac0c23391406fb0d)

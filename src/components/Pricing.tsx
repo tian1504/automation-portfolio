@@ -2,6 +2,8 @@ import { Check } from "lucide-react";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { BorderBeam } from "@/components/ui/border-beam";
+import { SectionHeading } from "@/components/SectionHeading";
 
 const pricingPlans = [
   {
@@ -34,16 +36,16 @@ const pricingPlans = [
   },
   {
     badge: "For Data-Heavy Projects",
-    title: "AI Scraping & Data Pipelines",
+    title: "Data Pipeline Build",
     price: "$900 – $2,400",
-    description: "Scrape, normalize, and automate data at scale.",
+    description: "Scrape, clean, enrich, and pipeline data into your stack.",
     features: [
-      "Custom web scraping (social, e-comm, directories)",
-      "Data cleanup + dedupe + enrichment",
+      "Custom scraping (social, e-comm, directories, APIs)",
+      "Dedupe, normalize, enrich",
       "Automated delivery to Notion / Airtable / Sheets",
-      "Scoring / ranking / reporting workflows",
+      "Scoring, ranking, scheduled reporting",
     ],
-    buttonText: "Discuss Scraping Project",
+    buttonText: "Discuss Data Project",
     highlighted: false,
   },
   {
@@ -71,28 +73,42 @@ export const Pricing = () => {
   return (
     <section id="pricing" className="section-padding">
       <div className="container-custom">
-        <div className="text-center mb-12 md:mb-16">
-          <h2 className="text-3xl md:text-5xl font-bold text-foreground mb-4">
-            Clear Pricing
-          </h2>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto mb-2">
-            Choose the engagement that fits your automation goals.
-          </p>
-          <p className="text-sm text-muted-foreground/70">
-            Transparent scope. Fast delivery. No fluff.
-          </p>
-        </div>
+        <SectionHeading
+          number="07"
+          label="Pricing"
+          title="What it costs."
+          description="Four ways to engage — pick what fits the work. Transparent scope, fast delivery, no fluff."
+        />
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
           {pricingPlans.map((plan, index) => (
             <Card
               key={index}
-              className={`border-border relative transition-all duration-300 hover:shadow-lg hover:-translate-y-1 ${
+              className={`border-border relative overflow-hidden transition-all duration-300 hover:shadow-lg hover:-translate-y-1 ${
                 plan.highlighted
                   ? "border-primary/50 shadow-glow scale-[1.02]"
                   : "hover:border-primary/30"
               }`}
             >
+              {plan.highlighted && (
+                <>
+                  <BorderBeam
+                    duration={8}
+                    size={120}
+                    colorFrom="#facc15"
+                    colorTo="#fef3c7"
+                    borderWidth={1.5}
+                  />
+                  <BorderBeam
+                    duration={8}
+                    size={120}
+                    delay={4}
+                    colorFrom="#facc15"
+                    colorTo="#fef3c7"
+                    borderWidth={1.5}
+                  />
+                </>
+              )}
               <CardHeader className="pb-4">
                 <Badge
                   variant={plan.highlighted ? "default" : "secondary"}

@@ -1,54 +1,67 @@
-import { Briefcase, Calendar } from "lucide-react";
-import { Card } from "@/components/ui/card";
+import { motion } from "motion/react";
+import { SectionHeading } from "@/components/SectionHeading";
 
-const experiences = [
+type Experience = {
+  period: string;
+  periodShort: string;
+  title: string;
+  company: string;
+  bullets: string[];
+  skills: string[];
+};
+
+const experiences: Experience[] = [
   {
-    title: "Automation Specialist – Amazon Product Workflows",
-    company: "Freelance",
-    period: "Nov 2025 – Present",
-    responsibilities: [
-      "Built and maintained automation workflows for Amazon product operations (orders, tracking, status updates).",
-      "Connected email, Amazon notifications, and internal tools using platforms like Make.com, n8n, and Zapier to keep the team in sync.",
-      "Automated Slack/email alerts for key events (new orders, shipment updates, cancellations) to reduce manual checking.",
-      "Added logging and monitoring so failures are easy to track and debug.",
+    period: "Apr 2026 — Present",
+    periodShort: "2026 — NOW",
+    title: "AI DM Agent — Instagram → GoHighLevel Pipeline",
+    company: "Freelance · AVA (Tamara)",
+    bullets: [
+      "Built the lead-capture layer for an Instagram DM AI agent: webhook intake, message parsing, profile enrichment, and CRM sync.",
+      "Implemented two-way Instagram Graph API integration handling verification handshake, inbound message events, and outbound automated replies.",
+      "Designed contact deduplication and pipeline opportunity creation in GoHighLevel CRM with version-aware API calls.",
+      "Phase 1.3 of a multi-phase AVA agent rollout — sets the data foundation for Claude-powered intent classification and reply generation.",
     ],
-    skills: ["Slack Bot", "n8n", "OpenAI", "Amazon", "Prompt Engineering"],
+    skills: ["n8n", "Claude", "Instagram Graph API", "GoHighLevel", "AI Agents", "Webhooks"],
   },
   {
-    title: "Web Scraping & Automation Specialist (Contract)",
+    period: "Nov 2025 — Present",
+    periodShort: "2025 — NOW",
+    title: "Automation Specialist — Amazon Product Workflows",
     company: "Freelance",
-    period: "Nov 2025 – Nov 2025",
-    responsibilities: [
-      "Build and maintain web scraping workflows to collect high school athlete stats and game data from public sites and databases.",
-      "Clean, normalize, and structure scraped data so it can be used in automated graphics templates and social content.",
-      "Use tools like Google sheets, Python, and automation platforms (Zapier) to schedule scrapes, handle errors, and keep data feeds reliable.",
-      "Collaborate with the owner/CEO to ensure data is accurate, on time, and ready to power high-engagement posts.",
+    bullets: [
+      "Built and maintain automation workflows for Amazon product operations — orders, tracking, status updates.",
+      "Connected email, Amazon notifications, and internal tools via Make.com, n8n, and Zapier so the team stays in sync.",
+      "Automated Slack and email alerts for new orders, shipment updates, and cancellations to remove manual checking.",
+      "Added logging and monitoring so failures are easy to track and debug in production.",
     ],
-    skills: ["Python", "Zapier", "Web Scraping", "Data Pipelines", "Photoshop & Datasets"],
+    skills: ["n8n", "Slack Bot", "OpenAI", "Amazon", "Prompt Engineering"],
   },
   {
-    title: "Social Media Web Scraping & Creative Content Automation",
+    period: "Sep 2025 — Nov 2025",
+    periodShort: "2025",
+    title: "Creative Intelligence — Social Media Scraping & UGC",
     company: "Sanlava (E-commerce & Social Brand)",
-    period: "Sep 2025 – Nov 2025",
-    responsibilities: [
-      "Designed a \"creative intelligence\" workflow that scrapes ads, UGC, and reviews from platforms like TikTok, Instagram, Facebook, and Google.",
-      "Structured data into Notion databases (Organic posts, Ads, Reviews, Trends, Hook Bank) to give the brand a single source of truth for creative ideas.",
-      "Used OpenAI and Gemini to generate hooks, UGC briefs, and static ad prompts based on the scraped data and custom scoring rules.",
-      "Automated weekly runs, scoring, and QA so the marketing team receives fresh, ready-to-use creative insights without manual research.",
+    bullets: [
+      'Designed a "creative intelligence" workflow that scrapes ads, UGC, and reviews from TikTok, Instagram, Facebook, and Google.',
+      "Structured data into Notion databases (Organic Posts, Ads, Reviews, Trends, Hook Bank) — single source of truth for creative ideas.",
+      "Used OpenAI and Gemini to generate hooks, UGC briefs, and static ad prompts based on scraped data and custom scoring rules.",
+      "Automated weekly runs, scoring, and QA so the marketing team gets fresh, ready-to-use creative insights without manual research.",
     ],
-    skills: ["n8n", "Apify", "Notion", "OpenAI", "Gemini", "Social Media", "UGC"],
+    skills: ["n8n", "Apify", "Notion", "OpenAI", "Gemini", "UGC"],
   },
   {
-    title: "System Administrator – Windows & Azure Cloud Engineer",
-    company: "Enterprise Infrastructure Team",
-    period: "2012 - 2025",
-    responsibilities: [
-      "Managed large fleets of Windows Server environments with a strong focus on uptime, security updates, and compliance.",
-      "Automated patching and reporting using PowerShell and Azure Update Manager to keep systems consistently up to date.",
+    period: "2012 — 2025",
+    periodShort: "2012 — 2025",
+    title: "System Administrator — Windows & Azure Cloud Engineer",
+    company: "Enterprise Infrastructure",
+    bullets: [
+      "Managed large fleets of Windows Server environments with strong focus on uptime, security updates, and compliance.",
+      "Automated patching and reporting via PowerShell and Azure Update Manager — kept systems consistently up to date at scale.",
       "Troubleshot complex L3 issues across VMware, networking, storage, and backups in production environments.",
       "Worked with global teams to plan changes, communicate risks, and document runbooks for stable, repeatable operations.",
     ],
-    skills: ["Windows Server", "Azure", "PowerShell", "VMware", "Patch Management", "Monitoring"],
+    skills: ["Windows Server", "Azure", "PowerShell", "VMware", "Patch Management"],
   },
 ];
 
@@ -56,51 +69,63 @@ export const Experience = () => {
   return (
     <section id="experience" className="section-padding">
       <div className="container-custom">
-        <div className="text-center mb-12 md:mb-16">
-          <h2 className="text-3xl md:text-5xl font-bold text-foreground mb-4">
-            Work Experience
-          </h2>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            A proven track record of delivering automation solutions that drive real business results.
-          </p>
-        </div>
+        <SectionHeading
+          number="03"
+          label="Experience"
+          title="Where I've shipped."
+          description="A decade in enterprise systems before going freelance — every workflow I build has to survive production, not just look good in a demo."
+        />
 
-        <div className="max-w-4xl mx-auto space-y-8">
+        <div className="max-w-5xl mx-auto">
           {experiences.map((exp, index) => (
-            <Card key={index} className="border-l-4 border-l-primary p-6 card-hover">
-              <div className="flex flex-col md:flex-row md:items-start md:justify-between mb-4">
-                <div>
-                  <h3 className="text-xl md:text-2xl font-bold text-foreground mb-1">
-                    {exp.title}
-                  </h3>
-                  <div className="flex items-center gap-2 text-muted-foreground mb-2">
-                    <Briefcase className="h-4 w-4" />
-                    <span className="font-medium">{exp.company}</span>
-                  </div>
+            <motion.article
+              key={exp.title}
+              initial={{ opacity: 0, y: 16 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-60px" }}
+              transition={{ duration: 0.45, delay: 0.05 }}
+              className={`group grid grid-cols-1 md:grid-cols-[170px_1fr] gap-6 md:gap-10 py-10 ${
+                index === 0 ? "border-t border-border" : ""
+              } border-b border-border`}
+            >
+              {/* Year anchor — left column */}
+              <div className="md:pt-1">
+                <div className="font-mono text-xs text-primary tracking-[0.2em] uppercase">
+                  {exp.periodShort}
                 </div>
-                <div className="flex items-center gap-2 text-muted-foreground bg-secondary px-3 py-1 rounded-full text-sm">
-                  <Calendar className="h-4 w-4" />
-                  <span>{exp.period}</span>
+                <div className="hidden md:block mt-2 font-mono text-[11px] text-muted-foreground/60 tracking-wider">
+                  {exp.period}
                 </div>
               </div>
 
-              <ul className="space-y-2 mb-4 list-disc list-inside text-muted-foreground">
-                {exp.responsibilities.map((resp, idx) => (
-                  <li key={idx}>{resp}</li>
-                ))}
-              </ul>
+              {/* Content — right column */}
+              <div>
+                <h3 className="text-xl md:text-2xl font-bold tracking-tight text-foreground leading-tight mb-1.5 group-hover:text-primary transition-colors">
+                  {exp.title}
+                </h3>
+                <div className="text-sm text-muted-foreground mb-5 font-medium">
+                  {exp.company}
+                </div>
 
-              <div className="flex flex-wrap gap-2">
-                {exp.skills.map((skill, idx) => (
-                  <span
-                    key={idx}
-                    className="px-3 py-1 bg-primary/10 text-primary text-sm rounded-full font-medium"
-                  >
-                    {skill}
-                  </span>
-                ))}
+                <ul className="space-y-2.5 mb-6 text-sm md:text-base text-muted-foreground/95 leading-relaxed">
+                  {exp.bullets.map((bullet, i) => (
+                    <li key={i} className="flex gap-3">
+                      <span className="text-primary/60 mt-0.5 select-none flex-shrink-0" aria-hidden>—</span>
+                      <span>{bullet}</span>
+                    </li>
+                  ))}
+                </ul>
+
+                <div className="flex flex-wrap gap-x-3 gap-y-1.5 font-mono text-[11px] text-muted-foreground tracking-wide">
+                  {exp.skills.map((skill, i) => (
+                    <span key={skill} className="flex items-center gap-3">
+                      <span className="text-foreground/70">{skill}</span>
+                      {i < exp.skills.length - 1 && <span className="text-border" aria-hidden>·</span>}
+                    </span>
+                  ))}
+                </div>
               </div>
-            </Card>
+            </motion.article>
           ))}
         </div>
       </div>
