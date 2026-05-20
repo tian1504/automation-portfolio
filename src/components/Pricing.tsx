@@ -1,151 +1,82 @@
-import { Check } from "lucide-react";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { BorderBeam } from "@/components/ui/border-beam";
-import { SectionHeading } from "@/components/SectionHeading";
+import { ArrowUpRight } from "lucide-react";
+import { motion } from "motion/react";
+import { SectionHeadingMin } from "@/components/SectionHeadingMin";
 
-const pricingPlans = [
+const plans = [
   {
-    badge: "Pay-as-you-go",
     title: "Hourly / Advisory",
     price: "$20 / hr",
-    description: "For quick consults, fixes, and scoped tasks.",
-    features: [
-      "Automation review & optimization",
-      "Zapier / Make / n8n troubleshooting",
-      "Workflow planning & architecture",
-    ],
-    buttonText: "Request Hourly Quote",
-    highlighted: false,
+    description: "Quick consults, fixes, and scoped tasks. Automation review, troubleshooting, planning.",
+    cta: "Request quote",
   },
   {
-    badge: "Most Popular",
     title: "Automation Build",
     price: "$600 – $1,800",
-    description: "End-to-end workflow builds that remove busywork.",
-    features: [
-      "Multi-step automation using n8n / Make / Zapier",
-      "API integrations + Notion / Airtable / Sheets",
-      "AI steps with OpenAI / Gemini where useful",
-      "Clear handoff + documentation",
-      "2 revision rounds",
-    ],
-    buttonText: "Book Build Brief",
-    highlighted: true,
+    description: "End-to-end workflow builds. n8n / Make / Zapier with API integrations, AI steps where useful, handoff documentation.",
+    cta: "Book brief",
+    featured: true,
   },
   {
-    badge: "For Data-Heavy Projects",
     title: "Data Pipeline Build",
     price: "$900 – $2,400",
-    description: "Scrape, clean, enrich, and pipeline data into your stack.",
-    features: [
-      "Custom scraping (social, e-comm, directories, APIs)",
-      "Dedupe, normalize, enrich",
-      "Automated delivery to Notion / Airtable / Sheets",
-      "Scoring, ranking, scheduled reporting",
-    ],
-    buttonText: "Discuss Data Project",
-    highlighted: false,
+    description: "Custom scraping, dedupe, enrichment. Automated delivery to Notion / Airtable / Sheets with scoring and reporting.",
+    cta: "Discuss project",
   },
   {
-    badge: "Monthly Retainer",
     title: "Maintenance & Growth",
     price: "$200 / month",
-    description: "Keep your automations healthy and improving.",
-    features: [
-      "Up to 5 hrs updates / month",
-      "Monitoring + quick fixes",
-      "Priority support",
-      "Monthly performance summary",
-    ],
-    buttonText: "Start Maintenance",
-    highlighted: false,
+    description: "Up to 5 hrs of updates monthly. Monitoring, quick fixes, priority support, performance summary.",
+    cta: "Start retainer",
   },
 ];
 
 export const Pricing = () => {
-  const scrollToContact = () => {
-    const contactSection = document.getElementById("contact");
-    contactSection?.scrollIntoView({ behavior: "smooth" });
+  const scrollToContact = (e: React.MouseEvent) => {
+    e.preventDefault();
+    const el = document.getElementById("contact");
+    if (el) el.scrollIntoView({ behavior: "smooth" });
   };
 
   return (
-    <section id="pricing" className="section-padding">
-      <div className="container-custom">
-        <SectionHeading
-          number="07"
-          label="Pricing"
-          title="What it costs."
-          description="Four ways to engage — pick what fits the work. Transparent scope, fast delivery, no fluff."
+    <section id="pricing" className="section-padding relative">
+      <div className="container-custom max-w-5xl">
+        <SectionHeadingMin
+          title="Pricing"
+          description="Four ways to engage. Transparent scope, no surprises."
         />
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
-          {pricingPlans.map((plan, index) => (
-            <Card
-              key={index}
-              className={`border-border relative overflow-hidden transition-all duration-300 hover:shadow-lg hover:-translate-y-1 ${
-                plan.highlighted
-                  ? "border-primary/50 shadow-glow scale-[1.02]"
-                  : "hover:border-primary/30"
-              }`}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-10">
+          {plans.map((plan, i) => (
+            <motion.div
+              key={plan.title}
+              initial={{ opacity: 0, y: 8 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-40px" }}
+              transition={{ duration: 0.35, delay: i * 0.05 }}
             >
-              {plan.highlighted && (
-                <>
-                  <BorderBeam
-                    duration={8}
-                    size={120}
-                    colorFrom="#facc15"
-                    colorTo="#fef3c7"
-                    borderWidth={1.5}
-                  />
-                  <BorderBeam
-                    duration={8}
-                    size={120}
-                    delay={4}
-                    colorFrom="#facc15"
-                    colorTo="#fef3c7"
-                    borderWidth={1.5}
-                  />
-                </>
-              )}
-              <CardHeader className="pb-4">
-                <Badge
-                  variant={plan.highlighted ? "default" : "secondary"}
-                  className="w-fit mb-3"
-                >
-                  {plan.badge}
-                </Badge>
-                <h3 className="text-xl font-bold text-foreground mb-2">
-                  {plan.title}
-                </h3>
-                <div className="text-3xl font-bold text-primary mb-2">
-                  {plan.price}
+              {plan.featured && (
+                <div className="font-mono text-[10px] text-primary tracking-[0.2em] uppercase mb-2">
+                  Most popular
                 </div>
-                <p className="text-sm text-muted-foreground">
-                  {plan.description}
-                </p>
-              </CardHeader>
-
-              <CardContent className="pt-0">
-                <ul className="space-y-3 mb-6">
-                  {plan.features.map((feature, idx) => (
-                    <li key={idx} className="flex items-start gap-2 text-sm">
-                      <Check className="h-4 w-4 text-primary mt-0.5 flex-shrink-0" />
-                      <span className="text-muted-foreground">{feature}</span>
-                    </li>
-                  ))}
-                </ul>
-
-                <Button
-                  onClick={scrollToContact}
-                  variant={plan.highlighted ? "default" : "outline"}
-                  className="w-full"
-                >
-                  {plan.buttonText}
-                </Button>
-              </CardContent>
-            </Card>
+              )}
+              <h3 className="text-base font-semibold text-foreground mb-2 tracking-tight">
+                {plan.title}
+              </h3>
+              <div className="text-lg font-bold text-primary mb-3 font-mono tracking-tight">
+                {plan.price}
+              </div>
+              <p className="text-[15px] text-muted-foreground leading-relaxed mb-4">
+                {plan.description}
+              </p>
+              <a
+                href="#contact"
+                onClick={scrollToContact}
+                className="group inline-flex items-center gap-1.5 text-[13px] text-primary hover:text-primary-glow font-medium"
+              >
+                {plan.cta}
+                <ArrowUpRight className="h-3 w-3 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 transition-transform" />
+              </a>
+            </motion.div>
           ))}
         </div>
       </div>

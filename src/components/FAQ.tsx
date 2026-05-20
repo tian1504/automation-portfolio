@@ -1,6 +1,5 @@
 import * as AccordionPrimitive from "@radix-ui/react-accordion";
-import { SectionHeading } from "@/components/SectionHeading";
-import { DotPattern } from "@/components/ui/dot-pattern";
+import { SectionHeadingMin } from "@/components/SectionHeadingMin";
 
 const faqs = [
   {
@@ -31,51 +30,39 @@ const faqs = [
 
 export const FAQ = () => {
   return (
-    <section id="faq" className="section-padding relative overflow-hidden">
-      {/* Quiet ambient dot field, fades at edges */}
-      <DotPattern
-        width={28}
-        height={28}
-        cr={1.2}
-        className="absolute inset-0 fill-foreground/[0.12] [mask-image:radial-gradient(ellipse_at_center,white_30%,transparent_75%)]"
-      />
-
-      <div className="container-custom relative z-10">
-        <SectionHeading
-          number="08"
-          label="FAQ"
-          title="Common questions."
+    <section id="faq" className="section-padding relative">
+      <div className="container-custom max-w-3xl">
+        <SectionHeadingMin
+          title="FAQ"
           description="If something isn't covered here, the booking call is where we figure it out together."
         />
 
-        <div className="max-w-3xl">
-          <AccordionPrimitive.Root type="single" collapsible className="border-t border-border">
-            {faqs.map((item, index) => (
-              <AccordionPrimitive.Item
-                key={item.q}
-                value={`item-${index}`}
-                className="border-b border-border"
-              >
-                <AccordionPrimitive.Header>
-                  <AccordionPrimitive.Trigger className="group flex w-full items-center justify-between gap-6 py-5 text-left transition-colors hover:text-primary [&[data-state=open]_.faq-icon-bar-vert]:rotate-90 [&[data-state=open]_.faq-icon-bar-vert]:opacity-0">
-                    <span className="text-base md:text-lg font-medium text-foreground/95 group-hover:text-primary transition-colors leading-snug">
-                      {item.q}
-                    </span>
-                    <span className="relative flex h-5 w-5 flex-shrink-0 items-center justify-center text-muted-foreground group-hover:text-primary transition-colors">
-                      <span className="absolute h-px w-3 bg-current" />
-                      <span className="faq-icon-bar-vert absolute h-3 w-px bg-current transition-all duration-300" />
-                    </span>
-                  </AccordionPrimitive.Trigger>
-                </AccordionPrimitive.Header>
-                <AccordionPrimitive.Content className="overflow-hidden data-[state=closed]:animate-accordion-up data-[state=open]:animate-accordion-down">
-                  <div className="pb-5 pr-10 text-sm md:text-base text-muted-foreground leading-relaxed max-w-2xl">
-                    {item.a}
-                  </div>
-                </AccordionPrimitive.Content>
-              </AccordionPrimitive.Item>
-            ))}
-          </AccordionPrimitive.Root>
-        </div>
+        <AccordionPrimitive.Root type="single" collapsible className="border-t border-border/40">
+          {faqs.map((item, index) => (
+            <AccordionPrimitive.Item
+              key={item.q}
+              value={`item-${index}`}
+              className="border-b border-border/40"
+            >
+              <AccordionPrimitive.Header>
+                <AccordionPrimitive.Trigger className="group flex w-full items-center justify-between gap-6 py-5 text-left transition-colors hover:text-primary [&[data-state=open]_.faq-icon-bar-vert]:rotate-90 [&[data-state=open]_.faq-icon-bar-vert]:opacity-0">
+                  <span className="text-[15px] md:text-base font-medium text-foreground/95 group-hover:text-primary transition-colors leading-snug">
+                    {item.q}
+                  </span>
+                  <span className="relative flex h-5 w-5 flex-shrink-0 items-center justify-center text-muted-foreground group-hover:text-primary transition-colors">
+                    <span className="absolute h-px w-3 bg-current" />
+                    <span className="faq-icon-bar-vert absolute h-3 w-px bg-current transition-all duration-300" />
+                  </span>
+                </AccordionPrimitive.Trigger>
+              </AccordionPrimitive.Header>
+              <AccordionPrimitive.Content className="overflow-hidden data-[state=closed]:animate-accordion-up data-[state=open]:animate-accordion-down">
+                <div className="pb-5 pr-10 text-[15px] text-muted-foreground leading-relaxed max-w-2xl">
+                  {item.a}
+                </div>
+              </AccordionPrimitive.Content>
+            </AccordionPrimitive.Item>
+          ))}
+        </AccordionPrimitive.Root>
       </div>
     </section>
   );
