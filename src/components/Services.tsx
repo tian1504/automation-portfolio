@@ -1,5 +1,8 @@
 import { motion } from "motion/react";
-import { SectionHeadingMin } from "@/components/SectionHeadingMin";
+import { ArrowUpRight } from "lucide-react";
+import { SectionHeading } from "@/components/SectionHeading";
+import { WorkflowBackdrop } from "@/components/WorkflowBackdrop";
+import { MagicCard } from "@/components/ui/magic-card";
 
 const services = [
   {
@@ -36,28 +39,53 @@ const services = [
 
 export const Services = () => {
   return (
-    <section id="services" className="section-padding relative">
-      <div className="container-custom max-w-5xl">
-        <SectionHeadingMin
-          title="Services"
-          description="Six engagements I run with clients."
+    <section id="services" className="section-padding relative overflow-hidden">
+      <WorkflowBackdrop className="opacity-60" />
+
+      <div className="container-custom relative z-10">
+        <SectionHeading
+          number="02"
+          label="Services"
+          title="What I build."
+          description="Six engagements I run with clients. Each card below is a node — most projects connect two or three of them into a single working system."
         />
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-10 gap-y-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-5">
           {services.map((service, index) => (
             <motion.div
               key={service.title}
-              initial={{ opacity: 0, y: 12 }}
+              initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-40px" }}
-              transition={{ duration: 0.35, delay: (index % 3) * 0.04 }}
+              viewport={{ once: true, margin: "-60px" }}
+              transition={{ duration: 0.45, delay: (index % 3) * 0.05 }}
             >
-              <h3 className="text-base font-semibold text-foreground mb-2 tracking-tight">
-                {service.title}
-              </h3>
-              <p className="text-[15px] text-muted-foreground leading-relaxed">
-                {service.description}
-              </p>
+              <MagicCard
+                className="rounded-sm h-full"
+                gradientFrom="hsl(45 93% 54%)"
+                gradientTo="hsl(45 93% 70%)"
+                gradientColor="hsl(45 93% 54%)"
+                gradientOpacity={0.08}
+                gradientSize={260}
+              >
+                <div className="relative p-7 lg:p-9 h-full">
+                  <div className="font-mono text-[11px] text-primary tracking-[0.25em] mb-6">
+                    {String(index + 1).padStart(2, "0")}
+                  </div>
+
+                  <h3 className="text-xl lg:text-2xl font-bold tracking-tight text-foreground mb-3 leading-tight">
+                    {service.title}
+                  </h3>
+
+                  <p className="text-sm md:text-base text-muted-foreground leading-relaxed max-w-sm">
+                    {service.description}
+                  </p>
+
+                  <ArrowUpRight
+                    className="absolute top-7 right-7 lg:top-9 lg:right-9 h-4 w-4 text-muted-foreground/40"
+                    aria-hidden
+                  />
+                </div>
+              </MagicCard>
             </motion.div>
           ))}
         </div>

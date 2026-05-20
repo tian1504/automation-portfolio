@@ -1,7 +1,7 @@
 import { ArrowUpRight, Calendar } from "lucide-react";
 import { motion } from "motion/react";
 import { Button } from "@/components/ui/button";
-import { SectionHeadingMin } from "@/components/SectionHeadingMin";
+import { SectionHeading } from "@/components/SectionHeading";
 import portraitImage from "@/assets/portrait.png";
 
 const BOOKING_URL = "https://calendly.com/tian1504/30min";
@@ -33,8 +33,10 @@ export const Contact = () => {
   return (
     <section id="contact" className="section-padding relative">
       <div className="container-custom">
-        <SectionHeadingMin
-          title="Let's talk"
+        <SectionHeading
+          number="09"
+          label="Contact"
+          title="Let's talk."
           description="Best way is a quick call — I usually reply within 24 hours. Tell me what's leaking time and I'll tell you if I can help."
         />
 

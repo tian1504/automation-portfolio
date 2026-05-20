@@ -1,5 +1,5 @@
 import { motion } from "motion/react";
-import { SectionHeadingMin } from "@/components/SectionHeadingMin";
+import { SectionHeading } from "@/components/SectionHeading";
 
 type Experience = {
   period: string;
@@ -68,49 +68,61 @@ const experiences: Experience[] = [
 export const Experience = () => {
   return (
     <section id="experience" className="section-padding">
-      <div className="container-custom max-w-4xl">
-        <SectionHeadingMin
-          title="Experience"
-          description="A decade in enterprise systems before going freelance — every workflow has to survive production."
+      <div className="container-custom">
+        <SectionHeading
+          number="03"
+          label="Experience"
+          title="Where I've shipped."
+          description="A decade in enterprise systems before going freelance — every workflow I build has to survive production, not just look good in a demo."
         />
 
-        <div>
+        <div className="max-w-5xl mx-auto">
           {experiences.map((exp, index) => (
             <motion.article
               key={exp.title}
-              initial={{ opacity: 0, y: 12 }}
+              initial={{ opacity: 0, y: 16 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-60px" }}
-              transition={{ duration: 0.4 }}
-              className="group grid grid-cols-1 md:grid-cols-[140px_1fr] gap-3 md:gap-10 py-10 border-t border-border/40"
+              transition={{ duration: 0.45, delay: 0.05 }}
+              className={`group grid grid-cols-1 md:grid-cols-[170px_1fr] gap-6 md:gap-10 py-10 ${
+                index === 0 ? "border-t border-border" : ""
+              } border-b border-border`}
             >
-              {/* Year anchor */}
+              {/* Year anchor — left column */}
               <div className="md:pt-1">
-                <div className="font-mono text-[11px] text-primary tracking-[0.2em] uppercase">
+                <div className="font-mono text-xs text-primary tracking-[0.2em] uppercase">
                   {exp.periodShort}
+                </div>
+                <div className="hidden md:block mt-2 font-mono text-[11px] text-muted-foreground/60 tracking-wider">
+                  {exp.period}
                 </div>
               </div>
 
-              {/* Content */}
+              {/* Content — right column */}
               <div>
-                <h3 className="text-base md:text-[17px] font-semibold tracking-tight text-foreground mb-1 leading-snug group-hover:text-primary transition-colors">
+                <h3 className="text-xl md:text-2xl font-bold tracking-tight text-foreground leading-tight mb-1.5 group-hover:text-primary transition-colors">
                   {exp.title}
                 </h3>
-                <div className="text-[13px] text-muted-foreground mb-5">
+                <div className="text-sm text-muted-foreground mb-5 font-medium">
                   {exp.company}
                 </div>
 
-                <ul className="space-y-2 mb-5 text-[15px] text-muted-foreground leading-relaxed">
+                <ul className="space-y-2.5 mb-6 text-sm md:text-base text-muted-foreground/95 leading-relaxed">
                   {exp.bullets.map((bullet, i) => (
                     <li key={i} className="flex gap-3">
-                      <span className="text-primary/50 mt-1.5 select-none flex-shrink-0" aria-hidden>—</span>
+                      <span className="text-primary/60 mt-0.5 select-none flex-shrink-0" aria-hidden>—</span>
                       <span>{bullet}</span>
                     </li>
                   ))}
                 </ul>
 
-                <div className="font-mono text-[11px] text-muted-foreground/80 tracking-wide">
-                  {exp.skills.join(" · ")}
+                <div className="flex flex-wrap gap-x-3 gap-y-1.5 font-mono text-[11px] text-muted-foreground tracking-wide">
+                  {exp.skills.map((skill, i) => (
+                    <span key={skill} className="flex items-center gap-3">
+                      <span className="text-foreground/70">{skill}</span>
+                      {i < exp.skills.length - 1 && <span className="text-border" aria-hidden>·</span>}
+                    </span>
+                  ))}
                 </div>
               </div>
             </motion.article>
