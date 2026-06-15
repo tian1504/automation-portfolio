@@ -27,7 +27,7 @@ export const Hero = () => {
           initial="hidden"
           animate="visible"
           transition={{ staggerChildren: 0.09, delayChildren: 0.05 }}
-          className="grid grid-cols-1 lg:grid-cols-[1.1fr_1fr] gap-10 lg:gap-16 items-center max-w-7xl mx-auto"
+          className="grid grid-cols-1 lg:grid-cols-[1fr_1.05fr] gap-10 lg:gap-14 items-center max-w-7xl mx-auto"
         >
           {/* Left: editorial text column — leads on mobile */}
           <div className="order-1 space-y-7">
@@ -120,7 +120,7 @@ export const Hero = () => {
           <motion.div
             variants={fadeUp}
             transition={{ duration: 0.7, delay: 0.2 }}
-            className="order-2 w-full max-w-xl mx-auto lg:mx-0 lg:justify-self-end"
+            className="order-2 w-full max-w-2xl mx-auto lg:mx-0 lg:justify-self-end"
           >
             <HeroNodeCanvas />
           </motion.div>
