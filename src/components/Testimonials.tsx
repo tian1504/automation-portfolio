@@ -49,7 +49,7 @@ export const Testimonials = () => {
 
       <div className="container-custom relative z-10">
         <SectionHeading
-          number="05"
+          number="06"
           label="Testimonials"
           title="What clients say."
           description="Three of my five-star Upwork engagements. The full set lives on my profile."

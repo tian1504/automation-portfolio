@@ -42,7 +42,7 @@ export const FAQ = () => {
 
       <div className="container-custom relative z-10">
         <SectionHeading
-          number="08"
+          number="09"
           label="FAQ"
           title="Common questions."
           description="If something isn't covered here, the booking call is where we figure it out together."

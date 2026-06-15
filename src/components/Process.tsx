@@ -46,7 +46,7 @@ export const Process = () => {
     <section id="process" className="section-padding relative">
       <div className="container-custom">
         <SectionHeading
-          number="06"
+          number="07"
           label="Process"
           title="How we'd work together."
           description="A predictable four-step engagement. Most builds ship in three weeks; audits in a few days."

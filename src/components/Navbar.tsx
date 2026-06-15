@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Link } from "react-router-dom";
 
 const navLinks = [
   { href: "#services", label: "Services" },
   { href: "#experience", label: "Experience" },
   { href: "#portfolio", label: "Work" },
+  { href: "#builds", label: "Builds" },
   { href: "#pricing", label: "Pricing" },
   { href: "#contact", label: "Contact" },
 ];
@@ -57,7 +59,7 @@ export const Navbar = () => {
         </a>
 
         {/* Desktop nav links */}
-        <div className="hidden md:flex items-center gap-7">
+        <div className="hidden lg:flex items-center gap-6">
           {navLinks.map((link) => (
             <a
               key={link.href}
@@ -68,13 +70,16 @@ export const Navbar = () => {
               {link.label}
             </a>
           ))}
+          <Button asChild size="sm" className="h-9">
+            <Link to="/audit">Free Audit</Link>
+          </Button>
         </div>
 
         {/* Mobile menu button */}
         <Button
           variant="ghost"
           size="icon"
-          className="md:hidden text-foreground hover:text-primary hover:bg-foreground/5"
+          className="lg:hidden text-foreground hover:text-primary hover:bg-foreground/5"
           onClick={() => setIsOpen(!isOpen)}
           aria-label="Toggle menu"
         >
@@ -84,7 +89,7 @@ export const Navbar = () => {
 
       {/* Mobile nav drawer */}
       {isOpen && (
-        <div className="md:hidden absolute top-full left-0 right-0 bg-background/95 backdrop-blur-md border-b border-border animate-fade-in">
+        <div className="lg:hidden absolute top-full left-0 right-0 bg-background/95 backdrop-blur-md border-b border-border animate-fade-in">
           <div className="container-custom py-6 flex flex-col gap-1">
             {navLinks.map((link) => (
               <a
@@ -96,6 +101,9 @@ export const Navbar = () => {
                 {link.label}
               </a>
             ))}
+            <Button asChild size="sm" className="w-full mt-4">
+              <Link to="/audit" onClick={() => setIsOpen(false)}>Free Audit</Link>
+            </Button>
           </div>
         </div>
       )}

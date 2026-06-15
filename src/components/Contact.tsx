@@ -2,7 +2,7 @@ import { ArrowUpRight, Calendar } from "lucide-react";
 import { motion } from "motion/react";
 import { Button } from "@/components/ui/button";
 import { SectionHeading } from "@/components/SectionHeading";
-import portraitImage from "@/assets/portrait.png";
+import portraitImage from "@/assets/portrait.webp";
 
 const BOOKING_URL = "https://calendly.com/tian1504/30min";
 
@@ -34,7 +34,7 @@ export const Contact = () => {
     <section id="contact" className="section-padding relative">
       <div className="container-custom">
         <SectionHeading
-          number="09"
+          number="10"
           label="Contact"
           title="Let's talk."
           description="Best way is a quick call — I usually reply within 24 hours. Tell me what's leaking time and I'll tell you if I can help."
@@ -92,14 +92,11 @@ export const Contact = () => {
                     loading="lazy"
                   />
                 </div>
-                {/* Green availability dot, sits on the bottom-right corner of the portrait */}
+                {/* Availability dot on the portrait corner — single brand hue, no ping */}
                 <span
-                  className="absolute -bottom-1 -right-1 flex h-4 w-4"
+                  className="absolute -bottom-1 -right-1 inline-flex h-4 w-4 rounded-full bg-primary border-[2.5px] border-background"
                   aria-label="Currently available for new projects"
-                >
-                  <span className="absolute inline-flex h-full w-full rounded-full bg-emerald-400/70 animate-ping" />
-                  <span className="relative inline-flex h-4 w-4 rounded-full bg-emerald-400 border-[2.5px] border-background" />
-                </span>
+                />
               </div>
 
               <div className="font-mono text-[11px] text-primary tracking-[0.25em] uppercase mb-4">

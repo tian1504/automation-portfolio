@@ -1,26 +1,14 @@
 import { Check } from "lucide-react";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { BorderBeam } from "@/components/ui/border-beam";
 import { SectionHeading } from "@/components/SectionHeading";
+import { cn } from "@/lib/utils";
 
+// Three build/retainer engagements. The $20/hr hourly option is intentionally
+// kept OFF the card grid (rendered as a quiet line below) so it doesn't anchor
+// the whole offer low.
 const pricingPlans = [
   {
-    badge: "Pay-as-you-go",
-    title: "Hourly / Advisory",
-    price: "$20 / hr",
-    description: "For quick consults, fixes, and scoped tasks.",
-    features: [
-      "Automation review & optimization",
-      "Zapier / Make / n8n troubleshooting",
-      "Workflow planning & architecture",
-    ],
-    buttonText: "Request Hourly Quote",
-    highlighted: false,
-  },
-  {
-    badge: "Most Popular",
+    badge: "Most chosen",
     title: "Automation Build",
     price: "$600 – $1,800",
     description: "End-to-end workflow builds that remove busywork.",
@@ -31,11 +19,11 @@ const pricingPlans = [
       "Clear handoff + documentation",
       "2 revision rounds",
     ],
-    buttonText: "Book Build Brief",
+    buttonText: "Book a build brief",
     highlighted: true,
   },
   {
-    badge: "For Data-Heavy Projects",
+    badge: "For data-heavy projects",
     title: "Data Pipeline Build",
     price: "$900 – $2,400",
     description: "Scrape, clean, enrich, and pipeline data into your stack.",
@@ -45,13 +33,13 @@ const pricingPlans = [
       "Automated delivery to Notion / Airtable / Sheets",
       "Scoring, ranking, scheduled reporting",
     ],
-    buttonText: "Discuss Data Project",
+    buttonText: "Discuss a data project",
     highlighted: false,
   },
   {
-    badge: "Monthly Retainer",
+    badge: "Monthly retainer",
     title: "Maintenance & Growth",
-    price: "$200 / month",
+    price: "$200 / mo",
     description: "Keep your automations healthy and improving.",
     features: [
       "Up to 5 hrs updates / month",
@@ -59,7 +47,7 @@ const pricingPlans = [
       "Priority support",
       "Monthly performance summary",
     ],
-    buttonText: "Start Maintenance",
+    buttonText: "Start maintenance",
     highlighted: false,
   },
 ];
@@ -74,80 +62,67 @@ export const Pricing = () => {
     <section id="pricing" className="section-padding">
       <div className="container-custom">
         <SectionHeading
-          number="07"
+          number="08"
           label="Pricing"
           title="What it costs."
-          description="Four ways to engage — pick what fits the work. Transparent scope, fast delivery, no fluff."
+          description="Fixed scope, fixed price — you sign off on everything before I build a thing, so there are never surprise invoices. Pick the engagement that fits the work."
         />
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
-          {pricingPlans.map((plan, index) => (
-            <Card
-              key={index}
-              className={`border-border relative overflow-hidden transition-all duration-300 hover:shadow-lg hover:-translate-y-1 ${
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 max-w-6xl mx-auto">
+          {pricingPlans.map((plan) => (
+            <div
+              key={plan.title}
+              className={cn(
+                "relative flex flex-col rounded-xl border p-7 transition-colors duration-300",
                 plan.highlighted
-                  ? "border-primary/50 shadow-glow scale-[1.02]"
-                  : "hover:border-primary/30"
-              }`}
-            >
-              {plan.highlighted && (
-                <>
-                  <BorderBeam
-                    duration={8}
-                    size={120}
-                    colorFrom="#facc15"
-                    colorTo="#fef3c7"
-                    borderWidth={1.5}
-                  />
-                  <BorderBeam
-                    duration={8}
-                    size={120}
-                    delay={4}
-                    colorFrom="#facc15"
-                    colorTo="#fef3c7"
-                    borderWidth={1.5}
-                  />
-                </>
+                  ? "border-primary/40 bg-card/60"
+                  : "border-border bg-card/25 hover:border-border/80"
               )}
-              <CardHeader className="pb-4">
-                <Badge
-                  variant={plan.highlighted ? "default" : "secondary"}
-                  className="w-fit mb-3"
-                >
-                  {plan.badge}
-                </Badge>
-                <h3 className="text-xl font-bold text-foreground mb-2">
-                  {plan.title}
-                </h3>
-                <div className="text-3xl font-bold text-primary mb-2">
-                  {plan.price}
-                </div>
-                <p className="text-sm text-muted-foreground">
-                  {plan.description}
-                </p>
-              </CardHeader>
+            >
+              <div className="font-mono text-[11px] uppercase tracking-[0.18em] text-muted-foreground mb-5">
+                {plan.badge}
+              </div>
 
-              <CardContent className="pt-0">
-                <ul className="space-y-3 mb-6">
-                  {plan.features.map((feature, idx) => (
-                    <li key={idx} className="flex items-start gap-2 text-sm">
-                      <Check className="h-4 w-4 text-primary mt-0.5 flex-shrink-0" />
-                      <span className="text-muted-foreground">{feature}</span>
-                    </li>
-                  ))}
-                </ul>
+              <h3 className="text-lg font-bold text-foreground mb-2">{plan.title}</h3>
+              <div className="text-[1.75rem] font-semibold tracking-tight text-foreground mb-3">
+                {plan.price}
+              </div>
+              <p className="text-sm text-muted-foreground leading-relaxed mb-7">
+                {plan.description}
+              </p>
 
-                <Button
-                  onClick={scrollToContact}
-                  variant={plan.highlighted ? "default" : "outline"}
-                  className="w-full"
-                >
-                  {plan.buttonText}
-                </Button>
-              </CardContent>
-            </Card>
+              <ul className="space-y-2.5 mb-8 flex-1">
+                {plan.features.map((feature) => (
+                  <li key={feature} className="flex items-start gap-2.5 text-sm">
+                    <Check className="h-4 w-4 mt-0.5 flex-shrink-0 text-muted-foreground/45" aria-hidden />
+                    <span className="text-muted-foreground">{feature}</span>
+                  </li>
+                ))}
+              </ul>
+
+              <Button
+                onClick={scrollToContact}
+                variant={plan.highlighted ? "default" : "outline"}
+                className="w-full"
+              >
+                {plan.buttonText}
+              </Button>
+            </div>
           ))}
         </div>
+
+        {/* Hourly option — kept honest but deliberately de-anchored from the grid */}
+        <p className="mt-10 text-center font-mono text-sm text-muted-foreground max-w-2xl mx-auto">
+          Smaller scope?{" "}
+          <span className="text-foreground">Hourly consults &amp; fixes from $20/hr</span> —{" "}
+          <button
+            onClick={scrollToContact}
+            className="text-primary hover:underline underline-offset-4"
+          >
+            request a quote
+          </button>
+          .
+        </p>
       </div>
     </section>
   );
