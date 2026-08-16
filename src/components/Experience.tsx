@@ -17,25 +17,37 @@ const experiences: Experience[] = [
     title: "AI DM Agent — Instagram → GoHighLevel Pipeline",
     company: "Freelance · AVA (Tamara)",
     bullets: [
-      "Built the lead-capture layer for an Instagram DM AI agent: webhook intake, message parsing, profile enrichment, and CRM sync.",
+      "Shipped the full agent: 24/7 Instagram DM automation that classifies inbound intent, handles objections, and generates context-aware replies with Claude.",
       "Implemented two-way Instagram Graph API integration handling verification handshake, inbound message events, and outbound automated replies.",
-      "Designed contact deduplication and pipeline opportunity creation in GoHighLevel CRM with version-aware API calls.",
-      "Phase 1.3 of a multi-phase AVA agent rollout — sets the data foundation for Claude-powered intent classification and reply generation.",
+      "Routes confirmed bookings into GoHighLevel with contact deduplication, pipeline opportunity creation, and team alerts.",
+      "Runs end to end without human input — escalates to a human only when the conversation actually needs one.",
     ],
     skills: ["n8n", "Claude", "Instagram Graph API", "GoHighLevel", "AI Agents", "Webhooks"],
   },
   {
-    period: "Nov 2025 — Present",
-    periodShort: "2025 — NOW",
-    title: "Automation Specialist — Amazon Product Workflows",
+    period: "2026",
+    periodShort: "2026",
+    title: "AI Member-Matching Engine — Airtable Logic Layer",
     company: "Freelance",
     bullets: [
-      "Built and maintain automation workflows for Amazon product operations — orders, tracking, status updates.",
-      "Connected email, Amazon notifications, and internal tools via Make.com, n8n, and Zapier so the team stays in sync.",
-      "Automated Slack and email alerts for new orders, shipment updates, and cancellations to remove manual checking.",
+      "Designed a multi-workflow matching system with Airtable as the structured logic layer — a configurable scoring and ranking engine over parsed member data.",
+      "Validation gates enforce data quality before any match is made; personalized introduction emails are generated automatically.",
+      "Hardened from prototype to stable production — resolved race conditions and rebuilt the field-mapping logic.",
+    ],
+    skills: ["n8n", "Airtable", "LLM Scoring", "Validation Gates"],
+  },
+  {
+    period: "Nov 2025 — Present",
+    periodShort: "2025 — NOW",
+    title: "Automation Specialist — Amazon SP-API & Sourcing",
+    company: "Freelance",
+    bullets: [
+      "Built automations against Amazon's Selling Partner API — LWA authentication, request throttling, pagination, and the asynchronous Reports API.",
+      "Live sales and inventory dashboards with re-order alerts; inbound-shipment and order-status workflows synced to the inventory system.",
+      "Two-stage LLM product-sourcing bot: strict brand / UPC / MPN / SKU matching plus SOP rules, with Apify supplier scraping and Keepa pricing — buy / no-buy verdicts delivered to Slack with sourced reasoning.",
       "Added logging and monitoring so failures are easy to track and debug in production.",
     ],
-    skills: ["n8n", "Slack Bot", "OpenAI", "Amazon", "Prompt Engineering"],
+    skills: ["n8n", "Amazon SP-API", "Python", "OpenAI", "Apify", "Keepa"],
   },
   {
     period: "Sep 2025 — Nov 2025",
@@ -51,8 +63,8 @@ const experiences: Experience[] = [
     skills: ["n8n", "Apify", "Notion", "OpenAI", "Gemini", "UGC"],
   },
   {
-    period: "2012 — 2025",
-    periodShort: "2012 — 2025",
+    period: "2012 — Jul 2026",
+    periodShort: "2012 — 2026",
     title: "System Administrator — Windows & Azure Cloud Engineer",
     company: "Enterprise Infrastructure",
     bullets: [
@@ -73,7 +85,7 @@ export const Experience = () => {
           number="03"
           label="Experience"
           title="Where I've shipped."
-          description="A decade in enterprise systems before going freelance — every workflow I build has to survive production, not just look good in a demo."
+          description="A decade-plus in enterprise systems, full-time on AI automation since July 2026 — every workflow I build has to survive production, not just look good in a demo."
         />
 
         <div className="max-w-5xl mx-auto">
