@@ -1,5 +1,6 @@
 import { ArrowUpRight, ArrowDown } from "lucide-react";
 import { motion } from "motion/react";
+import { Link } from "react-router-dom";
 import { SectionHeading } from "@/components/SectionHeading";
 import deductiveImg from "@/assets/work/deductive-engine.webp";
 import spapiImg from "@/assets/work/amazon-spapi-architecture.png";
@@ -18,6 +19,7 @@ type Build = {
   tools: string[];
   tag: string;
   tagDot: "green" | "yellow" | "neutral";
+  to?: string;
 };
 
 const BUILDS: Build[] = [
@@ -71,6 +73,7 @@ const BUILDS: Build[] = [
     tools: ["Node.js", "Web scraping", "Amazon FBA"],
     tag: "Client build · In delivery",
     tagDot: "yellow",
+    to: "/case-study/book-sourcing-engine",
   },
   {
     kind: "image",
@@ -153,7 +156,11 @@ export const Builds = () => {
         <div className="max-w-6xl mx-auto">
           {BUILDS.map((build, index) => {
             const isReversed = index % 2 === 1;
-            const visual = (
+            const visual = build.to ? (
+              <Link to={build.to} className="block group/img relative" aria-label={build.title}>
+                <Visual build={build} />
+              </Link>
+            ) : (
               <div className="group/img relative">
                 <Visual build={build} />
               </div>
@@ -200,6 +207,17 @@ export const Builds = () => {
                     </div>
                     <div className="text-sm text-foreground/85 leading-relaxed">{build.outcome}</div>
                   </div>
+
+                  {/* Case study link */}
+                  {build.to && (
+                    <Link
+                      to={build.to}
+                      className="group inline-flex items-center gap-2 text-primary hover:text-primary/80 font-medium text-sm mb-6"
+                    >
+                      Read the case study
+                      <ArrowUpRight className="h-4 w-4 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 transition-transform" />
+                    </Link>
+                  )}
 
                   {/* Tools */}
                   <div className="flex flex-wrap gap-x-3 gap-y-1 font-mono text-[11px] text-muted-foreground tracking-wide">
