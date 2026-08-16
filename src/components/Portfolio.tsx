@@ -98,7 +98,7 @@ export const Portfolio = () => {
           number="04"
           label="Selected Work"
           title="Production workflows."
-          description="Six featured automations running today across data, AI agents, and content systems. Each one shipped to a real client — the full archive lives on Upwork."
+          description="Six featured automations running today across data, AI agents, and content systems. Each one shipped to a real client."
         />
 
         {/* Editorial alternating-row case studies */}
@@ -196,63 +196,6 @@ export const Portfolio = () => {
           })}
         </div>
 
-        {/* Upwork archive — quiet, editorial */}
-        <div className="mt-24 pt-10 border-t border-border max-w-5xl mx-auto">
-          <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-8">
-            <div>
-              <div className="font-mono text-[11px] text-primary tracking-[0.25em] uppercase mb-3">More Work</div>
-              <h3 className="text-2xl md:text-3xl font-bold tracking-tight text-foreground leading-tight">
-                See the full archive on Upwork.
-              </h3>
-            </div>
-            <a
-              href="https://www.upwork.com/freelancers/~01ac0c23391406fb0d?nav_dir=pop"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="group inline-flex items-center gap-2 text-primary hover:text-primary-glow font-medium text-sm md:text-base self-start md:self-auto"
-            >
-              View my Upwork profile
-              <ArrowUpRight className="h-4 w-4 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 transition-transform" />
-            </a>
-          </div>
-
-          <a
-            href="https://www.upwork.com/freelancers/~01ac0c23391406fb0d?nav_dir=pop"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="block group relative"
-          >
-            <div className="relative overflow-hidden transition-all duration-300">
-              <img
-                src={new URL('../assets/upwork-profile-banner-clean.png', import.meta.url).href}
-                alt="Eleazar Sebastian M. – Upwork profile preview"
-                className="w-full h-auto block"
-                style={{
-                  marginLeft: '-3px',
-                  width: 'calc(100% + 3px)',
-                  // Two layered linear masks — horizontal + vertical fade,
-                  // intersected so ALL 4 edges fade into the page background.
-                  // No more visible rectangular boundary.
-                  WebkitMaskImage:
-                    'linear-gradient(to right, transparent 0%, #000 14%, #000 86%, transparent 100%), linear-gradient(to bottom, transparent 0%, #000 14%, #000 86%, transparent 100%)',
-                  WebkitMaskComposite: 'source-in',
-                  maskImage:
-                    'linear-gradient(to right, transparent 0%, #000 14%, #000 86%, transparent 100%), linear-gradient(to bottom, transparent 0%, #000 14%, #000 86%, transparent 100%)',
-                  maskComposite: 'intersect',
-                }}
-              />
-              {/* Subtle yellow halo on hover, replaces the static border */}
-              <div
-                aria-hidden
-                className="absolute inset-0 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-500"
-                style={{
-                  background:
-                    'radial-gradient(ellipse 90% 80% at center, transparent 50%, hsl(45 93% 54% / 0.06) 80%, transparent 100%)',
-                }}
-              />
-            </div>
-          </a>
-        </div>
       </div>
     </section>
   );

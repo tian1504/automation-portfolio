@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Link } from "react-router-dom";
 
 const navLinks = [
   { href: "#services", label: "Services" },
@@ -71,7 +70,7 @@ export const Navbar = () => {
             </a>
           ))}
           <Button asChild size="sm" className="h-9">
-            <Link to="/audit">Free Audit</Link>
+            <a href="#contact" onClick={(e) => handleNavClick(e, "#contact")}>Book a Call</a>
           </Button>
         </div>
 
@@ -102,7 +101,7 @@ export const Navbar = () => {
               </a>
             ))}
             <Button asChild size="sm" className="w-full mt-4">
-              <Link to="/audit" onClick={() => setIsOpen(false)}>Free Audit</Link>
+              <a href="#contact" onClick={(e) => handleNavClick(e, "#contact")}>Book a Call</a>
             </Button>
           </div>
         </div>

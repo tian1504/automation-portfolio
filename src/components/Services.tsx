@@ -6,6 +6,11 @@ import { MagicCard } from "@/components/ui/magic-card";
 
 const services = [
   {
+    title: "Amazon Seller Automation",
+    description:
+      "Amazon SP-API end to end: order and inventory sync, financial events, returns reports, re-order alerts, and sourcing engines. Seller Central operations, hands-off.",
+  },
+  {
     title: "AI Customer Agents",
     description:
       "Replace tier-1 support with a Claude agent that knows your knowledge base, drafts responses, and escalates only when a human is actually needed.",
@@ -29,11 +34,6 @@ const services = [
     title: "API & CRM Integrations",
     description:
       "Custom two-way connections between HubSpot, Apollo, Slack, Stripe, or any API. Error handling, retries, and monitoring built in.",
-  },
-  {
-    title: "Automation Audits",
-    description:
-      "Review your existing setup. Find what's leaking time, money, or breaking silently. Get a prioritized fix list before any building starts.",
   },
 ];
 
