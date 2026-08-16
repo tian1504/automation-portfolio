@@ -3,37 +3,38 @@ import { Button } from "@/components/ui/button";
 import { SectionHeading } from "@/components/SectionHeading";
 import { cn } from "@/lib/utils";
 
-// Three build/retainer engagements. The $20/hr hourly option is intentionally
+// Three build/retainer engagements. The hourly option is intentionally
 // kept OFF the card grid (rendered as a quiet line below) so it doesn't anchor
 // the whole offer low.
 const pricingPlans = [
   {
-    badge: "Most chosen",
-    title: "Automation Build",
-    price: "$600 – $1,800",
-    description: "End-to-end workflow builds that remove busywork.",
+    badge: "The specialty",
+    title: "Amazon System Build",
+    price: "$900 – $2,400",
+    description: "SP-API automations, seller dashboards, and sourcing tools for Amazon businesses.",
     features: [
-      "Multi-step automation using n8n / Make / Zapier",
-      "API integrations + Notion / Airtable / Sheets",
-      "AI steps with OpenAI / Gemini where useful",
-      "Clear handoff + documentation",
-      "2 revision rounds",
+      "SP-API sync workflows — orders, inventory, financials, returns",
+      "Live seller dashboards with re-order alerts",
+      "Sourcing and buy-decision tools",
+      "Runs on your accounts — credentials stay yours",
+      "Handover doc + recorded walkthrough",
     ],
     buttonText: "Book a build brief",
     highlighted: true,
   },
   {
-    badge: "For data-heavy projects",
-    title: "Data Pipeline Build",
-    price: "$900 – $2,400",
-    description: "Scrape, clean, enrich, and pipeline data into your stack.",
+    badge: "Agents & workflows",
+    title: "AI Agent & Workflow Build",
+    price: "$600 – $1,800",
+    description: "Autonomous agents and end-to-end workflows that remove busywork.",
     features: [
-      "Custom scraping (social, e-comm, directories, APIs)",
-      "Dedupe, normalize, enrich",
-      "Automated delivery to Notion / Airtable / Sheets",
-      "Scoring, ranking, scheduled reporting",
+      "Multi-step agents in n8n with tool use and validation gates",
+      "DM / lead-qualification agents wired into your CRM",
+      "RAG knowledge systems that answer with citations",
+      "AI steps with Claude / OpenAI / Gemini where useful",
+      "Clear handoff + documentation",
     ],
-    buttonText: "Discuss a data project",
+    buttonText: "Discuss an agent build",
     highlighted: false,
   },
   {
@@ -114,7 +115,7 @@ export const Pricing = () => {
         {/* Hourly option — kept honest but deliberately de-anchored from the grid */}
         <p className="mt-10 text-center font-mono text-sm text-muted-foreground max-w-2xl mx-auto">
           Smaller scope?{" "}
-          <span className="text-foreground">Hourly consults &amp; fixes from $20/hr</span> —{" "}
+          <span className="text-foreground">Hourly consults &amp; fixes from $15/hr</span> —{" "}
           <button
             onClick={scrollToContact}
             className="text-primary hover:underline underline-offset-4"

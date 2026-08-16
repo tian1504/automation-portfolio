@@ -1,7 +1,8 @@
 import { motion } from "motion/react";
-import { Sparkles, Braces, Webhook, type LucideIcon } from "lucide-react";
+import { Terminal, TrendingUp, Webhook, type LucideIcon } from "lucide-react";
 import { SectionHeading } from "@/components/SectionHeading";
 import { OrbitTools } from "@/components/OrbitTools";
+import { TechIcon } from "@/components/TechIcon";
 import n8nLogo from "@/assets/logos/n8n.svg";
 import makeLogo from "@/assets/logos/make.svg";
 import zapierLogo from "@/assets/logos/zapier.svg";
@@ -17,6 +18,8 @@ type Tool = {
   name: string;
   logo?: string;
   icon?: LucideIcon;
+  /** Render via TechIcon (brand-colored mask) when no colored logo asset exists. */
+  tech?: string;
   primary?: boolean;
 };
 
@@ -35,27 +38,44 @@ const stack: StackRow[] = [
     ],
   },
   {
-    category: "AI Models",
+    category: "AI & Agents",
     tools: [
-      { name: "Claude", icon: Sparkles, primary: true },
+      { name: "Claude", tech: "Claude", primary: true },
+      { name: "Claude Code", icon: Terminal, primary: true },
       { name: "OpenAI", logo: openaiLogo },
       { name: "Gemini", logo: geminiLogo },
     ],
   },
   {
-    category: "Data & Storage",
+    category: "Amazon",
     tools: [
-      { name: "Notion", logo: notionLogo, primary: true },
+      { name: "Amazon SP-API", tech: "Amazon SP-API", primary: true },
+      { name: "Keepa API", icon: TrendingUp },
+    ],
+  },
+  {
+    category: "Full-Stack",
+    tools: [
+      { name: "Supabase", tech: "Supabase", primary: true },
+      { name: "React", tech: "React" },
+      { name: "Node.js", tech: "Node.js" },
+      { name: "Python", tech: "Python" },
+      { name: "Netlify", tech: "Netlify" },
+    ],
+  },
+  {
+    category: "Data & CRM",
+    tools: [
       { name: "Airtable", logo: airtableLogo, primary: true },
+      { name: "Notion", logo: notionLogo },
       { name: "HubSpot", logo: hubspotLogo },
       { name: "GoHighLevel", logo: gohighlevelLogo },
     ],
   },
   {
-    category: "Scraping & Code",
+    category: "Scraping & APIs",
     tools: [
       { name: "Apify", logo: apifyLogo, primary: true },
-      { name: "Python", icon: Braces },
       { name: "Custom APIs", icon: Webhook },
     ],
   },
@@ -82,6 +102,8 @@ const ToolChip = ({ tool, index }: { tool: Tool; index: number }) => {
           aria-hidden
           className="w-5 h-5 object-contain flex-shrink-0"
         />
+      ) : tool.tech ? (
+        <TechIcon name={tool.tech} className="!h-5 !w-5" />
       ) : Icon ? (
         <Icon
           className={`w-[18px] h-[18px] flex-shrink-0 ${
@@ -101,8 +123,9 @@ const ToolChip = ({ tool, index }: { tool: Tool; index: number }) => {
   );
 };
 
-// Flat list of all tools for the orbit
-const allTools: Tool[] = stack.flatMap((row) => row.tools);
+// The orbit shows a curated subset so the tiles keep breathing room.
+const ORBIT_SKIP = new Set(["Keepa API", "Custom APIs", "Python", "HubSpot", "GoHighLevel", "Netlify"]);
+const allTools: Tool[] = stack.flatMap((row) => row.tools).filter((t) => !ORBIT_SKIP.has(t.name));
 
 export const TechStack = () => {
   return (

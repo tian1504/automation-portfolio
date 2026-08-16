@@ -37,7 +37,7 @@ export const Hero = () => {
               transition={{ duration: 0.5 }}
               className="font-mono text-[0.72rem] uppercase tracking-[0.15em] text-muted-foreground"
             >
-              AI Automation Engineer
+              AI Automation Engineer · Amazon SP-API
             </motion.div>
 
             {/* Editorial name — lighter weight, the period is the one yellow mark */}
@@ -59,15 +59,17 @@ export const Hero = () => {
               className="space-y-3 max-w-md text-base md:text-lg text-muted-foreground leading-relaxed"
             >
               <p>
-                I help lean teams{" "}
-                <span className="text-foreground font-medium">automate the busywork</span>{" "}
-                that quietly eats hours every week — support replies, lead gen, data entry, and reporting.
+                I help <span className="text-foreground font-medium">Amazon sellers</span> and lean teams{" "}
+                <span className="text-foreground font-medium">automate the operations</span>{" "}
+                that quietly eat hours every week — Seller Central reports, inventory and re-orders, lead
+                handling, and support replies.
               </p>
               <p>
                 <span className="font-mono text-foreground">n8n</span> +{" "}
                 <span className="font-mono text-foreground">Claude</span> is my home stack —{" "}
-                <span className="font-mono text-foreground">Make</span>,{" "}
-                <span className="font-mono text-foreground">Zapier</span>, and custom code when the build calls for it. Shipped to production, documented, and yours to keep.
+                <span className="font-mono text-foreground">Amazon SP-API</span>,{" "}
+                <span className="font-mono text-foreground">Supabase</span>, and custom code when the build calls
+                for it. Shipped to production, documented, and yours to keep.
               </p>
             </motion.div>
 

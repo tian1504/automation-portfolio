@@ -1,10 +1,13 @@
 import { motion } from "motion/react";
 import type { LucideIcon } from "lucide-react";
+import { TechIcon } from "@/components/TechIcon";
 
 type OrbitItem = {
   name: string;
   logo?: string;
   icon?: LucideIcon;
+  /** Render via TechIcon (brand-colored mask) when no colored logo asset exists. */
+  tech?: string;
 };
 
 interface OrbitToolsProps {
@@ -103,6 +106,8 @@ export const OrbitTools = ({
                     aria-hidden
                     className="w-7 h-7 object-contain"
                   />
+                ) : item.tech ? (
+                  <TechIcon name={item.tech} className="!h-7 !w-7" />
                 ) : Icon ? (
                   <Icon className="w-6 h-6 text-foreground/85" aria-hidden />
                 ) : null}
