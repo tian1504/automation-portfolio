@@ -1,6 +1,7 @@
 import { ArrowUpRight } from 'lucide-react';
 import { motion } from 'motion/react';
 import { SectionHeading } from '@/components/SectionHeading';
+import { TechIcon } from '@/components/TechIcon';
 
 // Workflow screenshots
 import workflowApollo from '@/assets/workflows/n8n-01.png';
@@ -182,10 +183,13 @@ export const Portfolio = () => {
                   </div>
 
                   {/* Tools */}
-                  <div className="flex flex-wrap gap-x-3 gap-y-1 font-mono text-[11px] text-muted-foreground tracking-wide">
+                  <div className="flex flex-wrap gap-x-3 gap-y-2 font-mono text-[11px] text-muted-foreground tracking-wide">
                     {project.tools.map((tool, i) => (
                       <span key={tool} className="flex items-center gap-3">
-                        <span className="text-foreground/70">{tool}</span>
+                        <span className="flex items-center gap-1.5 text-foreground/70">
+                          <TechIcon name={tool} />
+                          {tool}
+                        </span>
                         {i < project.tools.length - 1 && <span className="text-border" aria-hidden>·</span>}
                       </span>
                     ))}

@@ -1,15 +1,29 @@
-import { ArrowUpRight, ArrowDown } from "lucide-react";
+import {
+  ArrowUpRight,
+  BellRing,
+  BookOpen,
+  Calculator,
+  Database,
+  Globe,
+  LayoutDashboard,
+  ListChecks,
+  ShoppingCart,
+  Workflow,
+  type LucideIcon,
+} from "lucide-react";
 import { motion } from "motion/react";
 import { Link } from "react-router-dom";
 import { SectionHeading } from "@/components/SectionHeading";
+import { TechIcon } from "@/components/TechIcon";
 import deductiveImg from "@/assets/work/deductive-engine.webp";
 import spapiImg from "@/assets/work/amazon-spapi-architecture.png";
 
 type Kind = "image" | "diagram";
+type DiagramStep = { icon: LucideIcon; label: string; sub: string };
 type Build = {
   kind: Kind;
   image?: string;
-  diagram?: { steps: string[]; caption: string };
+  diagram?: { steps: DiagramStep[]; caption: string };
   categoryLabel: string;
   dotColor: string; // category dot in the visual badge
   title: string;
@@ -41,7 +55,13 @@ const BUILDS: Build[] = [
   {
     kind: "diagram",
     diagram: {
-      steps: ["Amazon SP-API", "n8n scheduled jobs", "Supabase (Postgres)", "Web dashboard", "Email / Slack re-order alerts"],
+      steps: [
+        { icon: ShoppingCart, label: "Amazon SP-API", sub: "orders · inventory · finances · pricing" },
+        { icon: Workflow, label: "n8n scheduled jobs", sub: "pulls on an interval" },
+        { icon: Database, label: "Supabase (Postgres)", sub: "one store for the data" },
+        { icon: LayoutDashboard, label: "Web dashboard", sub: "reads live · published on Netlify" },
+        { icon: BellRing, label: "Email / Slack alerts", sub: "re-order before stock runs out" },
+      ],
       caption: "seller-dashboard architecture — scheduled SP-API pulls to a live screen",
     },
     categoryLabel: "Seller Dashboard",
@@ -59,7 +79,12 @@ const BUILDS: Build[] = [
   {
     kind: "diagram",
     diagram: {
-      steps: ["AbeBooks · Biblio · Alibris", "Scraper engine (live listing reads)", "Margin math — price, condition, postage, Amazon fees", "Daily buy list (CSV + run log)"],
+      steps: [
+        { icon: BookOpen, label: "AbeBooks · Biblio · Alibris", sub: "scanned every morning" },
+        { icon: Globe, label: "Scraper engine", sub: "live listing reads · real browser over CDP" },
+        { icon: Calculator, label: "Margin math", sub: "price · condition · postage · Amazon fees" },
+        { icon: ListChecks, label: "Daily buy list", sub: "CSV + run log · fits the $200 budget" },
+      ],
       caption: "book-sourcing engine — every margin computed from what the listing says today",
     },
     categoryLabel: "FBA Sourcing",
@@ -95,49 +120,81 @@ const BUILDS: Build[] = [
 const tagDotColor = (d: Build["tagDot"]) =>
   d === "green" ? "#4ade80" : d === "yellow" ? "hsl(45 93% 54%)" : "hsl(35 8% 55%)";
 
-function ArchitectureDiagram({ steps, caption }: { steps: string[]; caption: string }) {
+function ArchitectureDiagram({ steps, caption }: { steps: DiagramStep[]; caption: string }) {
   return (
-    <div className="absolute inset-0 flex flex-col items-center justify-center px-6 py-5">
-      <div className="flex flex-col items-center gap-0 w-full max-w-[420px]">
-        {steps.map((step, i) => (
-          <div key={step} className="flex flex-col items-center w-full">
-            <div className="w-full border border-border bg-background/60 px-4 py-2.5 text-center">
-              <span className="font-mono text-[11px] md:text-xs text-foreground/85 tracking-wide">{step}</span>
+    <div className="relative flex flex-col sm:aspect-[16/10]">
+      {/* Static dot backdrop — texture without the cursor tricks */}
+      <div
+        aria-hidden
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          backgroundImage: "radial-gradient(hsl(45 30% 45% / 0.13) 1px, transparent 1px)",
+          backgroundSize: "22px 22px",
+        }}
+      />
+      <div className="relative flex-1 flex items-center justify-center px-5 pt-6 pb-4">
+        <div className="w-full max-w-[420px]">
+          {steps.map((step, i) => (
+            <div key={step.label}>
+              <div className="group/node flex items-center gap-3.5 border border-border bg-background/80 px-4 py-2.5 rounded-sm transition-colors duration-300 hover:border-primary/50">
+                <span className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-sm border border-primary/25 bg-primary/10 text-primary">
+                  <step.icon className="h-4 w-4" aria-hidden />
+                </span>
+                <span className="min-w-0 flex-1">
+                  <span className="block font-mono text-[11px] md:text-xs text-foreground tracking-wide truncate">
+                    {step.label}
+                  </span>
+                  <span className="block font-mono text-[10px] text-muted-foreground truncate mt-0.5">
+                    {step.sub}
+                  </span>
+                </span>
+                <span className="font-mono text-[9px] text-primary/50 tracking-widest flex-shrink-0">
+                  {String(i + 1).padStart(2, "0")}
+                </span>
+              </div>
+              {i < steps.length - 1 && (
+                <div className="relative mx-auto h-4 w-px bg-gradient-to-b from-primary/40 via-border to-primary/40">
+                  <span
+                    className="arch-pulse absolute left-1/2 -translate-x-1/2 h-[3px] w-[3px] rounded-full bg-primary motion-reduce:hidden"
+                    style={{ animationDelay: `${i * 0.45}s` }}
+                    aria-hidden
+                  />
+                </div>
+              )}
             </div>
-            {i < steps.length - 1 && (
-              <ArrowDown className="h-4 w-4 my-1 text-primary/70" aria-hidden />
-            )}
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
-      <div className="absolute bottom-3 left-4 right-4 font-mono text-[10px] text-muted-foreground/70 tracking-wide truncate">
-        {caption}
+      <div className="relative px-4 pb-3 flex">
+        <span className="font-mono text-[10px] tracking-wide text-muted-foreground/80 border border-border/60 bg-background/70 rounded-sm px-2 py-1 truncate">
+          {caption}
+        </span>
       </div>
     </div>
   );
 }
 
 function Visual({ build }: { build: Build }) {
-  return (
-    <div className="relative overflow-hidden border border-border bg-card/30 aspect-[16/10]">
-      {build.kind === "image" && (
-        <>
-          <img
-            src={build.image}
-            alt={build.title}
-            loading="lazy"
-            className="w-full h-full object-contain p-3 brightness-[0.94] saturate-[0.97] transition-transform duration-700 ease-out group-hover/img:scale-[1.02]"
-          />
-          {/* Tone the light product UI into the dark section; lifts on hover */}
-          <div className="absolute inset-0 bg-background/20 group-hover/img:bg-background/0 transition-colors duration-500 pointer-events-none" />
-          {/* Vignette (only over real-image screenshots, for legibility) */}
-          <div className="absolute inset-0 bg-gradient-to-t from-background/30 via-transparent to-transparent pointer-events-none" />
-        </>
-      )}
+  if (build.kind === "image") {
+    return (
+      <div className="relative overflow-hidden border border-border bg-card/30 aspect-[16/10]">
+        <img
+          src={build.image}
+          alt={build.title}
+          loading="lazy"
+          className="w-full h-full object-contain p-3 brightness-[0.94] saturate-[0.97] transition-transform duration-700 ease-out group-hover/img:scale-[1.02]"
+        />
+        {/* Tone the light product UI into the dark section; lifts on hover */}
+        <div className="absolute inset-0 bg-background/20 group-hover/img:bg-background/0 transition-colors duration-500 pointer-events-none" />
+        {/* Vignette (only over real-image screenshots, for legibility) */}
+        <div className="absolute inset-0 bg-gradient-to-t from-background/30 via-transparent to-transparent pointer-events-none" />
+      </div>
+    );
+  }
 
-      {build.kind === "diagram" && build.diagram && (
-        <ArchitectureDiagram steps={build.diagram.steps} caption={build.diagram.caption} />
-      )}
+  return (
+    <div className="relative overflow-hidden border border-border bg-card/30">
+      {build.diagram && <ArchitectureDiagram steps={build.diagram.steps} caption={build.diagram.caption} />}
     </div>
   );
 }
@@ -220,10 +277,13 @@ export const Builds = () => {
                   )}
 
                   {/* Tools */}
-                  <div className="flex flex-wrap gap-x-3 gap-y-1 font-mono text-[11px] text-muted-foreground tracking-wide">
+                  <div className="flex flex-wrap gap-x-3 gap-y-2 font-mono text-[11px] text-muted-foreground tracking-wide">
                     {build.tools.map((tool, i) => (
                       <span key={tool} className="flex items-center gap-3">
-                        <span className="text-foreground/70">{tool}</span>
+                        <span className="flex items-center gap-1.5 text-foreground/70">
+                          <TechIcon name={tool} />
+                          {tool}
+                        </span>
                         {i < build.tools.length - 1 && <span className="text-border" aria-hidden>·</span>}
                       </span>
                     ))}
