@@ -1,14 +1,9 @@
 import {
   ArrowUpRight,
-  BellRing,
   BookOpen,
   Calculator,
-  Database,
   Globe,
-  LayoutDashboard,
   ListChecks,
-  ShoppingCart,
-  Workflow,
   type LucideIcon,
 } from "lucide-react";
 import { motion } from "motion/react";
@@ -17,6 +12,7 @@ import { SectionHeading } from "@/components/SectionHeading";
 import { TechIcon } from "@/components/TechIcon";
 import deductiveImg from "@/assets/work/deductive-engine.webp";
 import spapiImg from "@/assets/work/amazon-spapi-architecture.png";
+import dashboardImg from "@/assets/work/seller-dashboard-redacted.png";
 
 type Kind = "image" | "diagram";
 export type DiagramStep = { icon: LucideIcon; label: string; sub: string };
@@ -54,28 +50,20 @@ const BUILDS: Build[] = [
     to: "/case-study/amazon-sp-api",
   },
   {
-    kind: "diagram",
-    diagram: {
-      steps: [
-        { icon: ShoppingCart, label: "Amazon SP-API", sub: "orders · inventory · finances · pricing" },
-        { icon: Workflow, label: "n8n scheduled jobs", sub: "pulls on an interval" },
-        { icon: Database, label: "Supabase (Postgres)", sub: "one store for the data" },
-        { icon: LayoutDashboard, label: "Web dashboard", sub: "reads live · published on Netlify" },
-        { icon: BellRing, label: "Email / Slack alerts", sub: "re-order before stock runs out" },
-      ],
-      caption: "seller-dashboard architecture — scheduled SP-API pulls to a live screen",
-    },
+    kind: "image",
+    image: dashboardImg,
     categoryLabel: "Seller Dashboard",
     dotColor: "#4ade80",
     title: "Amazon Seller Dashboard — Sales & Re-order Alerts",
     description:
-      "A sales, inventory, and re-order dashboard for a US fragrance brand selling on Amazon. n8n pulls orders, inventory, finances, and pricing from SP-API on a schedule into Supabase; a custom web dashboard reads from it, with automated email and Slack alerts before stock runs out.",
+      "A sales, inventory, and re-order dashboard for a US outdoor-products brand selling on Amazon. n8n pulls orders, inventory, finances, and pricing from SP-API on a schedule into Supabase; a custom web dashboard reads from it and opens each morning on what needs doing, worst first.",
     outcomeLabel: "Outcome",
     outcome:
       "Replaces manual Seller Central checks with one live screen — and a re-order alert before stock runs out, not after.",
-    tools: ["Amazon SP-API", "n8n", "Supabase", "Netlify", "Slack"],
+    tools: ["Amazon SP-API", "n8n", "Supabase", "React", "Netlify"],
     tag: "Client build · In delivery",
     tagDot: "yellow",
+    to: "/case-study/seller-dashboard",
   },
   {
     kind: "diagram",
