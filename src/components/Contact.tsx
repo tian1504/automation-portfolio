@@ -31,7 +31,7 @@ const channels = [
 
 export const Contact = () => {
   return (
-    <section id="contact" className="section-padding relative">
+    <section id="contact" className="section-padding !pb-0 relative">
       <div className="container-custom">
         <SectionHeading
           number="10"
