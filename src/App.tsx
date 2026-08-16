@@ -7,6 +7,7 @@ import { ScrollProgress } from "@/components/ScrollProgress";
 import { ScrollToTop } from "@/components/ScrollToTop";
 import Index from "./pages/Index";
 import CaseStudyBookSourcing from "./pages/CaseStudyBookSourcing";
+import CaseStudySpApi from "./pages/CaseStudySpApi";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -24,6 +25,7 @@ const App = () => (
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/case-study/book-sourcing-engine" element={<CaseStudyBookSourcing />} />
+            <Route path="/case-study/amazon-sp-api" element={<CaseStudySpApi />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>

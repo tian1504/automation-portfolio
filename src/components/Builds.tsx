@@ -19,7 +19,7 @@ import deductiveImg from "@/assets/work/deductive-engine.webp";
 import spapiImg from "@/assets/work/amazon-spapi-architecture.png";
 
 type Kind = "image" | "diagram";
-type DiagramStep = { icon: LucideIcon; label: string; sub: string };
+export type DiagramStep = { icon: LucideIcon; label: string; sub: string };
 type Build = {
   kind: Kind;
   image?: string;
@@ -51,6 +51,7 @@ const BUILDS: Build[] = [
     tools: ["n8n", "Amazon SP-API", "Reports API", "Webhooks"],
     tag: "Client build",
     tagDot: "green",
+    to: "/case-study/amazon-sp-api",
   },
   {
     kind: "diagram",
@@ -120,7 +121,7 @@ const BUILDS: Build[] = [
 const tagDotColor = (d: Build["tagDot"]) =>
   d === "green" ? "#4ade80" : d === "yellow" ? "hsl(45 93% 54%)" : "hsl(35 8% 55%)";
 
-function ArchitectureDiagram({ steps, caption }: { steps: DiagramStep[]; caption: string }) {
+export function ArchitectureDiagram({ steps, caption }: { steps: DiagramStep[]; caption: string }) {
   return (
     <div className="relative flex flex-col sm:aspect-[16/10]">
       {/* Static dot backdrop — texture without the cursor tricks */}

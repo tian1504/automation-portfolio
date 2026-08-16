@@ -14,40 +14,53 @@ import nodejs from "@/assets/logos/si/nodedotjs.svg";
 import amazon from "@/assets/logos/si/amazon.svg";
 import python from "@/assets/logos/si/python.svg";
 
-// Monochrome brand marks (simple-icons, CC0). Matched loosely so entries like
-// "Supabase (pgvector)" or "Amazon SP-API" still resolve. Techs without a
+// Brand marks (simple-icons, CC0) rendered in brand color via CSS mask.
+// Colors are the official brand hexes, except where the official color is
+// too dark to read on a near-black page (Notion, Slack, OpenAI, Make) —
+// those use the recognizable light variant of the brand. Matched loosely so
+// "Supabase (pgvector)" or "Amazon SP-API" still resolve; techs without a
 // mark render as text only — no icon beats a wrong icon.
-const ICONS: Array<[RegExp, string]> = [
-  [/n8n/i, n8n],
-  [/openai/i, openai],
-  [/gemini/i, gemini],
-  [/claude/i, claude],
-  [/notion/i, notion],
-  [/airtable/i, airtable],
-  [/zapier/i, zapier],
-  [/^make\b/i, make],
-  [/slack/i, slack],
-  [/supabase/i, supabase],
-  [/netlify/i, netlify],
-  [/react/i, react],
-  [/node/i, nodejs],
-  [/amazon|sp-api|fba|reports api/i, amazon],
-  [/python/i, python],
+type IconDef = { re: RegExp; src: string; color: string };
+
+const ICONS: IconDef[] = [
+  { re: /n8n/i, src: n8n, color: "#EA4B71" },
+  { re: /openai/i, src: openai, color: "#74AA9C" },
+  { re: /gemini/i, src: gemini, color: "#8E75B2" },
+  { re: /claude/i, src: claude, color: "#D97757" },
+  { re: /notion/i, src: notion, color: "#E8E4DC" },
+  { re: /airtable/i, src: airtable, color: "#18BFFF" },
+  { re: /zapier/i, src: zapier, color: "#FF4F00" },
+  { re: /^make\b/i, src: make, color: "#B368F7" },
+  { re: /slack/i, src: slack, color: "#E01E5A" },
+  { re: /supabase/i, src: supabase, color: "#3FCF8E" },
+  { re: /netlify/i, src: netlify, color: "#00C7B7" },
+  { re: /react/i, src: react, color: "#61DAFB" },
+  { re: /node/i, src: nodejs, color: "#5FA04E" },
+  { re: /amazon|sp-api|fba|reports api/i, src: amazon, color: "#FF9900" },
+  { re: /python/i, src: python, color: "#4B8BBE" },
 ];
 
-export const techIconFor = (name: string): string | undefined =>
-  ICONS.find(([re]) => re.test(name))?.[1];
+export const techIconFor = (name: string): IconDef | undefined =>
+  ICONS.find(({ re }) => re.test(name));
 
 export const TechIcon = ({ name, className = "" }: { name: string; className?: string }) => {
-  const src = techIconFor(name);
-  if (!src) return null;
+  const icon = techIconFor(name);
+  if (!icon) return null;
   return (
-    <img
-      src={src}
-      alt=""
+    <span
       aria-hidden
-      loading="lazy"
-      className={`h-3.5 w-3.5 invert opacity-60 ${className}`}
+      className={`inline-block h-3.5 w-3.5 flex-shrink-0 ${className}`}
+      style={{
+        backgroundColor: icon.color,
+        maskImage: `url("${icon.src}")`,
+        WebkitMaskImage: `url("${icon.src}")`,
+        maskSize: "contain",
+        WebkitMaskSize: "contain",
+        maskRepeat: "no-repeat",
+        WebkitMaskRepeat: "no-repeat",
+        maskPosition: "center",
+        WebkitMaskPosition: "center",
+      }}
     />
   );
 };
