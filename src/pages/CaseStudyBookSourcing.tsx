@@ -1,10 +1,9 @@
-import { Link } from "react-router-dom";
 import { motion } from "motion/react";
 import { ArrowRight, ArrowUpRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { CaseStudyBar } from "@/components/desk/PresenterNav";
+import { BOOKING_URL } from "@/lib/desk";
 import { SectionHeading } from "@/components/SectionHeading";
-
-const CALENDLY = "https://calendly.com/tian1504/30min";
 
 const reveal = {
   initial: { opacity: 0, y: 24 },
@@ -16,7 +15,7 @@ const reveal = {
 const FUNNEL = [
   { n: "~2,000", label: "listings scanned each morning" },
   { n: "~700", label: "distinct books that pass the buying rules" },
-  { n: "6–8", label: "books that fit the $200 daily budget" },
+  { n: "6 to 8", label: "books that fit the $200 daily budget" },
 ];
 
 const BUGS = [
@@ -24,31 +23,31 @@ const BUGS = [
     n: "01",
     title: "“0.00” means “no forecast”",
     body:
-      "The research tool writes 0.00 when it has no forecast for a book. Read as a real zero, that made a book look like a guaranteed loss — and it was silently dropping 44 of 150 books before anyone saw them.",
+      "The research tool writes 0.00 when it has no forecast for a book. Read as a real zero, that made a book look like a guaranteed loss. It was silently dropping 44 of 150 books before anyone saw them.",
   },
   {
     n: "02",
     title: "Two fees, exactly $0.99 apart",
     body:
-      "Two of the vendor's endpoints return a fee for the same book that differ by exactly $0.99. Using the wrong pairing overstated profit by 36 percent.",
+      "Two of the vendor’s endpoints return a fee for the same book that differ by exactly $0.99. Using the wrong pairing overstated profit by 36 percent.",
   },
   {
     n: "03",
     title: "The cookie that moved postage $29",
     body:
-      "A cookie flag decided whether the shop quoted postage to the buyer's real destination or guessed from the server's IP. Set wrong, it quoted $33.00 on a book that costs $3.75 to post domestically.",
+      "A cookie flag decided whether the shop quoted postage to the buyer’s real destination or guessed from the server’s IP. Set wrong, it quoted $33.00 on a book that costs $3.75 to post domestically.",
   },
   {
     n: "04",
     title: "Two definitions of what a book costs",
     body:
-      "Postage was inside the profit calculation but not inside the code that spent the budget — so the tool overspent by the postage and picked the cheapest sticker price instead of the cheapest landed cost. The fix: one function is the single definition of what a book costs, and every path that touches money routes through it.",
+      "Postage was inside the profit calculation but not inside the code that spent the budget, so the tool overspent by the postage and picked the cheapest sticker price instead of the cheapest landed cost. The fix: one function is the single definition of what a book costs, and every path that touches money routes through it.",
   },
   {
     n: "05",
     title: "The config that only looked current",
     body:
-      "The delivery postcode lived in an env file the server read once at startup. Changing the file wasn't enough: a running server kept the old value and quoted the wrong city for an entire run while looking completely correct on screen. Every run now records which postcode it used — and says so on screen.",
+      "The delivery postcode lived in an env file the server read once at startup. Changing the file wasn’t enough: a running server kept the old value and quoted the wrong city for an entire run while looking completely correct on screen. Every run now records which postcode it used, and says so on screen.",
   },
 ];
 
@@ -61,20 +60,7 @@ const CHECKS = [
 
 const CaseStudyBookSourcing = () => (
   <div className="min-h-screen flex flex-col">
-    {/* Minimal top bar */}
-    <header className="sticky top-0 z-20 border-b border-border/60 bg-background/70 backdrop-blur-md">
-      <div className="container-custom h-14 flex items-center justify-between">
-        <Link to="/" className="font-display font-bold tracking-tight text-base text-foreground">
-          Eleazar<span className="text-primary">.</span>
-        </Link>
-        <a
-          href="/#builds"
-          className="font-mono text-xs text-muted-foreground hover:text-foreground transition-colors rounded-sm px-1 py-1 -mx-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
-        >
-          ← Back to work
-        </a>
-      </div>
-    </header>
+    <CaseStudyBar backTo="/#builds" />
 
     <main className="flex-1">
       {/* Hero */}
@@ -91,7 +77,7 @@ const CaseStudyBookSourcing = () => (
             The Book Sourcing Engine<span className="text-primary">.</span>
           </h1>
           <p className="mt-5 text-lg text-muted-foreground leading-relaxed max-w-xl">
-            Two thousand listings in, seven verified books out — every margin computed from what the listing
+            Two thousand listings in, seven verified books out. Every margin is computed from what the listing
             actually says today, not what an index said last week.
           </p>
         </div>
@@ -104,7 +90,7 @@ const CaseStudyBookSourcing = () => (
             number="01"
             label="The problem"
             title="An indexed price, and nothing else."
-            description="The client buys used books cheap and resells them on Amazon FBA. He was choosing books by hand from a paid research tool that gave him an indexed price and nothing more — so he was buying copies that had already sold, copies in unsellable condition, and copies from overseas sellers whose postage ate the entire margin. He found all of this himself, checking one list by hand."
+            description="The client buys used books cheap and resells them on Amazon FBA. He was choosing books by hand from a paid research tool that gave him an indexed price and nothing more. So he was buying copies that had already sold, copies in unsellable condition, and copies from overseas sellers whose postage ate the entire margin. He found all of this himself, checking one list by hand."
           />
         </div>
       </section>
@@ -116,7 +102,7 @@ const CaseStudyBookSourcing = () => (
             number="02"
             label="What I built"
             title="A sourcing engine and a morning control panel."
-            description="Node and Express on the back; plain HTML, CSS, and vanilla JavaScript on the front. No framework, no build step, no bundler, no database — JSON files on disk are the store. Four dependencies across both halves. About 7,700 lines."
+            description="Node and Express on the back; plain HTML, CSS, and vanilla JavaScript on the front. No framework, no build step, no bundler, no database: JSON files on disk are the store. Four dependencies across both halves. About 7,700 lines."
           />
           <motion.div {...reveal} className="mt-4 grid grid-cols-1 md:grid-cols-3 gap-px border border-border bg-border/60">
             {FUNNEL.map((step, i) => (
@@ -135,7 +121,7 @@ const CaseStudyBookSourcing = () => (
           </motion.div>
           <p className="mt-6 text-muted-foreground leading-relaxed max-w-2xl">
             The narrowing is the product. Each surviving book is opened on the shop that actually sells it, and
-            the last stage — real Amazon fees, per book — is what cuts seven hundred candidates down to single
+            the last stage (real Amazon fees, per book) is what cuts seven hundred candidates down to single
             figures.
           </p>
         </div>
@@ -196,7 +182,7 @@ const CaseStudyBookSourcing = () => (
             ))}
           </ul>
           <p className="mt-6 text-muted-foreground leading-relaxed max-w-2xl">
-            One gate fails on purpose until changes to the scraping engine are committed deliberately — so the
+            One gate fails on purpose until changes to the scraping engine are committed deliberately, so the
             engine can never be edited casually.
           </p>
         </div>
@@ -209,7 +195,7 @@ const CaseStudyBookSourcing = () => (
             number="06"
             label="The interface"
             title="An antiquarian bindery, not a dashboard."
-            description="One non-technical person reads this once each morning. The visual identity is bottle-green leather, gold tooling, and aged paper — because it is a book business. After the theme change, every text-and-background pair was measured for WCAG AA contrast; the lowest ratio on the page is 4.67:1."
+            description="One non-technical person reads this once each morning. The visual identity is bottle-green leather, gold tooling, and aged paper, because it is a book business. After the theme change, every text-and-background pair was measured for WCAG AA contrast; the lowest ratio on the page is 4.67:1."
           />
           <p className="mt-2 text-muted-foreground leading-relaxed max-w-2xl">
             Each row shows the profit subtraction written out in full, so the client can check the arithmetic
@@ -233,7 +219,7 @@ const CaseStudyBookSourcing = () => (
               <div className="font-bold text-foreground">The 25-percent rule</div>
               <div className="text-sm text-muted-foreground leading-relaxed mt-1">
                 The client asked for a "buy at 25 percent of the Amazon price" rule. That number appears nowhere
-                in his vendor's published training — it was his own invention. I built it, switched it off, and
+                in his vendor’s published training. It was his own invention. I built it, switched it off, and
                 replaced it with a rule that a book must cost less than its own average price over six months:
                 a price compared to what that book normally goes for, not to an arbitrary percentage.
               </div>
@@ -242,8 +228,8 @@ const CaseStudyBookSourcing = () => (
               <div className="font-bold text-foreground">Automated Amazon sign-in</div>
               <div className="text-sm text-muted-foreground leading-relaxed mt-1">
                 Signing into his Amazon account automatically would have bought slightly better data. It would
-                also have put the account his business depends on through automated foreign sign-ins. I declined —
-                the marginal gain is not worth the account.
+                also have put the account his business depends on through automated foreign sign-ins. I declined.
+                The marginal gain is not worth the account.
               </div>
             </div>
           </div>
@@ -257,12 +243,12 @@ const CaseStudyBookSourcing = () => (
             number="08"
             label="Outcome"
             title="Seven books, to the cent."
-            description="Every figure on a saved list recomputes to the cent from the engine's own functions. A typical morning: 7 books, $196.98 of a $200 budget, $67.78 of estimated profit — every copy verified live before it reached the screen."
+            description="Every figure on a saved list recomputes to the cent from the engine’s own functions. A typical morning: 7 books, $196.98 of a $200 budget, $67.78 of estimated profit. Every copy was verified live before it reached the screen."
           />
           <p className="mt-2 text-muted-foreground leading-relaxed max-w-2xl">
             Stated plainly: no book has sold through yet, so the profit figures are estimates and are described
-            that way. What the engine has already removed are the silent losses — the sold copies, the unsellable
-            conditions, the overseas postage — that used to be discovered by hand, after the money was spent.
+            that way. What the engine has already removed are the silent losses (the sold copies, the unsellable
+            conditions, the overseas postage) that used to be discovered by hand, after the money was spent.
           </p>
         </div>
       </section>
@@ -275,14 +261,18 @@ const CaseStudyBookSourcing = () => (
               Running an Amazon operation on hand-checking?
             </h2>
             <p className="mt-3 text-muted-foreground leading-relaxed max-w-xl">
-              Tell me what you verify by hand every morning. I'll tell you which parts a system can verify for
-              you — and which parts it honestly can't.
+              Tell me what you verify by hand every morning. I’ll tell you which parts a system can verify for
+              you, and which parts it honestly can’t.
             </p>
             <div className="mt-7 flex flex-wrap gap-3">
               <Button asChild className="group">
-                <a href={CALENDLY} target="_blank" rel="noopener noreferrer">
-                  Book a 30-min call
-                  <ArrowUpRight className="ml-2 h-4 w-4 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 transition-transform" />
+                <a href={BOOKING_URL} target="_blank" rel="noopener noreferrer">
+                  Book a call
+                  <span className="sr-only"> (opens in a new tab)</span>
+                  <ArrowUpRight
+                    aria-hidden
+                    className="ml-2 h-4 w-4 transition-transform duration-150 ease-out-strong [@media(hover:hover)_and_(pointer:fine)]:group-hover:-translate-y-0.5 [@media(hover:hover)_and_(pointer:fine)]:group-hover:translate-x-0.5"
+                  />
                 </a>
               </Button>
               <Button asChild variant="ghost">

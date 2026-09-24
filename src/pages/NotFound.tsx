@@ -45,7 +45,7 @@ const NotFound = () => {
         >
           You hit{" "}
           <span className="font-mono text-foreground/85 break-all">{location.pathname}</span>
-          {" "}— that's not a workflow I've shipped yet.
+          , which isn't a workflow I've shipped yet.
         </motion.p>
 
         <motion.p

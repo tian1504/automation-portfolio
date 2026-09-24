@@ -26,3 +26,16 @@ dist-ssr
 # Claude Code local config + temp downloads
 .claude/
 .tmp/
+
+# Personal photos and photo tools kept next to the project (never publish)
+/My_Pic*.jpeg
+/Eleazar_PIC.png
+/*-*-*-*-*.png
+/linkedin-profile/
+/scripts/face_landmarker.task
+/scripts/add-smile.py
+/scripts/generate-linkedin-photo.py
+
+# Skill package and its local working notes (design brief, registry): kept off the public repo
+/scrollcraft.zip
+/scrollcraft/

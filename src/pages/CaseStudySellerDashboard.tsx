@@ -1,4 +1,3 @@
-import { Link } from "react-router-dom";
 import { motion } from "motion/react";
 import {
   ArrowUpRight,
@@ -9,11 +8,13 @@ import {
   Workflow,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { CaseStudyBar } from "@/components/desk/PresenterNav";
+import { BOOKING_URL } from "@/lib/desk";
 import { SectionHeading } from "@/components/SectionHeading";
-import { ArchitectureDiagram } from "@/components/Builds";
-import dashboardImg from "@/assets/work/seller-dashboard-redacted.png";
-
-const CALENDLY = "https://calendly.com/tian1504/30min";
+import { ArchitectureDiagram } from "@/components/ArchitectureDiagram";
+// The same redacted 1440x900 screenshot the homepage shows: a 58 KB WebP
+// (not the 510 KB PNG), already cached for a visitor arriving from there.
+import dashboardImg from "@/assets/desk/dash-full.webp";
 
 const reveal = {
   initial: { opacity: 0, y: 24 },
@@ -35,50 +36,37 @@ const DECISIONS = [
     n: "01",
     title: "A snapshot, not a query engine",
     body:
-      "n8n writes one JSON snapshot to Supabase on a schedule; the dashboard reads a single row. If Supabase is ever unreachable, the app falls back to a bundled copy of the same shape — so the dashboard can never fail to load on the morning the client needs it.",
+      "n8n writes one JSON snapshot to Supabase on a schedule; the dashboard reads a single row. If Supabase is ever unreachable, the app falls back to a bundled copy of the same shape, so the dashboard can never fail to load on the morning the client needs it.",
   },
   {
     n: "02",
     title: "Read-only by construction",
     body:
-      "The browser holds only a publishable key gated by row-level security. The dashboard can read the snapshot and nothing else — there is no write path from the client's screen to his data.",
+      "The browser holds only a publishable key gated by row-level security. The dashboard can read the snapshot and nothing else. There is no write path from the client’s screen to his data.",
   },
   {
     n: "03",
     title: "Fresh stock on demand, safely",
     body:
-      "A “Refresh” button calls a Supabase Edge Function that pulls current stock from Amazon right now. The Amazon credentials live server-side only, and the function patches inventory quantities alone — it cannot touch the sales history.",
+      "A “Refresh” button calls a Supabase Edge Function that pulls current stock from Amazon right now. The Amazon credentials live server-side only, and the function patches inventory quantities alone. It cannot touch the sales history.",
   },
   {
     n: "04",
     title: "Season-first, not report-first",
     body:
-      "This is a seasonal business with an October peak, so the dashboard's real job is ordering ahead: it compares this year's plan against last year's actuals, computes what to order per product, and generates a pre-season purchase order. A real PO has already gone out through it.",
+      "This is a seasonal business with an October peak, so the dashboard’s real job is ordering ahead: it compares this year’s plan against last year’s actuals, computes what to order per product, and generates a pre-season purchase order. A real PO has already gone out through it.",
   },
   {
     n: "05",
     title: "Feedback arrives as video, and gets treated as spec",
     body:
-      "The client reviews by recording screen-share walkthroughs. Each one is transcribed with timestamps and paired with a frame of exactly what he pointed at — so “this number here” never gets misread, and every iteration traces back to his own words.",
+      "The client reviews by recording screen-share walkthroughs. Each one is transcribed with timestamps and paired with a frame of exactly what he pointed at. That way “this number here” never gets misread, and every iteration traces back to his own words.",
   },
 ];
 
 const CaseStudySellerDashboard = () => (
   <div className="min-h-screen flex flex-col">
-    {/* Minimal top bar */}
-    <header className="sticky top-0 z-20 border-b border-border/60 bg-background/70 backdrop-blur-md">
-      <div className="container-custom h-14 flex items-center justify-between">
-        <Link to="/" className="font-display font-bold tracking-tight text-base text-foreground">
-          Eleazar<span className="text-primary">.</span>
-        </Link>
-        <a
-          href="/#builds"
-          className="font-mono text-xs text-muted-foreground hover:text-foreground transition-colors rounded-sm px-1 py-1 -mx-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
-        >
-          ← Back to work
-        </a>
-      </div>
-    </header>
+    <CaseStudyBar backTo="/#work" />
 
     <main className="flex-1">
       {/* Hero */}
@@ -95,7 +83,7 @@ const CaseStudySellerDashboard = () => (
             The Seller Dashboard<span className="text-primary">.</span>
           </h1>
           <p className="mt-5 text-lg text-muted-foreground leading-relaxed max-w-xl">
-            One screen that tells an Amazon seller what needs doing this morning — and what to ship before the
+            One screen that tells an Amazon seller what needs doing this morning, and what to ship before the
             season peak, not after it.
           </p>
           <motion.figure {...reveal} className="mt-10">
@@ -103,12 +91,15 @@ const CaseStudySellerDashboard = () => (
               <img
                 src={dashboardImg}
                 alt="The seller dashboard: a morning briefing panel beside out-of-stock, shipping, and stranded-stock lists"
+                width={1440}
+                height={900}
                 className="w-full h-auto block"
                 loading="eager"
+                decoding="async"
               />
             </div>
             <figcaption className="mt-3 font-mono text-[10px] text-muted-foreground tracking-wide">
-              the live dashboard — brand, product names, and figures blurred for client confidentiality
+              the live dashboard, with brand, product names, and figures blurred for client confidentiality
             </figcaption>
           </motion.figure>
         </div>
@@ -121,7 +112,7 @@ const CaseStudySellerDashboard = () => (
             number="01"
             label="The problem"
             title="Seller Central knows everything and tells you nothing first."
-            description="The client's numbers lived in Seller Central: orders in one report, inventory in another, fees in a third. Nothing said which product was out of stock and still selling, or what had to ship this week to survive an October peak that must be ordered for months in advance. Every answer was a manual dig."
+            description="The client’s numbers lived in Seller Central: orders in one report, inventory in another, fees in a third. Nothing said which product was out of stock and still selling, or what had to ship this week to survive an October peak that must be ordered for months in advance. Every answer was a manual dig."
           />
         </div>
       </section>
@@ -133,12 +124,12 @@ const CaseStudySellerDashboard = () => (
             number="02"
             label="What I built"
             title="A morning briefing, then the season."
-            description="The dashboard opens on TODAY — what needs doing, worst first: products out of stock and still selling with the dollars at risk per day, what needs shipping to Amazon and by when, stock Amazon is holding but not selling, and shipments on the way. Below it: season planning against last year's actuals, a pre-season purchase-order generator, store pulse with daily revenue, and a profit view built from Amazon's real financial records — fees charged, not estimated."
+            description="The dashboard opens on TODAY, which shows what needs doing, worst first: products out of stock and still selling with the dollars at risk per day, what needs shipping to Amazon and by when, stock Amazon is holding but not selling, and shipments on the way. Below it: season planning against last year’s actuals, a pre-season purchase-order generator, store pulse with daily revenue, and a profit view built from Amazon’s real financial records (fees charged, not estimated)."
           />
           <motion.div {...reveal} className="relative overflow-hidden border border-border bg-card/30 max-w-2xl">
             <ArchitectureDiagram
               steps={PIPELINE}
-              caption="dashboard architecture — scheduled SP-API pulls to one snapshot, one screen"
+              caption="dashboard architecture: scheduled SP-API pulls to one snapshot, one screen"
             />
           </motion.div>
         </div>
@@ -176,7 +167,7 @@ const CaseStudySellerDashboard = () => (
             number="04"
             label="Outcome"
             title="The morning check takes one screen."
-            description="In delivery and iterating with the client: the daily briefing replaces the manual dig through Seller Central, re-order alerts fire before stock runs out, and the first pre-season purchase order has already gone to the manufacturer through the dashboard's own generator. The build continues from the client's recorded walkthroughs — his words, timestamped, driving each release."
+            description="In delivery and iterating with the client: the daily briefing replaces the manual dig through Seller Central, re-order alerts fire before stock runs out, and the first pre-season purchase order has already gone to the manufacturer through the dashboard’s own generator. The build continues from the client’s recorded walkthroughs. His words, timestamped, drive each release."
           />
         </div>
       </section>
@@ -189,14 +180,18 @@ const CaseStudySellerDashboard = () => (
               What does your morning check look like?
             </h2>
             <p className="mt-3 text-muted-foreground leading-relaxed max-w-xl">
-              If it involves five Seller Central tabs and a spreadsheet, tell me what you look for. I'll show you
+              If it involves five Seller Central tabs and a spreadsheet, tell me what you look for. I’ll show you
               what one screen of it could look like.
             </p>
             <div className="mt-7 flex flex-wrap gap-3">
               <Button asChild className="group">
-                <a href={CALENDLY} target="_blank" rel="noopener noreferrer">
-                  Book a 30-min call
-                  <ArrowUpRight className="ml-2 h-4 w-4 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 transition-transform" />
+                <a href={BOOKING_URL} target="_blank" rel="noopener noreferrer">
+                  Book a call
+                  <span className="sr-only"> (opens in a new tab)</span>
+                  <ArrowUpRight
+                    aria-hidden
+                    className="ml-2 h-4 w-4 transition-transform duration-150 ease-out-strong [@media(hover:hover)_and_(pointer:fine)]:group-hover:-translate-y-0.5 [@media(hover:hover)_and_(pointer:fine)]:group-hover:translate-x-0.5"
+                  />
                 </a>
               </Button>
               <Button asChild variant="ghost">

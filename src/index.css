@@ -6,7 +6,8 @@
 @tailwind utilities;
 
 /* Design system: warm-dark editorial palette + Geist type stack.
-   All colors MUST be HSL. */
+   All colors MUST be HSL. One accent (yellow), rationed: the "Eleazar." period,
+   Book a call buttons, and the one moving accent on the page. */
 
 @layer base {
   :root {
@@ -44,6 +45,25 @@
 
     --radius: 0.5rem;
 
+    /* Bone paper ground (the terms section). Same warm hue family. */
+    --bone: 38 22% 89%;
+    --bone-ink: 30 10% 8%;
+    --bone-ink-soft: 30 8% 30%;
+    --bone-rule: 34 14% 74%;
+    /* The accent's darker stop, for accent-coloured marks on bone (>= 4.5:1). */
+    --accent-deep: 40 90% 26%;
+
+    /* Raised surfaces on the dark ground */
+    --surface: 30 7% 8%;
+    --surface-2: 30 6% 11%;
+    --edge: inset 0 1px 0 hsl(40 25% 96% / 0.06);
+    --shadow-tint: 30 30% 2%;
+    --e1: 0 1px 2px hsl(var(--shadow-tint) / 0.5), 0 2px 8px -2px hsl(var(--shadow-tint) / 0.5);
+    --e2: 0 2px 4px hsl(var(--shadow-tint) / 0.45), 0 12px 32px -8px hsl(var(--shadow-tint) / 0.7);
+    --e3: 0 4px 8px hsl(var(--shadow-tint) / 0.45), 0 32px 64px -16px hsl(var(--shadow-tint) / 0.85);
+
+    --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+
     /* Gradients — yellow-only, no second hue */
     --gradient-primary: linear-gradient(135deg, hsl(45 93% 54%), hsl(45 93% 64%));
     --gradient-accent: linear-gradient(135deg, hsl(45 93% 54%), hsl(45 93% 64%));
@@ -53,10 +73,6 @@
     --shadow-subtle: 0 1px 3px 0 hsl(0 0% 0% / 0.3);
     --shadow-medium: 0 4px 6px -1px hsl(0 0% 0% / 0.3), 0 2px 4px -1px hsl(0 0% 0% / 0.2);
     --shadow-large: 0 10px 15px -3px hsl(0 0% 0% / 0.3), 0 4px 6px -2px hsl(0 0% 0% / 0.2);
-
-    /* Transitions */
-    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    --transition-bounce: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
   }
 }
 
@@ -67,6 +83,9 @@
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
+  }
+  html {
+    scroll-behavior: auto !important;
   }
 }
 
@@ -80,27 +99,65 @@
     font-feature-settings: "rlig" 1, "calt" 1, "ss01" 1, "ss03" 1;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    caret-color: hsl(var(--primary));
   }
 
   h1, h2, h3, h4 {
     @apply font-display tracking-tighter-2;
     font-feature-settings: "rlig" 1, "calt" 1, "ss01" 1;
+    text-wrap: balance;
   }
 
-  body {
-    cursor: auto;
+  p, li, dd, blockquote {
+    text-wrap: pretty;
   }
 
   html {
     scroll-behavior: smooth;
+    /* Tabbing into content near the bottom edge keeps it clear of the reveal's
+       bottom band and (on phones) of the fixed dock. */
+    scroll-padding-bottom: 16svh;
+  }
+  @media (max-width: 1023.98px) {
+    html {
+      scroll-padding-bottom: calc(4rem + 16svh + env(safe-area-inset-bottom));
+    }
   }
 
-  /* Keep anchored section headings clear of the fixed navbar on hash/scroll */
+  ::selection {
+    background: hsl(var(--primary));
+    color: hsl(var(--primary-foreground));
+  }
+
+  /* One visible focus treatment everywhere: the accent, offset from the edge. */
+  :focus-visible {
+    outline: 2px solid hsl(var(--primary));
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+
+  /* Elements focused by script after a nav jump (tabindex="-1") are
+     landmarks for the next Tab, not controls: no ring around a whole section. */
+  [tabindex="-1"]:focus-visible {
+    outline: none;
+  }
+
+  a {
+    text-underline-offset: 0.22em;
+    text-decoration-thickness: 1px;
+  }
+
+  /* Keep anchored section headings clear of the fixed desktop chip. */
   section[id] {
-    scroll-margin-top: 5rem;
+    scroll-margin-top: 1.5rem;
+  }
+  @media (min-width: 1024px) {
+    section[id] {
+      scroll-margin-top: 4.5rem;
+    }
   }
 
-  /* Custom scrollbar */
+  /* Custom scrollbar: warm neutral, the accent is not spent here. */
   ::-webkit-scrollbar {
     width: 10px;
   }
@@ -110,18 +167,19 @@
   }
 
   ::-webkit-scrollbar-thumb {
-    @apply bg-primary/30 rounded-full;
+    background: hsl(30 6% 24%);
+    border-radius: 9999px;
   }
 
   ::-webkit-scrollbar-thumb:hover {
-    @apply bg-primary/50;
+    background: hsl(30 6% 32%);
   }
 }
 
 @layer components {
-  /* Card hover used by Experience section cards */
+  /* Card hover used by case-study cards */
   .card-hover {
-    @apply transition-all duration-300 hover:border-primary/50;
+    @apply transition-colors duration-300 hover:border-primary/50;
   }
 
   /* Section padding */
@@ -133,9 +191,53 @@
   .container-custom {
     @apply container mx-auto px-4 sm:px-6 lg:px-8;
   }
+
+  /* Film grain over the whole page: a flat dark ground bands on real displays. */
+  .grain {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 60;
+    opacity: 0.045;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.5  0 0 0 0 0.5  0 0 0 0 0.5  0 0 0 1 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+  }
+
+  /* The one section-heading size shared by every act (the H1 is the only
+     heading above it). */
+  .h-section {
+    font-size: clamp(1.75rem, 3.2vw, 2.75rem);
+    line-height: 1.06;
+    letter-spacing: -0.025em;
+  }
+
+  /* Small uppercase label for data rows (For / What it does / Status ...).
+     Mono is for labels and data only, never as a costume. */
+  .label-mono {
+    @apply font-mono text-[11px] uppercase tracking-[0.14em];
+  }
+
+  /* The warm bone section: restate color with the token so text re-inks. */
+  .ground-bone {
+    --foreground: var(--bone-ink);
+    --muted-foreground: var(--bone-ink-soft);
+    --border: var(--bone-rule);
+    background: hsl(var(--bone));
+    color: hsl(var(--bone-ink));
+  }
+  .ground-bone :focus-visible {
+    outline-color: hsl(var(--accent-deep));
+  }
+  .ground-bone ::selection {
+    background: hsl(var(--bone-ink));
+    color: hsl(var(--bone));
+  }
 }
 
 @layer utilities {
+  .tabular {
+    font-variant-numeric: tabular-nums;
+  }
+
   .animate-fade-in {
     animation: fadeIn 0.6s ease-out forwards;
   }

@@ -1,4 +1,3 @@
-import { Link } from "react-router-dom";
 import { motion } from "motion/react";
 import {
   ArrowUpRight,
@@ -10,10 +9,10 @@ import {
   Shuffle,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { CaseStudyBar } from "@/components/desk/PresenterNav";
+import { BOOKING_URL } from "@/lib/desk";
 import { SectionHeading } from "@/components/SectionHeading";
-import { ArchitectureDiagram } from "@/components/Builds";
-
-const CALENDLY = "https://calendly.com/tian1504/30min";
+import { ArchitectureDiagram } from "@/components/ArchitectureDiagram";
 
 const reveal = {
   initial: { opacity: 0, y: 24 },
@@ -24,14 +23,14 @@ const reveal = {
 
 const STATS = [
   { n: "~45", label: "n8n workflows in one workspace" },
-  { n: "8", label: "data types synced — orders, returns, financials, settlements, inventory, shipments, fees, catalog" },
+  { n: "8", label: "data types synced: orders, returns, financials, settlements, inventory, shipments, fees, catalog" },
   { n: "2", label: "marketplaces live (US + Canada), a third built and staged" },
 ];
 
 const PIPELINE = [
   { icon: Clock, label: "Schedule / webhook trigger", sub: "daily and hourly syncs · on-demand tools" },
   { icon: KeyRound, label: "Shared LWA token sub-workflow", sub: "one place to rotate Amazon credentials" },
-  { icon: LogIn, label: "IMS login", sub: "tenant-scoped bearer — data lands where it should" },
+  { icon: LogIn, label: "IMS login", sub: "tenant-scoped bearer, so data lands where it should" },
   { icon: Download, label: "Pull from SP-API", sub: "throttled · paginated · async reports polled" },
   { icon: Shuffle, label: "Reshape to the IMS contract", sub: "raw TSV reports become clean JSON" },
   { icon: Send, label: "POST /integrations/…", sub: "into the IMS · failures email immediately" },
@@ -46,52 +45,39 @@ const LESSONS = [
   },
   {
     n: "02",
-    title: "Reports that aren't ready when you ask",
+    title: "Reports that aren’t ready when you ask",
     body:
-      "Much of Amazon's data only comes from the asynchronous Reports API: request a report, get an ID, poll until it's done, then download and parse the raw TSV. That poll loop is factored once and reused, so every report-based sync behaves the same way.",
+      "Much of Amazon’s data only comes from the asynchronous Reports API: request a report, get an ID, poll until it’s done, then download and parse the raw TSV. That poll loop is factored once and reused, so every report-based sync behaves the same way.",
   },
   {
     n: "03",
     title: "The login decides where the data lands",
     body:
-      "The client's IMS is multi-tenant, and the identity a workflow posts with decides which tenant receives the data. Data had historically landed in the wrong tenant through a shared support login. The fix was organizational as much as technical: a dedicated ingester identity, used by every sync, so the question can never come up again.",
+      "The client’s IMS is multi-tenant, and the identity a workflow posts with decides which tenant receives the data. Data had historically landed in the wrong tenant through a shared support login. The fix was organizational as much as technical: a dedicated ingester identity, used by every sync, so the question can never come up again.",
   },
   {
     n: "04",
     title: "History is a workflow, not a script",
     body:
-      "Loading the past is as important as syncing the present. One-shot backfill workflows exist for orders, returns, settlements, financial events, the inventory ledger, and FBA shipments — and the daily syncs have gap-fill twins that recover any missed window.",
+      "Loading the past is as important as syncing the present. One-shot backfill workflows exist for orders, returns, settlements, financial events, the inventory ledger, and FBA shipments. The daily syncs also have gap-fill twins that recover any missed window.",
   },
   {
     n: "05",
-    title: "Failures email, silence doesn't",
+    title: "Failures email, silence doesn’t",
     body:
-      "Every sync routes failures through a shared error-handler that emails immediately with the workflow name and error. A quiet morning means the pipeline ran — not that nobody was looking.",
+      "Every sync routes failures through a shared error-handler that emails immediately with the workflow name and error. A quiet morning means the pipeline ran, not that nobody was looking.",
   },
   {
     n: "06",
     title: "Destructive operations stay gated",
     body:
-      "Listing creation and deletion, label printing, and FBA inbound plan tools exist in the same workspace — deliberately gated for manual, on-demand use. A scheduled workflow should never be able to delete a listing on its own.",
+      "Listing creation and deletion, label printing, and FBA inbound plan tools exist in the same workspace, deliberately gated for manual, on-demand use. A scheduled workflow should never be able to delete a listing on its own.",
   },
 ];
 
 const CaseStudySpApi = () => (
   <div className="min-h-screen flex flex-col">
-    {/* Minimal top bar */}
-    <header className="sticky top-0 z-20 border-b border-border/60 bg-background/70 backdrop-blur-md">
-      <div className="container-custom h-14 flex items-center justify-between">
-        <Link to="/" className="font-display font-bold tracking-tight text-base text-foreground">
-          Eleazar<span className="text-primary">.</span>
-        </Link>
-        <a
-          href="/#builds"
-          className="font-mono text-xs text-muted-foreground hover:text-foreground transition-colors rounded-sm px-1 py-1 -mx-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
-        >
-          ← Back to work
-        </a>
-      </div>
-    </header>
+    <CaseStudyBar backTo="/#builds" />
 
     <main className="flex-1">
       {/* Hero */}
@@ -108,8 +94,8 @@ const CaseStudySpApi = () => (
             The SP-API Sync Engine<span className="text-primary">.</span>
           </h1>
           <p className="mt-5 text-lg text-muted-foreground leading-relaxed max-w-xl">
-            Forty-five workflows that keep a seller's back office fed — orders, returns, settlements, inventory,
-            and fees — without anyone pulling a report by hand.
+            Forty-five workflows that keep a seller’s back office fed (orders, returns, settlements, inventory,
+            and fees) without anyone pulling a report by hand.
           </p>
         </div>
       </section>
@@ -120,8 +106,8 @@ const CaseStudySpApi = () => (
           <SectionHeading
             number="01"
             label="The problem"
-            title="The back office runs on data Amazon doesn't hand over."
-            description="The client's inventory management system needs a continuous feed of everything Amazon knows — orders, returns, financial events, settlements, inventory, FBA shipments, fee estimates, catalog data — across two marketplaces. Amazon's Selling Partner API has all of it, but makes you earn it: hourly-expiring tokens, per-endpoint throttling, pagination, and reports that are generated asynchronously and fetched by polling. Pulling any of this by hand doesn't scale past day one."
+            title="The back office runs on data Amazon doesn’t hand over."
+            description="The client’s inventory management system needs a continuous feed of everything Amazon knows (orders, returns, financial events, settlements, inventory, FBA shipments, fee estimates, catalog data) across two marketplaces. Amazon’s Selling Partner API has all of it, but makes you earn it: hourly-expiring tokens, per-endpoint throttling, pagination, and reports that are generated asynchronously and fetched by polling. Pulling any of this by hand doesn’t scale past day one."
           />
         </div>
       </section>
@@ -148,7 +134,7 @@ const CaseStudySpApi = () => (
           <motion.div {...reveal} className="relative overflow-hidden border border-border bg-card/30 max-w-2xl">
             <ArchitectureDiagram
               steps={PIPELINE}
-              caption="the shape every sync shares — learn one workflow, understand forty"
+              caption="the shape every sync shares: learn one workflow, understand forty"
             />
           </motion.div>
         </div>
@@ -186,7 +172,7 @@ const CaseStudySpApi = () => (
             number="04"
             label="The handover"
             title="A system you can hand over is a system you actually own."
-            description="The engine ships with a sixteen-section engineering handover: the architecture as a mental model, a per-workflow reference, an endpoint reference, an operations runbook, a known-issues register that states open risks plainly, and a first-week checklist for the next engineer. If it only runs while I'm holding it, it isn't finished."
+            description="The engine ships with a sixteen-section engineering handover: the architecture as a mental model, a per-workflow reference, an endpoint reference, an operations runbook, a known-issues register that states open risks plainly, and a first-week checklist for the next engineer. If it only runs while I’m holding it, it isn’t finished."
           />
         </div>
       </section>
@@ -198,7 +184,7 @@ const CaseStudySpApi = () => (
             number="05"
             label="Outcome"
             title="The IMS stays fed. Nobody pulls reports."
-            description="Orders, returns, financial events, settlements, inventory, shipments, and fees land in the IMS daily across both marketplaces, in the right tenant, with history backfilled. When something fails, the team knows by email before anyone notices a gap. The next marketplace — Walmart — is already built and staged against the same pattern."
+            description="Orders, returns, financial events, settlements, inventory, shipments, and fees land in the IMS daily across both marketplaces, in the right tenant, with history backfilled. When something fails, the team knows by email before anyone notices a gap. The next marketplace, Walmart, is already built and staged against the same pattern."
           />
         </div>
       </section>
@@ -211,14 +197,18 @@ const CaseStudySpApi = () => (
               Still exporting Seller Central reports by hand?
             </h2>
             <p className="mt-3 text-muted-foreground leading-relaxed max-w-xl">
-              Tell me which reports your team pulls every week. I'll tell you what a sync engine for your
-              operation would look like — and what it wouldn't touch.
+              Tell me which reports your team pulls every week. I’ll tell you what a sync engine for your
+              operation would look like, and what it wouldn’t touch.
             </p>
             <div className="mt-7 flex flex-wrap gap-3">
               <Button asChild className="group">
-                <a href={CALENDLY} target="_blank" rel="noopener noreferrer">
-                  Book a 30-min call
-                  <ArrowUpRight className="ml-2 h-4 w-4 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 transition-transform" />
+                <a href={BOOKING_URL} target="_blank" rel="noopener noreferrer">
+                  Book a call
+                  <span className="sr-only"> (opens in a new tab)</span>
+                  <ArrowUpRight
+                    aria-hidden
+                    className="ml-2 h-4 w-4 transition-transform duration-150 ease-out-strong [@media(hover:hover)_and_(pointer:fine)]:group-hover:-translate-y-0.5 [@media(hover:hover)_and_(pointer:fine)]:group-hover:translate-x-0.5"
+                  />
                 </a>
               </Button>
               <Button asChild variant="ghost">
