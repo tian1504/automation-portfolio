@@ -58,7 +58,6 @@ const Index = () => {
 
   return (
     <div className="min-h-screen pb-[calc(4rem+env(safe-area-inset-bottom))] lg:pb-0">
-      <div className="grain" aria-hidden />
       <PresenterNav />
       <main>
         <DeskStage />

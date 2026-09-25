@@ -17,6 +17,10 @@ import farSharp from "@/assets/desk/far-canvas.webp";
 import farSoft from "@/assets/desk/far-canvas-soft.webp";
 import cutout from "@/assets/desk/eleazar.webp";
 import cutoutSm from "@/assets/desk/eleazar-sm.webp";
+// Ground-coloured silhouettes with the cutout's own alpha: fading one in dims
+// him without a live CSS mask (masks on moving layers are costly to redraw).
+import shade from "@/assets/desk/eleazar-shade.webp";
+import shadeSm from "@/assets/desk/eleazar-sm-shade.webp";
 import dashFull from "@/assets/desk/dash-full.webp";
 import dashOos from "@/assets/desk/dash-oos.webp";
 import dashShip from "@/assets/desk/dash-ship.webp";
@@ -181,11 +185,8 @@ function useViewport() {
   return vp;
 }
 
-/** Fades the shirt out below the chest, so its red logo never shows in any state. */
-const SUBJECT_MASK: CSSProperties = {
-  WebkitMaskImage: "linear-gradient(to bottom, #000 70%, transparent 84%)",
-  maskImage: "linear-gradient(to bottom, #000 70%, transparent 84%)",
-};
+/* The shirt fades out below the chest (70% to 84% of the cutout's height) in the
+   image files themselves, so its red logo never shows and no CSS mask is needed. */
 /** Phone: the far canvas fades out before any of its own edges. */
 const FAR_MASK_PHONE: CSSProperties = {
   WebkitMaskImage:
@@ -213,6 +214,9 @@ const CLS = {
   /** The source line and link in normal flow, aligned with the turn column. */
   flow: "px-5 pt-3 sm:px-8 lg:pl-[max(8vw,calc((100vw-1200px)/2+2rem))] lg:pr-8 lg:pt-8",
 };
+
+/** Invisible, but still prepared by the browser (see frontOpacity). */
+const HIDDEN = 0.001;
 
 const ease = (a: number, b: number) => (v: number) => {
   const t = Math.min(1, Math.max(0, (v - a) / (b - a)));
@@ -263,14 +267,11 @@ function useLean(p: MotionValue<number>, enabled: boolean) {
   }, [enabled, mx, my]);
   const k = useTransform(p, (v) => 1 - ease(0, 0.08)(v));
   const both = [sx, sy, k] as MotionValue<number>[];
-  const farX = useTransform(both, ([x, , f]: number[]) => -12 * x * f);
-  const farY = useTransform(both, ([, y, f]: number[]) => -6 * y * f);
   const subjX = useTransform(both, ([x, , f]: number[]) => 6 * x * f);
   const subjY = useTransform(both, ([, y, f]: number[]) => 3 * y * f);
   const scrX = useTransform(both, ([x, , f]: number[]) => 16 * x * f);
   const scrY = useTransform(both, ([, y, f]: number[]) => 5 * y * f);
   return {
-    far: { x: farX, y: farY },
     subject: { x: subjX, y: subjY },
     screen: { x: scrX, y: scrY },
   };
@@ -515,7 +516,10 @@ function DeskPinned({ phone, footerInFrame }: { phone: boolean; footerInFrame: b
   const { scrollYProgress: p } = useScroll({ target: track, offset: ["start start", "end end"] });
   // Gate the planes on the images seen first; the dashboard is not seen until
   // the turn, so it loads on its own.
-  const ready = useDecoded([farSharp, farSoft, phone ? cutoutSm : cutout]);
+  const ready = useDecoded([farSharp, farSoft, phone ? cutoutSm : cutout, phone ? shadeSm : shade]);
+  // Decode the dashboard and its three panels while the visitor reads the hero,
+  // so the turn never waits on an image mid-animation.
+  useDecoded([dashFull, ...PANELS.map((x) => x.src)]);
   const fine = useMediaQuery(FINE_POINTER_QUERY);
   const xl = useMediaQuery(XL_QUERY);
   const vp = useViewport();
@@ -531,8 +535,6 @@ function DeskPinned({ phone, footerInFrame }: { phone: boolean; footerInFrame: b
   const copyEvents = useTransform(copyOpacity, (o) => (o > 0.5 ? "auto" : "none"));
 
   // -- Far plane: slow drift + rack focus by crossfading two pre-blurred files
-  const farY = useTransform(p, (v) => -40 * ease(0, 0.6)(v));
-  const farScale = useTransform(p, (v) => 1.04 - 0.04 * ease(0, 0.6)(v));
   const farSharpOpacity = useTransform(p, (v) => 1 - ease(T.focus[0], T.focus[1])(v));
   const lightOpacity = useTransform(p, (v) => 1 - 0.6 * ease(T.dim[0], T.travel[1])(v));
 
@@ -552,12 +554,15 @@ function DeskPinned({ phone, footerInFrame }: { phone: boolean; footerInFrame: b
   const outerY = useMotionTemplate`${scrYsvh}svh`;
   const innerY = useMotionTemplate`${scrYvw}vw`;
   const innerX = useMotionTemplate`${scrXvw}vw`;
-  const frontOpacity = useTransform(rotY, (v) => (Math.abs(v) < 90 ? 1 : 0));
-  const backOpacity = useTransform(rotY, (v) => (Math.abs(v) < 90 ? 0 : 1));
+  // "Hidden" layers rest at an invisible 0.001, never 0: the browser skips
+  // preparing fully transparent layers, then prepares them all on the first
+  // scroll notch (a visible hitch). At 0.001 they are ready before any scroll.
+  const frontOpacity = useTransform(rotY, (v) => (Math.abs(v) < 90 ? 1 : HIDDEN));
+  const backOpacity = useTransform(rotY, (v) => (Math.abs(v) < 90 ? HIDDEN : 1));
   const sheen = useTransform(rotY, (v) => Math.max(0, 1 - Math.abs(v - geo.restRot) / 30));
   // The first screen is just him and the headline. As the headline leaves, he
   // lifts the screen into view (done before the Hush line, so the silence stays still).
-  const lidIn = useTransform(p, (v) => ease(T.lidIn[0], T.lidIn[0] + 0.07)(v));
+  const lidIn = useTransform(p, (v) => Math.max(HIDDEN, ease(T.lidIn[0], T.lidIn[0] + 0.07)(v)));
   const lidRise = useTransform(p, (v) => 22 * (1 - ease(T.lidIn[0], T.lidIn[1])(v)));
   const lidRiseY = useMotionTemplate`${lidRise}svh`;
 
@@ -573,7 +578,7 @@ function DeskPinned({ phone, footerInFrame }: { phone: boolean; footerInFrame: b
   const subjXvw = useMotionTemplate`${subjX}vw`;
   const subjDim = useTransform(
     p,
-    (v) => 0.42 * ease(T.dim[0], T.dim[1])(v) + (phone ? 0.52 : 0.43) * ease(T.fade[0], T.fade[1])(v),
+    (v) => Math.max(HIDDEN, 0.42 * ease(T.dim[0], T.dim[1])(v) + (phone ? 0.52 : 0.43) * ease(T.fade[0], T.fade[1])(v)),
   );
 
   // -- Hush line
@@ -629,12 +634,12 @@ function DeskPinned({ phone, footerInFrame }: { phone: boolean; footerInFrame: b
             className="absolute inset-0 transition-opacity duration-500 ease-out-strong"
             style={{ opacity: ready ? 1 : 0 }}
           >
-            {/* Far: his real n8n canvas, masked away from the copy column */}
-            <motion.div
+            {/* Far: his real n8n canvas, masked away from the copy column. It holds
+                still (the furthest plane): a masked layer that never moves is
+                drawn once, so scrolling never pays for the mask again. */}
+            <div
               className="absolute inset-0"
               style={{
-                y: farY,
-                scale: farScale,
                 WebkitMaskImage: phone
                   ? "radial-gradient(ellipse 90% 55% at 50% 70%, #000 30%, transparent 75%)"
                   : "radial-gradient(ellipse 38% 64% at 75% 46%, #000 30%, transparent 80%)",
@@ -643,7 +648,7 @@ function DeskPinned({ phone, footerInFrame }: { phone: boolean; footerInFrame: b
                   : "radial-gradient(ellipse 38% 64% at 75% 46%, #000 30%, transparent 80%)",
               }}
             >
-              <motion.div className="absolute inset-0" style={lean.far}>
+              <div className="absolute inset-0">
                 <img
                   src={farSoft}
                   alt=""
@@ -662,8 +667,8 @@ function DeskPinned({ phone, footerInFrame }: { phone: boolean; footerInFrame: b
                   style={{ opacity: farSharpOpacity, ...(phone ? FAR_MASK_PHONE : null) }}
                   className="absolute left-1/2 top-[44%] w-[150%] max-w-none -translate-x-[30%] -translate-y-1/2 opacity-70 lg:w-[112%] lg:-translate-x-[40%]"
                 />
-              </motion.div>
-            </motion.div>
+              </div>
+            </div>
 
             {/* Atmosphere: a warm-neutral light pool behind his head */}
             <motion.div
@@ -682,7 +687,7 @@ function DeskPinned({ phone, footerInFrame }: { phone: boolean; footerInFrame: b
               <motion.div className="h-full w-full" style={lean.subject}>
                 <motion.div
                   className="relative h-full w-full origin-bottom"
-                  style={{ x: subjXvw, y: subjY, scale: subjScale, ...SUBJECT_MASK }}
+                  style={{ x: subjXvw, y: subjY, scale: subjScale }}
                 >
                   <img
                     src={phone ? cutoutSm : cutout}
@@ -692,16 +697,14 @@ function DeskPinned({ phone, footerInFrame }: { phone: boolean; footerInFrame: b
                     className="absolute inset-0 h-full w-full max-w-none"
                     draggable={false}
                   />
-                  <motion.div
-                    className="absolute inset-0"
-                    style={{
-                      opacity: subjDim,
-                      background: "hsl(var(--background))",
-                      WebkitMaskImage: `url(${phone ? cutoutSm : cutout})`,
-                      maskImage: `url(${phone ? cutoutSm : cutout})`,
-                      WebkitMaskSize: "100% 100%",
-                      maskSize: "100% 100%",
-                    }}
+                  <motion.img
+                    src={phone ? shadeSm : shade}
+                    alt=""
+                    width={1165}
+                    height={1080}
+                    className="absolute inset-0 h-full w-full max-w-none"
+                    style={{ opacity: subjDim }}
+                    draggable={false}
                   />
                 </motion.div>
               </motion.div>
@@ -898,9 +901,11 @@ function LiftPanel({
         style={{
           ...rect,
           opacity: shadow,
-          background: "hsl(var(--shadow-tint) / 0.95)",
-          filter: "blur(10px)",
-          transform: "translateZ(0.8px) translateY(6px)",
+          // A soft edge from a gradient, drawn once; a live blur() on a layer
+          // inside the moving 3D screen would be redrawn on every frame.
+          background:
+            "radial-gradient(closest-side, hsl(var(--shadow-tint) / 0.95) 55%, hsl(var(--shadow-tint) / 0) 100%)",
+          transform: "translateZ(0.8px) translateY(6px) scale(1.06, 1.25)",
         }}
       />
       <motion.div className="absolute" style={{ ...rect, z, transformStyle: "preserve-3d" }}>
@@ -982,7 +987,6 @@ function DeskStatic({ phone }: { phone: boolean }) {
             height={1080}
             decoding="async"
             className="absolute bottom-[-24px] left-1/2 h-[50svh] w-auto max-w-none -translate-x-1/2 max-lg:landscape:bottom-0 max-lg:landscape:left-[74vw] max-lg:landscape:h-[88%] lg:bottom-0 lg:left-[71vw] lg:h-[86svh]"
-            style={SUBJECT_MASK}
           />
           <div className="absolute inset-x-0 bottom-0 h-[22svh] bg-gradient-to-b from-transparent to-background lg:h-[30svh]" />
         </div>

@@ -1,5 +1,5 @@
 import { Fragment, useRef, type MouseEvent } from "react";
-import { cubicBezier, motion, useReducedMotion, useScroll, useTransform } from "motion/react";
+import { motion, useReducedMotion } from "motion/react";
 import { ArrowUpRight } from "lucide-react";
 import {
   BOOKING_URL,
@@ -18,7 +18,7 @@ import deskSm from "@/assets/desk/close-desk-sm.webp";
  * on the left, the picture on the right) but not its picture: the opening
  * meets you face to face, the close shows him at work, in the evening, with
  * the real seller dashboard on the monitor and a real n8n editor on the
- * laptop. The photo settles a few pixels on entry, then everything holds.
+ * laptop. The photo holds still; only the copy fades in.
  * Nothing follows this section; the footer line lives inside it.
  */
 
@@ -45,8 +45,6 @@ const PHOTO_MASK_DESK =
 const PHOTO_MASK_PHONE =
   "linear-gradient(to bottom, #000 62%, transparent 100%), linear-gradient(to right, transparent 0%, #000 8%, #000 92%, transparent 100%)";
 
-const settle = cubicBezier(0.5, 1, 0.89, 1);
-
 /**
  * The address is printed so it can be read and copied anywhere. Dragging
  * across it to select it does not open the mail app; a still click, a tap or
@@ -72,10 +70,6 @@ export const DeskClose = () => {
   const rv = (i: number) => (reduce ? {} : revealAt(i));
   const mailto = useSelectableMailto();
 
-  // 0 when the section's top meets the viewport bottom, 1 when it docks at the top.
-  const { scrollYProgress: p } = useScroll({ target: ref, offset: ["start end", "start start"] });
-  const photoY = useTransform(p, [0.05, 0.85], [28, 0], { ease: settle });
-  const photoScale = useTransform(p, [0.05, 0.85], [1.035, 1], { ease: settle });
 
   const maskStyle = (mask: string, composite: boolean) => ({
     WebkitMaskImage: mask,
@@ -95,10 +89,8 @@ export const DeskClose = () => {
         aria-hidden
         className="relative w-full lg:absolute lg:bottom-0 lg:right-0 lg:w-[min(70vw,calc((100svh-2rem)*1.777))]"
       >
-        <motion.div
-          className="aspect-[4/3] w-full sm:aspect-[16/10] lg:aspect-[1388/781]"
-          style={reduce ? undefined : { y: photoY, scale: photoScale }}
-        >
+        {/* Held still: a masked photo that never moves is drawn once. */}
+        <div className="aspect-[4/3] w-full sm:aspect-[16/10] lg:aspect-[1388/781]">
           <img
             src={deskLg}
             srcSet={`${deskSm} 900w, ${deskLg} 1388w`}
@@ -125,7 +117,7 @@ export const DeskClose = () => {
             className="h-full w-full select-none object-cover object-[68%_50%] lg:hidden"
             style={maskStyle(PHOTO_MASK_PHONE, true)}
           />
-        </motion.div>
+        </div>
       </div>
 
       {/* Desktop: a column of density under the copy only (never a full-frame
