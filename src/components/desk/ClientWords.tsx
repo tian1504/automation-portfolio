@@ -1,5 +1,5 @@
 import { motion, useReducedMotion } from "motion/react";
-import { ArrowUpRight, Plus } from "lucide-react";
+import { ArrowUpRight, BadgeCheck, Plus, Star } from "lucide-react";
 import { UPWORK_URL, reveal, revealAt } from "@/lib/desk";
 import {
   LEAD_REVIEW,
@@ -12,8 +12,11 @@ import {
 
 /**
  * Act 6, "In clients' words" and the record under it.
- * A hard change of pace to reading: one Upwork review set large, two smaller
- * ones in unequal columns, then the work history back to 2012. Device: flow + in.
+ * The reviews are drawn the way clients already read them on Upwork: each in
+ * its own panel, with the stars, the rating, the dates, the words, and the
+ * qualities the client endorsed. The newest is set large; three more sit under
+ * it. A rating note beside the heading says what they all share. Then the work
+ * history back to 2012. Device: flow + in.
  * Every block rises once on entry and then stays; nothing is scroll-linked.
  * Under reduced motion the entrances are skipped (content is simply there, see
  * useEnter) and the row disclosure drops its small slide.
@@ -72,22 +75,113 @@ const DotRun = ({
   </span>
 );
 
-/** The museum label under (or beside) each review. */
-const Attribution = ({ review }: { review: Review }) => (
-  <>
-    <p className="text-[15px] font-medium leading-snug text-foreground">
-      {review.project}
-    </p>
-    <p className="mt-1 text-[15px] leading-snug text-muted-foreground">
-      <DotRun
-        items={[review.period, "5 stars, verified on Upwork"]}
-        className="tabular"
+/** Upwork's five stars, in the page's one accent. Read out as the rating. */
+const Stars = ({ rating, size = "h-4 w-4" }: { rating: number; size?: string }) => (
+  <span role="img" aria-label={`${rating.toFixed(1)} out of 5 stars`} className="inline-flex items-center gap-0.5">
+    {[0, 1, 2, 3, 4].map((i) => (
+      <Star
+        key={i}
+        aria-hidden
+        strokeWidth={0}
+        className={`${size} ${i < Math.round(rating) ? "fill-primary" : "fill-muted-foreground/30"}`}
       />
+    ))}
+  </span>
+);
+
+/** The review's header row: stars, the rating, then the contract's dates. */
+const RatingRow = ({ review, large = false }: { review: Review; large?: boolean }) => (
+  <p className="flex flex-wrap items-center gap-x-3 gap-y-1">
+    <Stars rating={review.rating} size={large ? "h-[18px] w-[18px]" : "h-4 w-4"} />
+    <span className={`tabular font-semibold text-foreground ${large ? "text-base" : "text-[15px]"}`}>
+      {review.rating.toFixed(1)}
+    </span>
+    <span aria-hidden className="h-4 w-px bg-border" />
+    <span className="tabular text-[15px] text-muted-foreground">{review.period}</span>
+  </p>
+);
+
+/** "Endorsed by client": the skills and qualities the client ticked, as small chips. */
+const Endorsed = ({ tags }: { tags: string[] }) => (
+  <div className="mt-5">
+    <p className="text-[13px] font-medium text-muted-foreground">Endorsed by client</p>
+    <ul className="mt-2 flex flex-wrap gap-1.5">
+      {tags.map((t) => (
+        <li
+          key={t}
+          className="rounded-md border border-border bg-[hsl(var(--surface-2))] px-2.5 py-1 text-[13px] leading-snug text-foreground/85"
+        >
+          {t}
+        </li>
+      ))}
+    </ul>
+  </div>
+);
+
+/** One review, as its own panel. The lead one is larger. */
+const ReviewCard = ({ review, lead = false }: { review: Review; lead?: boolean }) => (
+  <figure
+    className={`relative flex h-full flex-col rounded-xl border border-border bg-[hsl(var(--surface))] shadow-[var(--edge),var(--e1)] ${
+      lead ? "p-6 sm:p-8 md:p-10" : "p-6"
+    }`}
+  >
+    <figcaption className="order-first">
+      <p className={`font-semibold tracking-[-0.01em] text-foreground ${lead ? "text-lg md:text-xl" : "text-[17px]"}`}>
+        {review.project}
+      </p>
+      <div className="mt-2">
+        <RatingRow review={review} large={lead} />
+      </div>
+    </figcaption>
+    <blockquote className="mt-5">
+      <p
+        className={
+          lead
+            ? "relative max-w-[46ch] font-display text-[clamp(1.375rem,2.4vw,2.1rem)] font-[450] leading-[1.26] tracking-[-0.018em] text-foreground"
+            : "relative text-[16px] leading-relaxed text-foreground/90"
+        }
+      >
+        <Quoted text={review.quote} />
+      </p>
+    </blockquote>
+    {review.note && <p className="mt-3 text-[14px] leading-snug text-muted-foreground">{review.note}</p>}
+    <div className="mt-auto">
+      <Endorsed tags={review.tags} />
+    </div>
+  </figure>
+);
+
+/** Beside the heading: what every review on the page shares, and where to check it. */
+const RatingNote = () => (
+  <div className="flex items-start gap-4 rounded-xl border border-border bg-[hsl(var(--surface))] p-5 shadow-[var(--edge),var(--e1)] md:p-6">
+    <p className="font-display text-[2.75rem] font-semibold leading-none tracking-[-0.03em] text-foreground">
+      5.0
     </p>
-    <p className="mt-2.5 font-mono text-[11px] uppercase leading-relaxed tracking-[0.08em] text-muted-foreground/80">
-      <DotRun items={review.tags} />
-    </p>
-  </>
+    <div className="min-w-0">
+      <Stars rating={5} size="h-[18px] w-[18px]" />
+      <p className="mt-1.5 text-[15px] leading-snug text-muted-foreground">
+        Every review here is 5 stars,{" "}
+        <span className="inline-flex items-center gap-1 whitespace-nowrap text-foreground/90">
+          verified on Upwork
+          <BadgeCheck aria-hidden strokeWidth={1.75} className="h-4 w-4 text-muted-foreground" />
+        </span>
+      </p>
+      <a
+        href={UPWORK_URL}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="group/link -mx-1 mt-1 inline-flex min-h-11 items-center gap-1.5 px-1 text-[15px] font-medium text-foreground underline decoration-border underline-offset-4 transition-[color,text-decoration-color,opacity] duration-150 ease-out-strong active:opacity-70 [@media(hover:hover)_and_(pointer:fine)]:hover:decoration-foreground"
+      >
+        Read every review on Upwork
+        <ArrowUpRight
+          aria-hidden
+          strokeWidth={1.75}
+          className="h-4 w-4 text-muted-foreground transition-[transform,color] duration-150 ease-out-strong [@media(hover:hover)_and_(pointer:fine)]:group-hover/link:-translate-y-0.5 [@media(hover:hover)_and_(pointer:fine)]:group-hover/link:translate-x-0.5 [@media(hover:hover)_and_(pointer:fine)]:group-hover/link:text-foreground"
+        />
+        <span className="sr-only"> (opens in a new tab)</span>
+      </a>
+    </div>
+  </div>
 );
 
 const RoleRow = ({ role, index }: { role: Role; index: number }) => {
@@ -157,77 +251,40 @@ export const ClientWords = () => {
       {/* The bottom padding matches the bone section's top padding, so the cut
         to bone sits midway between the last row and the next heading. */}
       <div className="mx-auto w-full max-w-[1200px] px-5 pb-24 pt-16 sm:px-8 md:pb-32 md:pt-20">
-        <motion.h2
-          {...enter()}
-          id="clients-title"
-          className="h-section max-w-[18ch] font-display font-semibold text-foreground"
-        >
-          In my clients{"’"} words.
-        </motion.h2>
-
-        {/* The lead review: set large, its label hung at its foot on the right. */}
-        <motion.figure
-          {...enter(1, 0.08)}
-          className="mt-7 grid gap-y-6 md:mt-10 lg:grid-cols-12 lg:gap-x-8"
-        >
-          {/* Sized off the same vw slope as the section h2 (about 0.8 of it),
-            so the quote stays a step below the heading at every width. */}
-          <blockquote className="lg:col-span-8">
-            <p className="relative max-w-[30ch] font-display text-[clamp(1.375rem,2.6vw,2.25rem)] font-[450] leading-[1.24] tracking-[-0.018em] text-foreground">
-              {/* A no-break space keeps the lone "I" off the end of line one. */}
-              <Quoted text={LEAD_REVIEW.quote.replace("I wasn", "I wasn")} />
-            </p>
-          </blockquote>
-          <figcaption className="max-w-sm border-t border-border pt-4 lg:col-span-4 lg:col-start-9 lg:max-w-none lg:self-end">
-            <Attribution review={LEAD_REVIEW} />
-          </figcaption>
-        </motion.figure>
-
-        {/* Two more, smaller, in unequal columns. */}
-        <div className="mt-10 grid gap-y-8 md:mt-12 lg:grid-cols-12 lg:gap-x-8">
-          {MORE_REVIEWS.map((r, i) => (
-            <motion.figure
-              key={r.project}
-              {...enter(i + 2, 0.08)}
-              className={`border-t border-border pt-6 ${
-                i === 0 ? "lg:col-span-4" : "lg:col-span-7 lg:col-start-6"
-              }`}
-            >
-              <blockquote>
-                <p className="relative max-w-[60ch] text-[17px] leading-relaxed text-foreground/90 md:text-lg">
-                  <Quoted text={r.quote} />
-                </p>
-              </blockquote>
-              <figcaption className="mt-4">
-                <Attribution review={r} />
-              </figcaption>
-            </motion.figure>
-          ))}
+        {/* The heading, with the rating note beside it on wide screens. */}
+        <div className="grid gap-y-6 lg:grid-cols-12 lg:items-end lg:gap-x-8">
+          <motion.h2
+            {...enter()}
+            id="clients-title"
+            className="h-section max-w-[18ch] font-display font-semibold text-foreground lg:col-span-7"
+          >
+            In my clients{"’"} words.
+          </motion.h2>
+          <motion.div {...enter(1, 0.08)} className="lg:col-span-5">
+            <RatingNote />
+          </motion.div>
         </div>
 
-        <motion.p {...enter(4, 0.08)} className="mt-5 md:mt-7">
-          <a
-            href={UPWORK_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="group/link -mx-1 inline-flex min-h-11 items-center gap-1.5 px-1 text-[15px] font-medium text-foreground underline decoration-border underline-offset-4 transition-[color,text-decoration-color,opacity] duration-150 ease-out-strong active:opacity-70 [@media(hover:hover)_and_(pointer:fine)]:hover:decoration-foreground"
-          >
-            Read every review on Upwork
-            <ArrowUpRight
-              aria-hidden
-              strokeWidth={1.75}
-              className="h-4 w-4 text-muted-foreground transition-[transform,color] duration-150 ease-out-strong [@media(hover:hover)_and_(pointer:fine)]:group-hover/link:-translate-y-0.5 [@media(hover:hover)_and_(pointer:fine)]:group-hover/link:translate-x-0.5 [@media(hover:hover)_and_(pointer:fine)]:group-hover/link:text-foreground"
-            />
-            <span className="sr-only"> (opens in a new tab)</span>
-          </a>
-        </motion.p>
+        {/* The newest review, set large. */}
+        <motion.div {...enter(2, 0.08)} className="mt-8 md:mt-10">
+          <ReviewCard review={LEAD_REVIEW} lead />
+        </motion.div>
+
+        {/* Three more, each in its own panel. */}
+        <ul className="mt-5 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+          {MORE_REVIEWS.map((r, i) => (
+            <motion.li key={r.project} {...enter(i + 3, 0.08)} className={i === 2 ? "md:col-span-2 lg:col-span-1" : undefined}>
+              <ReviewCard review={r} />
+            </motion.li>
+          ))}
+        </ul>
 
         {/* The record: one main column of rows, the kit beside it as a margin note
           (the same 8 + 4 logic as the lead review and its label). */}
         <section
           id="experience"
           aria-labelledby="record-title"
-          className="mt-12 grid gap-y-6 lg:grid-cols-12 lg:gap-x-8"
+          className="mt-16 grid gap-y-6 md:mt-20 lg:grid-cols-12 lg:gap-x-8"
         >
           <motion.div {...enter()} className="lg:col-span-8">
             <h3

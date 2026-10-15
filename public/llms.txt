@@ -11,7 +11,7 @@
 
 ## Case studies
 
-- [The Seller Dashboard](https://eleazarai.dev/case-study/seller-dashboard): one screen that tells an Amazon seller what needs doing this morning, worst first. SP-API, n8n, Supabase and React. Client build, in delivery.
+- [The Seller Dashboard](https://eleazarai.dev/case-study/seller-dashboard): one screen that tells an Amazon seller what needs doing this morning, worst first. Amazon SP-API, GitHub Actions, Supabase and React. Client build, in delivery.
 - [The SP-API Sync Engine](https://eleazarai.dev/case-study/amazon-sp-api): about forty-five n8n workflows that keep a seller's inventory system fed with orders, returns, settlements, inventory and fees from Amazon, for the US and Canada marketplaces. Client build, live.
 - [The Book Sourcing Engine](https://eleazarai.dev/case-study/book-sourcing-engine): scans about 2,000 used-book listings each morning, checks each survivor live, counts postage and Amazon fees, and writes a buy list inside the daily budget. Client build, in delivery.
 

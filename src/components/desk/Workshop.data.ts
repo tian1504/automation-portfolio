@@ -2,7 +2,8 @@
 // (checked against the full-color screenshots), not from the old Portfolio
 // copy. Numbers and "Outcome" claims are left out until the owner confirms a
 // source. Three rows are parts of one build (DeductiveLabs), so they sit
-// together and say so.
+// together and say so. The multi-agent canvas is the one the pinned stage
+// plays at the top of the page, so it is not the first row here.
 
 // Warm mono previews, cut to the canvas alone (no n8n sidebar, header, tab
 // strip, zoom controls or logs) and all at one 11:5 shape, so each one fills the
@@ -33,6 +34,9 @@ import staticAdFull from "@/assets/desk/workshop/static-ad-full.webp";
 
 type Img = { src: string; w: number; h: number };
 
+/** Other parts of the page open a row's dialog by id with this window event (detail: the row id). */
+export const OPEN_WORK_EVENT = "open-work";
+
 export type Work = {
   id: string;
   title: string;
@@ -60,19 +64,6 @@ export type Work = {
 
 export const WORKS: Work[] = [
   {
-    id: "multi-agent",
-    title: "Multi-Agent Orchestration System",
-    line: "Routes each support issue to one of four specialist agents.",
-    detail:
-      "Part of the DeductiveLabs engine. A product manager agent reads the issue, a summary agent condenses it, and a switch hands it to one of four specialist agents, each with its own OpenAI model.",
-    tools: ["n8n", "OpenAI"],
-    kind: "n8n canvas",
-    preview: { src: multiAgentPreview, w: 1305, h: 593 },
-    full: { src: multiAgentFull, w: 1592, h: 697 },
-    alt: "n8n canvas of the DeductiveLabs agent flow: a webhook and a chat trigger, a product manager agent, an incident summary agent, and a switch that routes to four specialist agents",
-    panStart: 0.1,
-  },
-  {
     id: "internal-gpt",
     title: "Problem Identification Agent",
     line: "Reads a support question and its files, then finds an answer.",
@@ -97,6 +88,19 @@ export const WORKS: Work[] = [
     full: { src: deductiveFull, w: 1300, h: 691 },
     alt: "The DeductiveLabs intelligence dashboard: session totals, average confidence, knowledge base coverage and a problem category heatmap",
     panStart: 0,
+  },
+  {
+    id: "multi-agent",
+    title: "Multi-Agent Orchestration System",
+    line: "Routes each support issue to one of four specialist agents.",
+    detail:
+      "Part of the DeductiveLabs engine. A product manager agent reads the issue, a summary agent condenses it, and a switch hands it to one of four specialist agents, each with its own OpenAI model. This is the system from the sample run at the top of this page.",
+    tools: ["n8n", "OpenAI"],
+    kind: "n8n canvas",
+    preview: { src: multiAgentPreview, w: 1305, h: 593 },
+    full: { src: multiAgentFull, w: 1592, h: 697 },
+    alt: "n8n canvas of the DeductiveLabs agent flow: a webhook and a chat trigger, a product manager agent, an incident summary agent, and a switch that routes to four specialist agents",
+    panStart: 0.1,
   },
   {
     id: "apollo",

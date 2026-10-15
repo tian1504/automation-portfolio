@@ -221,6 +221,16 @@
     background: hsl(var(--bone-ink));
     color: hsl(var(--bone));
   }
+
+  /* The workshop band: n8n's own canvas ground (a faint dot grid), the room
+     the AI builds come from. Same hue as the page, one step lighter, drawn
+     once (it never moves). */
+  .ground-canvas {
+    background-color: hsl(var(--surface));
+    background-image: radial-gradient(hsl(var(--bone) / 0.075) 1px, transparent 1.5px);
+    background-size: 20px 20px;
+    background-position: center top;
+  }
 }
 
 @layer utilities {

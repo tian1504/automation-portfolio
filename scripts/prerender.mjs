@@ -118,7 +118,7 @@ const PAGES = [
     url: "/case-study/seller-dashboard",
     title: "The Seller Dashboard: Amazon sales and re-order alerts | Eleazar Sebastian Martinez",
     description:
-      "Case study: one screen that tells an Amazon seller what needs doing this morning, built with SP-API, n8n, Supabase and React.",
+      "Case study: one screen that tells an Amazon seller what needs doing this morning, built with Amazon SP-API, GitHub Actions, Supabase and React.",
   },
   {
     url: "/case-study/amazon-sp-api",

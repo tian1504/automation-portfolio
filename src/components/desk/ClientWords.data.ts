@@ -1,33 +1,52 @@
 /**
  * Copy for the "In my clients' words" act and the record under it.
- * Reviews are verbatim from Upwork (src/components/Testimonials.tsx); only the
- * punctuation around them is typographic. Roles keep every original bullet and
- * skill from src/components/Experience.tsx, with the dashes rewritten and the
- * page's house style applied (no serial comma, US spelling). The reviews stay
- * word for word, so their commas and wording are the clients' own.
+ * Reviews are verbatim from Upwork (src/components/Testimonials.tsx, and the
+ * owner's own screenshot for the newest); only the punctuation around them is
+ * typographic. A review Upwork shows cut short ends where the cut is, with an
+ * ellipsis: no words are added. Roles keep every original bullet and skill
+ * from src/components/Experience.tsx, with the dashes rewritten and the page's
+ * house style applied (no serial comma, US spelling). The reviews stay word
+ * for word, so their commas and wording are the clients' own.
  */
 
 export type Review = {
   quote: string;
   project: string;
   period: string;
+  /** Upwork's star rating for the contract (every one so far is 5.0). */
+  rating: number;
+  /** "Endorsed by client": the skills and qualities the client ticked. */
   tags: string[];
+  /** A line of context under the quote, in his own voice (never part of the review). */
+  note?: string;
 };
 
+/** The newest review leads. Upwork shows it cut short; the quote stops where Upwork's does. */
 export const LEAD_REVIEW: Review = {
   quote:
-    "Eleazar brought the vision into reality. I wasn’t sure how the automation was going to work but he showed us that everything was possible. He works really quick.",
-  project: "AI Automation, Image Generation",
-  period: "Jan 2026",
-  tags: ["Reliable", "Committed to Quality"],
+    "Basti has been incredible to work with. He goes above and beyond the task given and brings solutions proactively. He is also an excellent communicator and keeps you updated…",
+  project: "n8n Fix",
+  period: "Aug to Oct 2026",
+  rating: 5,
+  tags: ["n8n", "Google Sheets Automation", "Automation", "Solution Oriented", "Clear Communicator", "Accountable for Outcomes"],
+  note: "Basti is short for Sebastian, my middle name.",
 };
 
 export const MORE_REVIEWS: Review[] = [
   {
     quote:
+      "Eleazar brought the vision into reality. I wasn’t sure how the automation was going to work but he showed us that everything was possible. He works really quick.",
+    project: "AI Automation, Image Generation",
+    period: "Jan 2026",
+    rating: 5,
+    tags: ["Reliable", "Committed to Quality"],
+  },
+  {
+    quote:
       "He has deep knowledge in workflow automation. His technical background helped the project to be more than I envisioned.",
     project: "n8n Multi-Agent Framework Design",
     period: "Dec 2025 to Feb 2026",
+    rating: 5,
     tags: ["Committed to Quality", "Solution Oriented", "Detail Oriented"],
   },
   {
@@ -35,6 +54,7 @@ export const MORE_REVIEWS: Review[] = [
       "Great experience working with this developer. Responsive, detail-oriented, and delivered high-quality work on time. Excellent communication throughout. Highly recommended.",
     project: "Workflow Automation (Asana, Zapier, HubSpot)",
     period: "Oct to Nov 2025",
+    rating: 5,
     tags: ["Reliable", "Collaborative", "Clear Communicator", "Accountable for Outcomes"],
   },
 ];

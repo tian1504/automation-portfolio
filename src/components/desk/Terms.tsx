@@ -410,7 +410,7 @@ const Questions = () => (
 /* ----------------------------------------------------------------- section */
 
 export const Terms = () => (
-  <section id="pricing" className="ground-bone relative py-24 md:py-32" aria-labelledby="terms-title">
+  <section id="pricing" className="ground-bone relative pb-20 pt-24 md:pb-24 md:pt-32" aria-labelledby="terms-title">
     <div className="mx-auto w-full max-w-[1200px] px-5 sm:px-8">
       <motion.div {...reveal} className="max-w-[40rem]">
         <h2

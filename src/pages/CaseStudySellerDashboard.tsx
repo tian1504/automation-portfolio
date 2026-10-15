@@ -12,9 +12,9 @@ import { CaseStudyBar } from "@/components/desk/PresenterNav";
 import { BOOKING_URL } from "@/lib/desk";
 import { SectionHeading } from "@/components/SectionHeading";
 import { ArchitectureDiagram } from "@/components/ArchitectureDiagram";
-// The same redacted 1440x900 screenshot the homepage shows: a 58 KB WebP
-// (not the 510 KB PNG), already cached for a visitor arriving from there.
-import dashboardImg from "@/assets/desk/dash-full.webp";
+// The same replica the homepage shows: the real app's Today screen, drawn with
+// sample data, so no client product, figure or brand appears on the site.
+import { SellerDashboard } from "@/components/desk/SellerDashboard";
 
 const reveal = {
   initial: { opacity: 0, y: 24 },
@@ -25,7 +25,7 @@ const reveal = {
 
 const PIPELINE = [
   { icon: ShoppingCart, label: "Amazon SP-API", sub: "orders · inventory · finances · pricing" },
-  { icon: Workflow, label: "n8n scheduled jobs", sub: "refresh one snapshot on an interval" },
+  { icon: Workflow, label: "Scheduled jobs", sub: "GitHub Actions 4x a day · stock every 15 min" },
   { icon: Database, label: "Supabase (Postgres)", sub: "a single snapshot row · read-only to the browser" },
   { icon: LayoutDashboard, label: "React dashboard", sub: "Recharts · published on Netlify" },
   { icon: BellRing, label: "Morning briefing & alerts", sub: "what needs doing, worst first" },
@@ -36,7 +36,7 @@ const DECISIONS = [
     n: "01",
     title: "A snapshot, not a query engine",
     body:
-      "n8n writes one JSON snapshot to Supabase on a schedule; the dashboard reads a single row. If Supabase is ever unreachable, the app falls back to a bundled copy of the same shape, so the dashboard can never fail to load on the morning the client needs it.",
+      "A scheduled GitHub Actions job pulls from Amazon four times a day and writes one JSON snapshot to Supabase; the dashboard reads a single row. If Supabase is ever unreachable, the app falls back to a bundled copy of the same shape, so the dashboard can never fail to load on the morning the client needs it.",
   },
   {
     n: "02",
@@ -77,7 +77,7 @@ const CaseStudySellerDashboard = () => (
             Client build · In delivery
           </span>
           <p className="mt-5 font-mono text-xs md:text-sm text-muted-foreground">
-            For a US outdoor-products brand on Amazon · SP-API · n8n · Supabase · React · Netlify
+            For a US outdoor-products brand on Amazon · SP-API · GitHub Actions · Supabase · React · Netlify
           </p>
           <h1 className="mt-4 font-display font-bold tracking-tighter-2 leading-[1.02] text-4xl md:text-5xl lg:text-6xl text-foreground">
             The Seller Dashboard<span className="text-primary">.</span>
@@ -86,20 +86,14 @@ const CaseStudySellerDashboard = () => (
             One screen that tells an Amazon seller what needs doing this morning, and what to ship before the
             season peak, not after it.
           </p>
-          <motion.figure {...reveal} className="mt-10">
-            <div className="relative overflow-hidden border border-border bg-card/30">
-              <img
-                src={dashboardImg}
-                alt="The seller dashboard: a morning briefing panel beside out-of-stock, shipping, and stranded-stock lists"
-                width={1440}
-                height={900}
-                className="w-full h-auto block"
-                loading="eager"
-                decoding="async"
-              />
-            </div>
+          <motion.figure {...reveal} className="mt-10" data-nosnippet>
+            <SellerDashboard className="lg:overflow-hidden lg:rounded-xl lg:border lg:border-border" />
+            <p className="sr-only">
+              The seller dashboard, shown with sample data: a daily briefing beside the out-of-stock, shipping and
+              stranded-stock lists.
+            </p>
             <figcaption className="mt-3 font-mono text-[10px] text-muted-foreground tracking-wide">
-              the live dashboard, with brand, product names, and figures blurred for client confidentiality
+              the Today screen, shown with sample data in place of the client’s products and figures
             </figcaption>
           </motion.figure>
         </div>

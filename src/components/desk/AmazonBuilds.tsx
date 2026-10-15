@@ -1,18 +1,60 @@
-import type { ReactNode } from "react";
+import { useEffect, useRef, type ReactNode } from "react";
 import { Link } from "react-router-dom";
-import { motion, useReducedMotion, type Variants } from "motion/react";
+import {
+  animate,
+  motion,
+  useInView,
+  useMotionValue,
+  useReducedMotion,
+  useTransform,
+  type MotionValue,
+  type Variants,
+} from "motion/react";
 import { ArrowRight } from "lucide-react";
-import { EASE_OUT, jumpTo, reveal, revealAt, useMediaQuery } from "@/lib/desk";
+import { EASE_OUT, reveal, revealAt, useMediaQuery } from "@/lib/desk";
 import { SourcingDiagram, SyncDiagramTall, SyncDiagramWide } from "./AmazonBuilds.diagrams";
+import { REVEAL, SellerDashboard } from "./SellerDashboard";
 
 /**
- * ACT 4, "More receipts". Two more Amazon systems, each shown as a plate: an
- * honest line drawing of the engine on a raised panel, then a museum-style
- * label (For / What it does / Runs on / Status). Device: reveal. The panel
- * wipes open in the direction its data flows, and the drawing's strokes draw
- * once, in data order. Nothing pinned, nothing scrubbed.
- * Reduced motion: no wipe, the drawings are complete, text only fades.
+ * The Amazon work, right after the pinned stage (a different client's build
+ * from the AI run above it, so it opens on its own heading and source line).
+ *
+ * First the seller dashboard, as a flat, readable replica of the real app on
+ * SAMPLE data: once it is well into view, its three problem cards lift worst
+ * first and the captions under it name each one. It runs once and holds.
+ *
+ * Then two more Amazon systems, each shown as a plate: an honest line drawing
+ * of the engine on a raised panel, then a museum-style label (For / What it
+ * does / Runs on / Status). The panel wipes open in the direction its data
+ * flows, and the drawing's strokes draw once, in data order. Nothing pinned,
+ * nothing scrubbed.
+ * Reduced motion: the dashboard is shown settled, no wipe, the drawings are
+ * complete, text only fades.
  */
+
+const LEAD = ["Seller Central knows everything.", "It doesn’t tell you what to fix first."];
+const DASH_H3 = "What needs doing today, worst first.";
+const DASH_CAPTIONS = [
+  {
+    title: "Out of stock, still selling.",
+    body: "Products with orders and no stock. Always at the top, because they lose sales every day.",
+  },
+  {
+    title: "Needs shipping to Amazon.",
+    body: "What to send and how many days are left to cover the season ahead.",
+  },
+  {
+    title: "Stock Amazon is not selling.",
+    body: "Units Amazon holds but won’t sell, flagged so someone checks Seller Central.",
+  },
+];
+const DASH_SOURCE =
+  "A seller dashboard I built for a US outdoor brand on Amazon. Amazon SP-API, GitHub Actions, Supabase and React. Client build, in delivery. The first pre-season purchase order has already gone out through it. Shown here with sample data.";
+const DASH_ALT =
+  "A copy of the seller dashboard I built, shown with sample data. It opens on today’s problems, worst first: out of stock and still selling, needs shipping to Amazon, and stock Amazon is not selling.";
+
+/** Each caption steps up with its card's lift (the replica's own reveal timing, 0..1). */
+const CAPTION_AT = REVEAL.lifts.map(([start]) => start);
 
 type Flow = "right" | "down";
 
@@ -190,19 +232,119 @@ const PlateView = ({
   );
 };
 
+/**
+ * The dashboard plate. The replica plays its triage once, when it is well
+ * into view (so the AI run's outline above has left the screen first).
+ * About a screen before that, the reveal is nudged off zero: the replica then
+ * prepares its moving layers while nothing moves, instead of all at once on
+ * the frame the triage starts (which dropped frames mid-scroll).
+ */
+const ARMED = 0.0001;
+const DashboardPlate = () => {
+  const reduce = useReducedMotion();
+  const figure = useRef<HTMLDivElement>(null);
+  const near = useInView(figure, { once: true, margin: "0px 0px 90% 0px" });
+  const inView = useInView(figure, { once: true, margin: "0px 0px -42% 0px" });
+  const progress = useMotionValue(reduce ? 1 : 0);
+  useEffect(() => {
+    if (near && !reduce && progress.get() === 0) progress.set(ARMED);
+  }, [near, reduce, progress]);
+  useEffect(() => {
+    if (!inView || reduce) return;
+    const run = animate(progress, 1, { duration: 2.4, ease: "linear" });
+    return () => run.stop();
+  }, [inView, reduce, progress]);
+
+  return (
+    <article aria-labelledby="work-title">
+      <motion.p {...reveal} className="label-mono text-muted-foreground">
+        For Amazon sellers
+      </motion.p>
+      {/* The lead-in: the problem, in the seller's words, before the screen that answers it. */}
+      <motion.p
+        {...revealAt(1)}
+        className="mt-3 max-w-[24ch] font-display text-[clamp(1.6rem,3vw,2.6rem)] font-medium leading-[1.12] tracking-[-0.025em] text-foreground"
+      >
+        <span className="block">{LEAD[0]}</span> <span className="block text-muted-foreground">{LEAD[1]}</span>
+      </motion.p>
+
+      {/* The replica is a picture of the app: hidden from assistive tech and from
+          search snippets (its numbers are samples), described in words instead.
+          No entrance fade: fading a block this large would draw all of it in one
+          frame mid-scroll. Its own triage is the motion. */}
+      <div ref={figure} className="mt-8 md:mt-12" data-nosnippet>
+        <SellerDashboard
+          reveal={reduce ? undefined : progress}
+          className="lg:overflow-hidden lg:rounded-xl lg:border lg:border-border lg:shadow-[var(--edge),var(--e2)]"
+        />
+        <p className="sr-only">{DASH_ALT}</p>
+      </div>
+
+      <div className="mt-8 grid gap-8 md:mt-10 lg:grid-cols-12 lg:gap-x-8">
+        <div className="lg:col-span-7">
+          <motion.h2
+            {...reveal}
+            id="work-title"
+            tabIndex={-1}
+            className="text-xl font-semibold tracking-tight text-foreground focus-visible:outline-none md:text-2xl"
+          >
+            {DASH_H3}
+          </motion.h2>
+          {/* Below lg the replica shows the app's narrow layout, whose own card titles carry these,
+              so the list is for screen readers there. */}
+          <motion.ol {...revealAt(1)} className="max-lg:sr-only lg:mt-4 lg:space-y-3">
+            {DASH_CAPTIONS.map((c, i) => (
+              <DashCaption key={c.title} progress={progress} at={CAPTION_AT[i]} title={c.title} body={c.body} />
+            ))}
+          </motion.ol>
+        </div>
+        <motion.div {...revealAt(2)} className="lg:col-span-5 lg:self-end">
+          <p className="max-w-[46ch] text-[15px] leading-relaxed text-muted-foreground">{DASH_SOURCE}</p>
+          <div className="mt-1.5">
+            <Link
+              to="/case-study/seller-dashboard"
+              aria-label="Read the case study: Seller dashboard"
+              className="group inline-flex min-h-11 items-center gap-1.5 text-[15px] font-medium text-foreground underline decoration-border underline-offset-4 transition-[text-decoration-color,opacity] duration-150 ease-out-strong active:opacity-70 [@media(hover:hover)_and_(pointer:fine)]:hover:decoration-foreground"
+            >
+              Read the case study
+              <ArrowRight
+                aria-hidden
+                className="h-4 w-4 transition-transform duration-150 ease-out-strong [@media(hover:hover)_and_(pointer:fine)]:group-hover:translate-x-0.5"
+              />
+            </Link>
+          </div>
+        </motion.div>
+      </div>
+    </article>
+  );
+};
+
+/** A caption steps up as its card lifts; the others wait a little back. */
+function DashCaption({ progress, at, title, body }: { progress: MotionValue<number>; at: number; title: string; body: string }) {
+  const opacity = useTransform(progress, (v) => (v >= at ? 1 : 0.45));
+  return (
+    <motion.li style={{ opacity }} className="text-[17px] leading-snug">
+      <span className="font-semibold text-foreground">{title}</span> <span className="text-muted-foreground">{body}</span>
+    </motion.li>
+  );
+}
+
 export const AmazonBuilds = () => {
   // The sync route reads left to right from md up, top to bottom on phones; its panel wipes the same way.
   const wide = useMediaQuery("(min-width: 768px)");
 
   return (
-    <section id="builds" aria-labelledby="builds-title" className="pb-10 pt-12 md:pb-24 md:pt-16">
-      <div className="mx-auto w-full max-w-[1200px] px-5 sm:px-8">
+    // #work keeps its old address: links already sent in proposals land on the dashboard.
+    <section id="builds" aria-label="Amazon builds" className="pb-12 pt-6 md:pb-20 lg:pt-4">
+      <div id="work" className="mx-auto w-full max-w-[1200px] px-5 sm:px-8">
+        <DashboardPlate />
+
         <motion.h2
           {...reveal}
           id="builds-title"
-          className="h-section max-w-[22ch] font-display font-semibold text-foreground"
+          className="mt-16 max-w-[22ch] font-display text-[clamp(1.5rem,2.6vw,2.1rem)] font-semibold leading-[1.1] tracking-[-0.025em] text-foreground md:mt-20"
         >
-          More Amazon systems I’ve built.
+          Two more Amazon systems I’ve built.
         </motion.h2>
 
         <div className="mt-8 grid gap-10 md:mt-12 md:gap-16 lg:grid-cols-12 lg:gap-x-8 lg:gap-y-0">
@@ -228,23 +370,6 @@ export const AmazonBuilds = () => {
             diagram={<SourcingDiagram className="mx-auto max-w-[330px]" />}
             className="lg:col-span-5 lg:col-start-8 lg:row-span-2 lg:row-start-1 lg:mt-20"
           />
-          <motion.p
-            {...reveal}
-            className="max-w-[34ch] text-lg leading-snug text-muted-foreground md:text-xl lg:col-span-7 lg:row-start-2 lg:max-w-none lg:self-end lg:pb-2.5 lg:pt-16"
-          >
-            I also build{" "}
-            <a
-              href="#portfolio"
-              onClick={(e) => {
-                e.preventDefault();
-                jumpTo("portfolio");
-              }}
-              className="py-3 text-foreground underline decoration-border underline-offset-4 transition-[text-decoration-color,opacity] duration-150 ease-out-strong active:opacity-70 [@media(hover:hover)_and_(pointer:fine)]:hover:decoration-foreground"
-            >
-              AI agents and n8n workflows
-            </a>{" "}
-            for lean teams.
-          </motion.p>
         </div>
       </div>
     </section>

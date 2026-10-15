@@ -14,20 +14,23 @@ import avatar from "@/assets/desk/avatar.webp";
 
 /**
  * The presenter chip. The grammar's nav is the person, not a bar: on desktop a
- * small chip top-right (his face, the wordmark, three jumps, the one action);
+ * small chip top-right (his face, the wordmark, four jumps, the one action);
  * on phones a dock at the thumb from the first frame (Menu, Prices, the action).
  * Case-study pages get `CaseStudyBar` below instead.
  */
 
+// "work" keeps its old address (links already sent in proposals use /#work) and
+// now lands on the seller dashboard; the AI run has its own, "agents".
 const CHIP_LINKS = [
-  { id: "work", label: "Work" },
+  { id: "agents", label: "AI agents" },
+  { id: "work", label: "Amazon" },
   { id: "testimonials", label: "Reviews" },
   { id: "pricing", label: "Prices" },
 ];
 
 const SHEET_LINKS = [
-  { id: "work", label: "Work" },
-  { id: "builds", label: "More builds" },
+  { id: "agents", label: "AI agents" },
+  { id: "work", label: "Amazon builds" },
   { id: "portfolio", label: "Workflows" },
   { id: "testimonials", label: "Reviews" },
   { id: "experience", label: "Experience" },
@@ -38,10 +41,11 @@ const SHEET_LINKS = [
 
 /**
  * Where keyboard focus lands after a jump, when it is not the anchor itself.
- * #work is an aria-hidden marker inside the pinned stage; its visible heading
- * sits after the hero copy, so the next Tab continues to the case-study link.
+ * #agents is an aria-hidden marker inside the pinned stage; its visible heading
+ * sits after the hero copy, so the next Tab continues to the run's link.
+ * #work is the seller dashboard's section, focused on its heading.
  */
-const FOCUS_AFTER_JUMP: Record<string, string> = { work: "work-title" };
+const FOCUS_AFTER_JUMP: Record<string, string> = { agents: "agents-title", work: "work-title" };
 const jump = (id: string) => jumpTo(id, FOCUS_AFTER_JUMP[id]);
 
 /** Let modified clicks (new tab, new window) keep the browser's behaviour. */

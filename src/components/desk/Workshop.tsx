@@ -5,7 +5,7 @@ import { ChevronDown, Maximize2, X } from "lucide-react";
 import { Dialog, DialogClose, DialogDescription, DialogOverlay, DialogPortal, DialogTitle } from "@/components/ui/dialog";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { EASE_OUT, FINE_POINTER_QUERY, reveal, revealAt, useMediaQuery } from "@/lib/desk";
-import { WORKS, type Work } from "./Workshop.data";
+import { OPEN_WORK_EVENT, WORKS, type Work } from "./Workshop.data";
 
 /**
  * Act 5, the workshop. Breadth for almost no scroll: seven rows, one preview.
@@ -27,7 +27,7 @@ const Heading = ({ pointer }: { pointer: boolean }) => (
       id="workshop-title"
       className="h-section max-w-[15ch] text-balance font-display font-semibold text-foreground"
     >
-      AI agents and n8n workflows.
+      More AI agents and n8n workflows.
     </motion.h2>
     <motion.p {...revealAt(1)} className="mt-4 text-base leading-relaxed text-muted-foreground md:text-[17px]">
       {pointer ? "Point at a row to see the real build." : "Tap a row to see the real build."}
@@ -84,7 +84,7 @@ const DeskView = ({ onOpen }: { onOpen: OpenFn }) => {
           <figure
             id={previewId}
             onClick={() => onOpen(active, rows.current[active])}
-            className="cursor-zoom-in overflow-hidden rounded-lg border border-border/70 bg-[hsl(var(--surface))] shadow-[var(--edge),var(--e2)] transition-[transform,border-color] duration-150 ease-out-strong active:scale-[0.99] [@media(hover:hover)_and_(pointer:fine)]:hover:border-foreground/20"
+            className="cursor-zoom-in overflow-hidden rounded-lg border border-border/70 bg-[hsl(var(--surface-2))] shadow-[var(--edge),var(--e2)] transition-[transform,border-color] duration-150 ease-out-strong active:scale-[0.99] [@media(hover:hover)_and_(pointer:fine)]:hover:border-foreground/20"
           >
             <div className="relative aspect-[11/5] bg-background">
               {WORKS.map((w, i) => {
@@ -151,7 +151,7 @@ const DeskView = ({ onOpen }: { onOpen: OpenFn }) => {
                 <motion.span
                   layoutId={highlightId}
                   aria-hidden
-                  className="absolute inset-0 -z-10 rounded-md bg-[hsl(var(--surface))] shadow-[var(--edge)]"
+                  className="absolute inset-0 -z-10 rounded-md bg-[hsl(var(--surface-2))] shadow-[var(--edge)]"
                   transition={{ duration: 0.2, ease: EASE_OUT }}
                 />
               )}
@@ -369,8 +369,20 @@ export const Workshop = () => {
     setDialog({ open: true, i });
   };
 
+  // The run at the top of the page opens its canvas's real screenshot here.
+  useEffect(() => {
+    const on = (e: Event) => {
+      const i = WORKS.findIndex((w) => w.id === (e as CustomEvent<string>).detail);
+      if (i < 0) return;
+      e.preventDefault();
+      openAt(i, document.activeElement instanceof HTMLElement ? document.activeElement : null);
+    };
+    window.addEventListener(OPEN_WORK_EVENT, on);
+    return () => window.removeEventListener(OPEN_WORK_EVENT, on);
+  }, []);
+
   return (
-    <section id="portfolio" aria-labelledby="workshop-title" className="relative py-24 md:py-32">
+    <section id="portfolio" aria-labelledby="workshop-title" className="ground-canvas relative border-y border-border py-20 md:py-24">
       <div className="mx-auto w-full max-w-[1200px] px-5 sm:px-8">
         {desk ? <DeskView onOpen={openAt} /> : <TouchView onOpen={openAt} />}
       </div>

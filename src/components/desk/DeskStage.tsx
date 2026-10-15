@@ -1,5 +1,4 @@
-import { Fragment, forwardRef, useEffect, useLayoutEffect, useRef, useState, type CSSProperties } from "react";
-import { Link } from "react-router-dom";
+import { forwardRef, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import {
   motion,
   useMotionTemplate,
@@ -8,11 +7,10 @@ import {
   useScroll,
   useSpring,
   useTransform,
+  type MotionStyle,
   type MotionValue,
 } from "motion/react";
-import { ArrowRight } from "lucide-react";
-import { BOOKING_URL, FINE_POINTER_QUERY, PHONE_QUERY, UPWORK_URL, reveal, useMediaQuery } from "@/lib/desk";
-import { SCREEN_BEZEL } from "./ScreenShell";
+import { BOOKING_URL, FINE_POINTER_QUERY, PHONE_QUERY, UPWORK_URL, jumpTo, reveal, useMediaQuery } from "@/lib/desk";
 import farSharp from "@/assets/desk/far-canvas.webp";
 import farSoft from "@/assets/desk/far-canvas-soft.webp";
 import cutout from "@/assets/desk/eleazar.webp";
@@ -21,212 +19,287 @@ import cutoutSm from "@/assets/desk/eleazar-sm.webp";
 // him without a live CSS mask (masks on moving layers are costly to redraw).
 import shade from "@/assets/desk/eleazar-shade.webp";
 import shadeSm from "@/assets/desk/eleazar-sm-shade.webp";
-import dashFull from "@/assets/desk/dash-full.webp";
-import dashOos from "@/assets/desk/dash-oos.webp";
-import dashShip from "@/assets/desk/dash-ship.webp";
-import dashStranded from "@/assets/desk/dash-stranded.webp";
+import { Maximize2 } from "lucide-react";
+import { BEATS, SAMPLE, TALL_VIEWBOX, VIEWBOX } from "./RunCanvas.data";
+import { RunCanvas, RunChat } from "./RunCanvas";
+import { OPEN_WORK_EVENT } from "./Workshop.data";
 
 /**
- * DeskStage: acts 1 to 3 in one pinned stage (the only pin on the page).
- *   Hello  : he sits facing you, the back of his screen in front of his chest,
- *            his real n8n canvas soft behind him.
- *   Hush   : the copy leaves, he steps back, one line alone (authored silence).
- *   Turn   : the screen swings round to face you. It is the real seller
- *            dashboard he built. It tips back and the three problem panels lift
- *            off it, worst first, while plain captions name each one.
+ * DeskStage: the page's only pinned stage.
+ *   Hello : he sits facing you, his real n8n canvas soft behind him.
+ *   Hush  : the copy leaves, he steps back into the dark, and the canvas behind
+ *           him comes into focus: it is the AI support system he built.
+ *   Run   : that canvas plays one SAMPLE issue through, step by step, as the
+ *           visitor scrolls: a manager agent reads it, a summary agent sums it
+ *           up, a switch picks one of four specialists, and the answer goes
+ *           back to the chat. Plain captions name each step.
  * Everything is driven by one scroll progress value through MotionValues, so
- * React never re-renders on scroll.
+ * React never re-renders on scroll. The run moves only while the visitor
+ * scrolls; it never loops, and it ends and holds.
  *
- * The turn's words must be readable in the pinned frame. A hidden copy of the
- * turn column is measured against the frame (per viewport size, never per
- * scroll): when everything fits, the source line and the case-study link sit
- * in the frame; when only the heading and captions fit, those two follow the
- * stage in normal flow; when even that does not fit (phones held sideways,
- * heavy zoom) the page uses the static composition, as it does for reduced
- * motion.
+ * The seller dashboard is a different client's build: it opens the next
+ * section on its own, so nothing here flows into it.
+ *
+ * The run's words must be readable in the pinned frame. A hidden copy of the
+ * caption column is measured against the frame (per viewport size, never per
+ * scroll): when everything fits, the source line and its link sit in the
+ * frame; when only the heading and steps fit, those two follow the stage in
+ * normal flow; when even that does not fit (phones held sideways, heavy zoom)
+ * the page uses the static composition, as it does for reduced motion.
  */
 
 // ---------------------------------------------------------------------------
-// Copy (BRIEF.md, with typographic apostrophes; the Hush line drops "just",
-// which is on the owner's list of words to avoid)
+// Copy
+
 const H1 = "AI automation engineer.";
 const SUBLINE =
   "I’m Eleazar. I build AI agents, n8n workflows and Amazon SP-API tools that take the daily checks off your team.";
-const HUSH = ["Seller Central knows everything.", "It doesn’t tell you what to fix first."];
-const TURN_H2 = "What needs doing today, worst first.";
-const CAPTIONS = [
+const HUSH = ["Behind me is a team of AI agents I built in n8n.", "Let me give them a sample support issue."];
+const RUN_EYEBROW = "Sample run";
+const RUN_H2 = "Each issue, read by AI and handed to a specialist agent.";
+/** Four steps; their bold leads tell the story on their own. Each spans the beats it names. */
+const STEPS = [
   {
-    title: "Out of stock, still selling.",
-    body: "Products with orders and no stock. Always at the top, because they lose sales every day.",
+    from: "in",
+    to: "normalize",
+    title: "A support issue comes in.",
+    body: "Someone types it into the chat, and it is put into a standard format.",
+    phone: `“${SAMPLE.input}”`,
   },
   {
-    title: "Needs shipping to Amazon.",
-    body: "What to send and how many days are left to cover the season ahead.",
+    from: "pm",
+    to: "summary",
+    title: "Two AI agents read it.",
+    body: "A manager agent thinks it over, then a summary agent sums it up.",
   },
   {
-    title: "Stock Amazon is not selling.",
-    body: "Units Amazon holds but won’t sell, flagged so someone checks Seller Central.",
+    from: "route",
+    to: "route",
+    title: "A switch picks one of four.",
+    body: "In this sample, the rules send it to the Quick Isolation Agent.",
   },
-];
-const TURN_FOOTER =
-  "A seller dashboard I built for a US outdoor brand on Amazon. SP-API, n8n, Supabase and React. Client build, in delivery. The first pre-season purchase order has already gone out through it.";
-const DASH_ALT =
-  "The seller dashboard I built. It opens on today’s problems, worst first: out of stock and still selling, needs shipping to Amazon, stock Amazon is not selling. Brand, products and money figures are blurred for the client.";
+  {
+    from: "specialist",
+    to: "reply",
+    title: "The specialist answers.",
+    body: "It runs on its own OpenAI model and replies in the chat.",
+    phone: `“${SAMPLE.output}”`,
+  },
+] as const;
+const RUN_FOOTER =
+  "The Multi-Agent Orchestration System, part of an IT troubleshooting engine I built for a client. n8n and OpenAI. The issue and the reply are samples, not client data.";
+const RUN_ALT =
+  "A sample run through the Multi-Agent Orchestration System in n8n: a support issue arrives in the chat, a manager agent and a summary agent read it, a switch sends it to the Quick Isolation Agent (one of four specialist agents), and that agent replies in the chat.";
 
-// Crop rectangles, measured on the 1440x900 source (percent of the image).
-// The stranded list runs off the bottom of the screenshot, so its lifted copy
-// stops on the divider under its second row (object-top keeps it pixel-aligned).
-const PANELS = [
-  { src: dashOos, w: 830, h: 196, left: 28.958, top: 37.889, width: 57.639, height: 21.778, lift: 72, fade: false },
-  { src: dashShip, w: 830, h: 196, left: 28.958, top: 60.444, width: 57.639, height: 21.778, lift: 50, fade: false },
-  { src: dashStranded, w: 830, h: 152, left: 28.958, top: 83.111, width: 57.639, height: 13.667, lift: 34, fade: true },
-];
-const FADE_BOTTOM: CSSProperties = {
-  WebkitMaskImage: "linear-gradient(to bottom, #000 calc(100% - 3px), transparent)",
-  maskImage: "linear-gradient(to bottom, #000 calc(100% - 3px), transparent)",
-};
+// ---------------------------------------------------------------------------
+// Progress windows (0..1 across the pinned travel)
 
-// Progress windows (0..1 across the pinned travel).
-const T = {
-  copyOut: [0.07, 0.15],
-  lidIn: [0.03, 0.16],
-  dim: [0.1, 0.3],
-  fade: [0.3, 0.4], // his second dim step, finished before the screen crosses his face
-  focus: [0.1, 0.26],
-  hushIn: [0.15, 0.21],
-  hushOut: [0.3, 0.36],
-  rotate: [0.3, 0.5],
-  travel: [0.3, 0.54],
-  tip: [0.52, 0.6],
-  h2In: [0.52, 0.58],
-  lifts: [
-    [0.58, 0.68],
-    [0.68, 0.78],
-    [0.78, 0.88],
-  ],
-  footerIn: [0.88, 0.93],
+type Windows = {
+  copyOut: [number, number];
+  shade: [number, number];
+  subjectOut: [number, number];
+  hushIn: [number, number];
+  hushOut: [number, number];
+  swap: [number, number];
+  h2In: [number, number];
+  run: [number, number];
+  footerIn: [number, number];
 };
-// Phone: the screen turns in place first, then rises to the top.
-const PHONE_TURN = { rotate: [0.3, 0.42], travel: [0.4, 0.54] };
-// The settled end state: all three problems named, source line and link in.
-// The #work anchor lands here, and so does keyboard focus on the link.
-const SETTLED_AT = 0.94;
+const T_DESK: Windows = {
+  copyOut: [0.04, 0.11],
+  shade: [0.05, 0.12],
+  subjectOut: [0.1, 0.18],
+  hushIn: [0.08, 0.13],
+  hushOut: [0.19, 0.23],
+  swap: [0.11, 0.21],
+  h2In: [0.21, 0.26],
+  run: [0.25, 0.88],
+  footerIn: [0.89, 0.93],
+};
+const T_PHONE: Windows = {
+  copyOut: [0.04, 0.1],
+  shade: [0.04, 0.1],
+  subjectOut: [0.08, 0.15],
+  hushIn: [0.07, 0.11],
+  hushOut: [0.17, 0.2],
+  swap: [0.09, 0.19],
+  h2In: [0.19, 0.23],
+  run: [0.22, 0.86],
+  footerIn: [0.87, 0.91],
+};
+// The settled end state: the answer back, every step named, source line in.
+// The #agents anchor lands here, and so does keyboard focus on the footer link.
+const SETTLED = { desk: 0.94, phone: 0.93 };
 
 // Stage heights in svh (desktop / phone). Travel = height - 100.
-const SPAN = { desk: 320, phone: 250 };
+const SPAN = { desk: 300, phone: 240 };
 
-const XL_QUERY = "(min-width: 1280px)";
+/** A beat's window in page progress. */
+const beatAt = (T: Windows, id: string): [number, number] => {
+  const b = BEATS.find((x) => x.id === id)!;
+  const [r0, r1] = T.run;
+  return [r0 + b.at[0] * (r1 - r0), r0 + b.at[1] * (r1 - r0)];
+};
 
-/**
- * Where the screen sits. The wrapper is the reading position (end state). On
- * phones the rest pose (the back of the screen in front of his chest) is set
- * in svh/vw. On desktop it is derived from the viewport, because he is sized
- * by height and the screen by width: the lid is sized and placed against him
- * (its lowest corner just above the fold, its top edge clear of his chin), so
- * it reads as a whole device at every aspect ratio. Between lg and xl the
- * caption column needs more room, so the screen is a little narrower there.
- */
-type Geo = {
-  left: number; // vw
-  width: number; // vw
-  top: string;
-  restX: number; // vw
-  restScale: number;
-  restYsvh: number;
-  restYvw: number;
-  restRot: number; // deg; 180 = the back square on
-  tipY: number;
-  tipX: number;
+// ---------------------------------------------------------------------------
+// The view onto the canvas
+//
+// Desktop shows the real canvas at its reading size (node names about 11px)
+// and pans along the run; it never scales while the run plays. At the swap it
+// starts exactly where the far canvas image sits, so his own background turns
+// into the crisp drawing without a jump (below about 1360px wide the reading
+// size is larger than the image, so the point under the image's light holds
+// still and the rest grows around it). Phones use the tall layout and pan down.
+
+/** px per canvas unit at the reading size. */
+const U_READ = 1.5;
+
+/** Where the view looks during the run: canvas x (wide) at run progress, eased between stops. */
+const PAN_WIDE: [number, number][] = [
+  [0, 360],
+  [0.16, 440],
+  [0.3, 560],
+  [0.44, 690],
+  [0.6, 790],
+  [0.7, 790],
+  [0.84, 650],
+  [1, 650],
+];
+const WIDE_Y = 236;
+/** Tall: the canvas y at the top of the view. */
+const PAN_TALL: [number, number][] = [
+  [0, 0],
+  [0.18, 8],
+  [0.3, 70],
+  [0.44, 196],
+  [0.58, 412],
+  [1, 412],
+];
+
+const smoothstep = (t: number) => t * t * (3 - 2 * t);
+const clamp01 = (t: number) => Math.min(1, Math.max(0, t));
+function along(stops: [number, number][], v: number) {
+  if (v <= stops[0][0]) return stops[0][1];
+  for (let i = 1; i < stops.length; i++) {
+    const [t1, x1] = stops[i];
+    const [t0, x0] = stops[i - 1];
+    if (v <= t1) return x0 + (x1 - x0) * smoothstep((v - t0) / (t1 - t0 || 1));
+  }
+  return stops[stops.length - 1][1];
+}
+
+type View = {
+  /** px per canvas unit. */
+  u: number;
+  /** Canvas translate at the swap (lined up with the far canvas image). */
+  alignX: number;
+  alignY: number;
+  /** Canvas translate that puts canvas point (cx, cy) at the reading spot. */
+  readX: (cx: number) => number;
+  readY: (cy: number) => number;
 };
-const PHONE_GEO: Geo = {
-  left: 4, width: 92, top: "6svh", restX: 0, restScale: 0.58, restYsvh: 82, restYvw: -28.75, restRot: 155, tipY: 0, tipX: 9,
-};
-const DESK_FRAME = {
-  lg: { left: 46, width: 47 },
-  xl: { left: 40, width: 52 },
-};
-const DESK_REST = {
-  rot: 148, // 32 degrees off square, so the edge thickness reads
-  lidW: 0.46, // flat lid width, as a share of the viewport height
-  centerX: [0.71, 0.055], // 71vw (his centre line) + 5.5svh
-  lowest: 0.965, // lowest corner, as a share of the viewport height
-  reach: 1.05, // lowest corner below the lid's centre, in flat half heights
-  // Perspective in step with the screen's width (1400px at 1440 wide), so the
-  // turn and the rest pose keep the same depth at every desktop width.
-  depth: 1.87,
-};
-function deskGeo(xl: boolean, w: number, h: number): Geo {
-  const { left, width } = xl ? DESK_FRAME.xl : DESK_FRAME.lg;
-  const wrapW = (width / 100) * w;
-  const lidW = DESK_REST.lidW * h;
-  const centerX = DESK_REST.centerX[0] * w + DESK_REST.centerX[1] * h;
-  const centerY = DESK_REST.lowest * h - DESK_REST.reach * ((lidW * 10) / 16 / 2);
+
+function deskView(w: number, h: number): View {
+  const imgW = 1.12 * w;
+  const imgH = imgW * (VIEWBOX.h / VIEWBOX.w);
+  const uImg = imgW / VIEWBOX.w;
+  const u = Math.max(U_READ, uImg);
+  // The far image's box (left-1/2 top-[44%] w-[112%] -translate-x-[40%] -translate-y-1/2).
+  const left = 0.5 * w - 0.4 * imgW;
+  const top = 0.44 * h - 0.5 * imgH;
+  // The canvas point under the image's light (its mask centre) holds still through the swap.
+  const sx = 0.75 * w;
+  const sy = 0.46 * h;
+  const cx = VIEWBOX.x + (sx - left) / uImg;
+  const cy = VIEWBOX.y + (sy - top) / uImg;
+  // Reading spot: the middle of the room right of the caption column.
+  const colLeft = Math.max(0.08 * w, (w - 1200) / 2 + 32);
+  const colW = Math.min(440, Math.max(358, 0.28 * w));
+  const rx = (colLeft + colW + w) / 2 + 12;
+  const ry = 0.45 * h;
   return {
-    left,
-    width,
-    top: `calc(54svh - ${(width * 10) / 32}vw)`,
-    restX: ((centerX - (left / 100) * w - wrapW / 2) / w) * 100,
-    restScale: lidW / wrapW,
-    restYsvh: ((centerY - 0.54 * h) / h) * 100,
-    restYvw: 0,
-    restRot: DESK_REST.rot,
-    tipY: -9,
-    tipX: 11,
+    u,
+    alignX: sx - (cx - VIEWBOX.x) * u,
+    alignY: sy - (cy - VIEWBOX.y) * u,
+    readX: (c) => rx - (c - VIEWBOX.x) * u,
+    readY: (c) => ry - (c - VIEWBOX.y) * u,
   };
 }
 
-function useViewport() {
+function phoneView(w: number, h: number): View {
+  const side = 14;
+  const u = (w - side * 2) / TALL_VIEWBOX.w;
+  const top = 0.035 * h;
+  return {
+    u,
+    alignX: side,
+    alignY: top,
+    readX: () => side,
+    readY: (c) => top - (c - TALL_VIEWBOX.y) * u,
+  };
+}
+
+/** The frame's own size: the sticky frame is the page width (no scrollbar) by one viewport height. */
+function useFrame() {
   // The build-time pre-render has no window: assume a common laptop until the browser takes over.
-  const [vp, setVp] = useState(() =>
-    typeof window === "undefined" ? { w: 1440, h: 900 } : { w: window.innerWidth, h: window.innerHeight },
-  );
+  const read = () =>
+    typeof window === "undefined"
+      ? { w: 1440, h: 900 }
+      : { w: document.documentElement.clientWidth || window.innerWidth, h: window.innerHeight };
+  const [vp, setVp] = useState(read);
   useEffect(() => {
-    const on = () => setVp({ w: window.innerWidth, h: window.innerHeight });
+    const on = () => setVp(read());
     window.addEventListener("resize", on);
     return () => window.removeEventListener("resize", on);
   }, []);
   return vp;
 }
 
-/* The shirt fades out below the chest (70% to 84% of the cutout's height) in the
-   image files themselves, so its red logo never shows and no CSS mask is needed. */
+// ---------------------------------------------------------------------------
+
 /** Phone: the far canvas fades out before any of its own edges. */
-const FAR_MASK_PHONE: CSSProperties = {
+const FAR_MASK_PHONE = {
   WebkitMaskImage:
     "linear-gradient(to bottom, #000 55%, transparent 95%), linear-gradient(to right, transparent 0%, #000 15%, #000 85%, transparent 100%)",
   maskImage:
     "linear-gradient(to bottom, #000 55%, transparent 95%), linear-gradient(to right, transparent 0%, #000 15%, #000 85%, transparent 100%)",
   WebkitMaskComposite: "source-in",
   maskComposite: "intersect",
-};
+} as const;
 
-// Shared classes for the turn column (the real one and the measured copy).
+/** Desktop: the caption column's left edge and width (the scrim under it follows them). */
+const COL_SCRIM_W = "calc(max(8vw, (100vw - 1200px) / 2 + 2rem) + clamp(22.375rem, 28vw, 27.5rem) + 12rem)";
+
+// Shared classes for the run column (the real one and the measured copy).
 const CLS = {
   h1: "font-display text-[clamp(1.95rem,8.6vw,2.6rem)] font-semibold leading-[1.02] tracking-[-0.035em] text-foreground lg:text-[clamp(3rem,4.6vw,4.25rem)]",
   subline: "mt-4 max-w-[40ch] text-[15px] leading-relaxed text-muted-foreground sm:text-base lg:mt-6 lg:text-lg",
-  col:
-    "absolute inset-x-5 top-[calc(6svh+57.5vw+0.875rem)] z-10 sm:inset-x-8 " +
-    "lg:inset-x-auto lg:left-[max(8vw,calc((100vw-1200px)/2+2rem))] lg:top-[22svh] lg:w-[clamp(22.375rem,28vw,27.5rem)] " +
-    "lg:[@media(max-height:760px)]:top-[12svh]",
-  h2: "h-section font-display font-semibold text-foreground",
-  ol: "mt-2.5 space-y-2.5 lg:mt-7 lg:space-y-5 lg:[@media(max-height:760px)]:mt-5 lg:[@media(max-height:760px)]:space-y-3",
+  hush:
+    "font-display text-[clamp(1.45rem,6vw,2rem)] font-medium leading-[1.14] tracking-[-0.025em] text-foreground lg:text-[clamp(1.9rem,2.7vw,2.5rem)]",
+  /** Desktop column: under the nav, left of the canvas. */
+  col: "absolute z-10 left-[max(8vw,calc((100vw-1200px)/2+2rem))] top-[17svh] w-[clamp(22.375rem,28vw,27.5rem)] [@media(max-height:760px)]:top-[12svh]",
+  /** Phone column: under the canvas, clear of the dock. */
+  colPhone: "absolute inset-x-5 bottom-[calc(5rem+env(safe-area-inset-bottom))] z-10 sm:inset-x-8",
+  eyebrow: "label-mono text-muted-foreground",
+  h2: "mt-3 font-display text-[clamp(1.35rem,5.4vw,1.6rem)] font-semibold leading-[1.12] tracking-[-0.025em] text-foreground lg:text-[clamp(1.6rem,2.25vw,2.15rem)]",
+  ol: "mt-6 space-y-3.5 [@media(max-height:760px)]:mt-4 [@media(max-height:760px)]:space-y-2.5",
   caption: "text-[17px] leading-snug",
-  footer: "mt-4 lg:mt-8 lg:[@media(max-height:760px)]:mt-5",
+  footer: "mt-6 [@media(max-height:760px)]:mt-4",
   footerP: "max-w-[46ch] text-[14px] leading-relaxed text-muted-foreground lg:text-[15px]",
   linkWrap: "mt-1.5",
-  /** The source line and link in normal flow, aligned with the turn column. */
+  /** The source line and link in normal flow, aligned with the run column. */
   flow: "px-5 pt-3 sm:px-8 lg:pl-[max(8vw,calc((100vw-1200px)/2+2rem))] lg:pr-8 lg:pt-8",
 };
 
-/** Invisible, but still prepared by the browser (see frontOpacity). */
+/** Invisible, but still prepared by the browser (see the HIDDEN note in DeskPinned). */
 const HIDDEN = 0.001;
 
 const ease = (a: number, b: number) => (v: number) => {
-  const t = Math.min(1, Math.max(0, (v - a) / (b - a)));
+  const t = clamp01((v - a) / (b - a));
   return 1 - Math.pow(1 - t, 3); // ease-out cubic
 };
 const easeInOut = (a: number, b: number) => (v: number) => {
-  const t = Math.min(1, Math.max(0, (v - a) / (b - a)));
+  const t = clamp01((v - a) / (b - a));
   return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
 };
 
@@ -260,9 +333,9 @@ function useDecoded(srcs: string[]) {
 }
 
 /**
- * Pointer lean (fine pointers only, opening frame only): the planes shift a few
- * pixels at different rates, the way a real space does when you lean. Fades out
- * as soon as the visitor starts scrolling. Never required to read the page.
+ * Pointer lean (fine pointers only, opening frame only): he and the canvas
+ * shift a few pixels at different rates, the way a real space does when you
+ * lean. Fades out as soon as the visitor starts scrolling.
  */
 function useLean(p: MotionValue<number>, enabled: boolean) {
   const mx = useMotionValue(0);
@@ -280,81 +353,130 @@ function useLean(p: MotionValue<number>, enabled: boolean) {
   }, [enabled, mx, my]);
   const k = useTransform(p, (v) => 1 - ease(0, 0.08)(v));
   const both = [sx, sy, k] as MotionValue<number>[];
-  const subjX = useTransform(both, ([x, , f]: number[]) => 6 * x * f);
-  const subjY = useTransform(both, ([, y, f]: number[]) => 3 * y * f);
-  const scrX = useTransform(both, ([x, , f]: number[]) => 16 * x * f);
-  const scrY = useTransform(both, ([, y, f]: number[]) => 5 * y * f);
   return {
-    subject: { x: subjX, y: subjY },
-    screen: { x: scrX, y: scrY },
+    x: useTransform(both, ([x, , f]: number[]) => 6 * x * f),
+    y: useTransform(both, ([, y, f]: number[]) => 3 * y * f),
   };
 }
 
 // ---------------------------------------------------------------------------
-// How much of the turn column fits in the pinned frame at this viewport size.
+// How much of the run column fits in the pinned frame at this viewport size.
 
 type Fit = "all" | "core" | "none";
 
-function useTurnFit(enabled: boolean) {
+function useRunFit(enabled: boolean, phone: boolean) {
   const probe = useRef<HTMLDivElement>(null);
   const [fit, setFit] = useState<Fit | null>(null);
   useLayoutEffect(() => {
     const box = probe.current;
     if (!enabled || !box) return;
-    const col = box.querySelector<HTMLElement>("[data-probe-col]");
-    const core = box.querySelector<HTMLElement>("[data-probe-core]");
-    const limit = box.querySelector<HTMLElement>("[data-probe-limit]");
-    if (!col || !core || !limit) return;
+    const q = (s: string) => box.querySelector<HTMLElement>(s);
     // The probe is 100svh tall, so this only changes when the viewport really
     // does (resize, rotation, zoom), not when a phone's toolbar collapses.
     const measure = () => {
-      const room = limit.offsetTop;
-      const allEnd = col.offsetTop + col.offsetHeight;
-      const coreEnd = col.offsetTop + core.offsetTop + core.offsetHeight;
-      setFit(allEnd <= room ? "all" : coreEnd <= room ? "core" : "none");
+      if (phone) {
+        // Bottom-anchored over the dock; its top must stay under the canvas.
+        const all = q("[data-probe-phone-all]");
+        const core = q("[data-probe-phone-core]");
+        const floor = q("[data-probe-phone-floor]");
+        if (!all || !core || !floor) return;
+        const room = floor.offsetTop;
+        setFit(all.offsetTop >= room ? "all" : core.offsetTop >= room ? "core" : "none");
+      } else {
+        const col = q("[data-probe-col]");
+        const core = q("[data-probe-core]");
+        const limit = q("[data-probe-limit]");
+        if (!col || !core || !limit) return;
+        const room = limit.offsetTop;
+        const allEnd = col.offsetTop + col.offsetHeight;
+        const coreEnd = col.offsetTop + core.offsetTop + core.offsetHeight;
+        setFit(allEnd <= room ? "all" : coreEnd <= room ? "core" : "none");
+      }
     };
     measure();
     const ro = new ResizeObserver(measure);
     ro.observe(box);
-    ro.observe(col);
+    box.querySelectorAll<HTMLElement>("[data-probe-observe]").forEach((el) => ro.observe(el));
     return () => ro.disconnect();
-  }, [enabled]);
+  }, [enabled, phone]);
   return { probe, fit };
 }
 
-/** An invisible copy of the turn column in a 100svh box, measured, never shown. */
-const TurnProbe = forwardRef<HTMLDivElement>((_, ref) => (
+/** The phone's one caption slot: every state stacked in one grid cell, so its height is the tallest. */
+const PhoneSlot = ({ withFooter }: { withFooter: boolean }) => (
+  <div className="mt-3 grid">
+    {PHONE_STATES.map((s, i) => (
+      <p key={i} className={`${CLS.caption} [grid-area:1/1]`}>
+        <span className="font-semibold">{s.title}</span> <span>{s.body}</span>
+      </p>
+    ))}
+    {withFooter && (
+      <div className="[grid-area:1/1]">
+        <p className={CLS.footerP}>{RUN_FOOTER}</p>
+        <span className="mt-1.5 inline-flex min-h-11 items-center text-[15px] font-medium">See the original n8n canvas</span>
+      </div>
+    )}
+  </div>
+);
+
+/** An invisible copy of the run column in a 100svh box, measured, never shown. */
+const RunProbe = forwardRef<HTMLDivElement, { phone: boolean }>(({ phone }, ref) => (
   <div
     ref={ref}
     aria-hidden
     className="pointer-events-none invisible fixed inset-x-0 top-0 -z-10 h-svh"
     style={{ contain: "strict" }}
   >
-    <div data-probe-col className={CLS.col}>
-      <div data-probe-core>
-        <h2 className={CLS.h2}>{TURN_H2}</h2>
-        <ol className={CLS.ol}>
-          {CAPTIONS.map((c) => (
-            <li key={c.title}>
-              <p className={CLS.caption}>
-                <span className="font-semibold">{c.title}</span> <span>{c.body}</span>
-              </p>
-            </li>
-          ))}
-        </ol>
-      </div>
-      <div className={CLS.footer}>
-        <p className={CLS.footerP}>{TURN_FOOTER}</p>
-        <div className={CLS.linkWrap}>
-          <span className="inline-flex min-h-11 items-center text-[15px] font-medium">Read the case study</span>
+    {phone ? (
+      <>
+        {[true, false].map((withFooter) => (
+          <div
+            key={String(withFooter)}
+            data-probe-observe
+            {...(withFooter ? { "data-probe-phone-all": "" } : { "data-probe-phone-core": "" })}
+            className={CLS.colPhone}
+          >
+            <p className={CLS.eyebrow}>{RUN_EYEBROW}</p>
+            <h2 className={CLS.h2}>{RUN_H2}</h2>
+            <PhoneSlot withFooter={withFooter} />
+          </div>
+        ))}
+        {/* Top of the caption room: the canvas keeps the frame above it. */}
+        <div data-probe-phone-floor className="absolute inset-x-0 top-[55svh] h-0" />
+      </>
+    ) : (
+      <>
+        <div data-probe-col data-probe-observe className={CLS.col}>
+          <div data-probe-core>
+            <p className={CLS.eyebrow}>{RUN_EYEBROW}</p>
+            <h2 className={CLS.h2}>{RUN_H2}</h2>
+            <ol className={CLS.ol}>
+              {STEPS.map((s) => (
+                <li key={s.title}>
+                  <p className={CLS.caption}>
+                    <span className="font-semibold">{s.title}</span> <span>{s.body}</span>
+                  </p>
+                </li>
+              ))}
+            </ol>
+          </div>
+          <div className={CLS.footer}>
+            <p className={CLS.footerP}>{RUN_FOOTER}</p>
+            <div className={CLS.linkWrap}>
+              <span className="inline-flex min-h-11 items-center text-[15px] font-medium">See the original n8n canvas</span>
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
-    {/* Bottom of the usable frame: 16px clear of the edge, and of the dock on phones. */}
-    <div data-probe-limit className="absolute inset-x-0 bottom-[calc(5rem+env(safe-area-inset-bottom))] h-0 lg:bottom-4" />
+        {/* Bottom of the usable frame: 16px clear of the edge. */}
+        <div data-probe-limit className="absolute inset-x-0 bottom-4 h-0" />
+      </>
+    )}
   </div>
 ));
-TurnProbe.displayName = "TurnProbe";
+RunProbe.displayName = "RunProbe";
+
+/** The phone's caption states: the four steps, with the sample issue and the reply quoted in place of a chat panel. */
+const PHONE_STATES = STEPS.map((s) => ({ title: s.title, body: "phone" in s ? s.phone : s.body }));
 
 // ---------------------------------------------------------------------------
 
@@ -364,10 +486,10 @@ const IS_SERVER = typeof window === "undefined";
 export const DeskStage = () => {
   const reduce = useReducedMotion();
   const phone = useMediaQuery(PHONE_QUERY);
-  const { probe, fit } = useTurnFit(!reduce);
+  const { probe, fit } = useRunFit(!reduce, phone);
   // One section element whatever the mode, so anything holding #home keeps it.
   // The pre-render writes the complete static layout (every word of the hero
-  // and the turn, in reading order) for crawlers that do not run JavaScript;
+  // and the run, in reading order) for crawlers that do not run JavaScript;
   // the browser replaces it with the measured, animated stage on start.
   return (
     <>
@@ -381,7 +503,7 @@ export const DeskStage = () => {
           <DeskPinned phone={phone} footerInFrame={fit === "all"} />
         )}
       </section>
-      {!reduce && !IS_SERVER && <TurnProbe ref={probe} />}
+      {!reduce && !IS_SERVER && <RunProbe ref={probe} phone={phone} />}
     </>
   );
 };
@@ -436,95 +558,54 @@ const BookButton = ({ className = "" }: { className?: string }) => (
   </a>
 );
 
-const CaseStudyLink = ({ onFocus }: { onFocus?: () => void }) => (
-  <Link
-    to="/case-study/seller-dashboard"
+/**
+ * The run's proof: the real n8n screenshot of this canvas, in the workshop's
+ * own dialog (further down the page). Without the workshop mounted, the link
+ * still goes to it.
+ */
+const CanvasLink = ({ onFocus }: { onFocus?: () => void }) => (
+  <a
+    href="#portfolio"
+    aria-haspopup="dialog"
     onFocus={onFocus}
-    // The visible text plus which case study (the page has three such links).
-    aria-label="Read the case study: Seller dashboard"
+    onClick={(e) => {
+      if (e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+      e.preventDefault();
+      const opened = !window.dispatchEvent(new CustomEvent(OPEN_WORK_EVENT, { detail: "multi-agent", cancelable: true }));
+      if (!opened) jumpTo("portfolio");
+    }}
     className="group inline-flex min-h-11 items-center gap-1.5 text-[15px] font-medium text-foreground underline decoration-border underline-offset-4 transition-[text-decoration-color,opacity] duration-150 ease-out-strong active:opacity-70 [@media(hover:hover)_and_(pointer:fine)]:hover:decoration-foreground"
   >
-    Read the case study
-    <ArrowRight
-      className="h-4 w-4 transition-transform duration-150 ease-out-strong [@media(hover:hover)_and_(pointer:fine)]:group-hover:translate-x-0.5"
+    See the original n8n canvas
+    <Maximize2
       aria-hidden
+      className="h-3.5 w-3.5 text-muted-foreground transition-colors duration-150 ease-out-strong [@media(hover:hover)_and_(pointer:fine)]:group-hover:text-foreground"
     />
-  </Link>
+  </a>
 );
 
-/** The turn's source line and the case-study link. */
-const TurnFooter = ({ onFocus }: { onFocus?: () => void }) => (
+/** The run's source line and its link. */
+const RunFooter = ({ onFocus }: { onFocus?: () => void }) => (
   <>
-    <p className={CLS.footerP}>{TURN_FOOTER}</p>
+    <p className={CLS.footerP}>{RUN_FOOTER}</p>
     <div className={CLS.linkWrap}>
-      <CaseStudyLink onFocus={onFocus} />
+      <CanvasLink onFocus={onFocus} />
     </div>
   </>
 );
 
 /** Phone wordmark (desktop has the chip). */
-const Wordmark = () => (
-  <a
+const Wordmark = ({ style }: { style?: MotionStyle }) => (
+  <motion.a
     href="#home"
+    style={style}
     className="absolute left-5 top-2.5 z-10 inline-flex min-h-11 items-center font-display text-base font-semibold tracking-tight text-foreground transition-opacity duration-150 ease-out-strong active:opacity-70 lg:hidden"
   >
     {/* one inline run, so the name reads "Eleazar." with no stray space */}
     <span>
       Eleazar<span className="text-primary">.</span>
     </span>
-  </a>
-);
-
-/** The back of the screen: matte, lit along the top lip, with a sheen. */
-const ScreenBack = ({ sheen }: { sheen?: MotionValue<number> | number }) => (
-  <div
-    aria-hidden
-    className="absolute inset-0 rounded-[10px]"
-    style={{
-      transform: "rotateY(180deg) translateZ(8px)",
-      background: "linear-gradient(180deg, hsl(30 6% 15%), hsl(30 6% 10%) 38%, hsl(30 6% 8%))",
-      boxShadow: "inset 0 1px 0 hsl(40 25% 96% / 0.12), inset 0 0 0 1px hsl(40 25% 96% / 0.07), var(--e3)",
-    }}
-  >
-    {/* an embossed mark and a hinge line, so it reads as a lid */}
-    <span
-      className="absolute left-1/2 top-[44%] -translate-x-1/2 -translate-y-1/2 select-none font-display text-[clamp(1.5rem,3.4vw,3rem)] font-semibold tracking-tight"
-      style={{ color: "hsl(30 6% 13%)", textShadow: "0 1px 0 hsl(40 25% 96% / 0.07), 0 -1px 0 hsl(30 30% 2% / 0.6)" }}
-    >
-      E.
-    </span>
-    <div className="absolute inset-x-[6%] bottom-[7%] h-px bg-[hsl(40_25%_96%/0.1)]" />
-    {sheen !== undefined && (
-      <motion.div
-        className="absolute inset-0 rounded-[10px]"
-        style={{
-          opacity: sheen,
-          background: "linear-gradient(105deg, transparent 28%, hsl(40 25% 96% / 0.08) 46%, transparent 62%)",
-        }}
-      />
-    )}
-  </div>
-);
-
-/** Device thickness: thin strips on the edges, behind the front face. */
-const Edges = () => (
-  <>
-    <div
-      aria-hidden
-      className="absolute left-full top-0 h-full w-2 origin-left"
-      style={{ transform: "rotateY(90deg)", background: "hsl(30 5% 17%)" }}
-    />
-    <div
-      aria-hidden
-      className="absolute right-full top-0 h-full w-2 origin-right"
-      style={{ transform: "rotateY(-90deg)", background: "hsl(30 5% 13%)" }}
-    />
-    <div
-      aria-hidden
-      className="absolute bottom-full left-0 h-2 w-full origin-bottom"
-      style={{ transform: "rotateX(-90deg)", background: "hsl(30 5% 22%)" }}
-    />
-  </>
+  </motion.a>
 );
 
 // ---------------------------------------------------------------------------
@@ -533,88 +614,72 @@ const Edges = () => (
 function DeskPinned({ phone, footerInFrame }: { phone: boolean; footerInFrame: boolean }) {
   const track = useRef<HTMLDivElement>(null);
   const { scrollYProgress: p } = useScroll({ target: track, offset: ["start start", "end end"] });
-  // Gate the planes on the images seen first; the dashboard is not seen until
-  // the turn, so it loads on its own.
+  // Gate the planes on the images seen first.
   const ready = useDecoded([farSharp, farSoft, phone ? cutoutSm : cutout, phone ? shadeSm : shade]);
-  // Decode the dashboard and its three panels while the visitor reads the hero,
-  // so the turn never waits on an image mid-animation.
-  useDecoded([dashFull, ...PANELS.map((x) => x.src)]);
   const fine = useMediaQuery(FINE_POINTER_QUERY);
-  const xl = useMediaQuery(XL_QUERY);
-  const vp = useViewport();
+  const frame = useFrame();
   const lean = useLean(p, fine && !phone);
-  const geo = phone ? PHONE_GEO : deskGeo(xl, vp.w, vp.h);
-  const turn = phone ? PHONE_TURN : T;
+  const T = phone ? T_PHONE : T_DESK;
   const span = phone ? SPAN.phone : SPAN.desk;
   const travel = span - 100;
+  const settled = phone ? SETTLED.phone : SETTLED.desk;
+  const view = useMemo(() => (phone ? phoneView(frame.w, frame.h) : deskView(frame.w, frame.h)), [phone, frame.w, frame.h]);
 
-  // -- Hello copy leaves (and stops catching the pointer once it has)
-  const copyOpacity = useTransform(p, (v) => 1 - ease(T.copyOut[0], T.copyOut[1])(v));
-  const copyY = useTransform(p, (v) => -24 * ease(T.copyOut[0], T.copyOut[1])(v));
-  const copyEvents = useTransform(copyOpacity, (o) => (o > 0.5 ? "auto" : "none"));
-
-  // -- Far plane: slow drift + rack focus by crossfading two pre-blurred files
-  const farSharpOpacity = useTransform(p, (v) => 1 - ease(T.focus[0], T.focus[1])(v));
-  const lightOpacity = useTransform(p, (v) => 1 - 0.6 * ease(T.dim[0], T.travel[1])(v));
-
-  // -- The screen: turn, travel, tip back
-  const rotT = useTransform(p, easeInOut(turn.rotate[0], turn.rotate[1]));
-  const travelT = useTransform(p, easeInOut(turn.travel[0], turn.travel[1]));
-  const tipT = useTransform(p, ease(T.tip[0], T.tip[1]));
-  const rotY = useTransform([rotT, tipT] as MotionValue<number>[], ([r, t]: number[]) =>
-    geo.restRot * (1 - r) + geo.tipY * t,
-  );
-  const rotX = useTransform([rotT, tipT] as MotionValue<number>[], ([r, t]: number[]) => 7 * (1 - r) + geo.tipX * t);
-  const scrScale = useTransform(travelT, (t) => geo.restScale + (1 - geo.restScale) * t);
-  // Each translation interpolates in a single unit (svh or vw), on its own wrapper or axis.
-  const scrYsvh = useTransform(travelT, (t) => geo.restYsvh * (1 - t));
-  const scrYvw = useTransform(travelT, (t) => geo.restYvw * (1 - t));
-  const scrXvw = useTransform(travelT, (t) => geo.restX * (1 - t));
-  const outerY = useMotionTemplate`${scrYsvh}svh`;
-  const innerY = useMotionTemplate`${scrYvw}vw`;
-  const innerX = useMotionTemplate`${scrXvw}vw`;
   // "Hidden" layers rest at an invisible 0.001, never 0: the browser skips
   // preparing fully transparent layers, then prepares them all on the first
   // scroll notch (a visible hitch). At 0.001 they are ready before any scroll.
-  const frontOpacity = useTransform(rotY, (v) => (Math.abs(v) < 90 ? 1 : HIDDEN));
-  const backOpacity = useTransform(rotY, (v) => (Math.abs(v) < 90 ? HIDDEN : 1));
-  const sheen = useTransform(rotY, (v) => Math.max(0, 1 - Math.abs(v - geo.restRot) / 30));
-  // The first screen is just him and the headline. As the headline leaves, he
-  // lifts the screen into view (done before the Hush line, so the silence stays still).
-  const lidIn = useTransform(p, (v) => Math.max(HIDDEN, ease(T.lidIn[0], T.lidIn[0] + 0.07)(v)));
-  const lidRise = useTransform(p, (v) => 22 * (1 - ease(T.lidIn[0], T.lidIn[1])(v)));
-  const lidRiseY = useMotionTemplate`${lidRise}svh`;
 
-  // -- Subject: steps back and dims (a ground-coloured overlay masked by his own
-  //    alpha). The second dim step is done before the rising screen reaches his
-  //    face; on phone he also sinks on the screen's own curve, not ahead of it.
-  const subjYsvh = useTransform([p, travelT] as MotionValue<number>[], ([v, t]: number[]) =>
-    2.5 * ease(T.dim[0], T.dim[1])(v) + (phone ? 16 * t : 12 * ease(T.travel[0], T.travel[1])(v)),
-  );
+  // -- The run's own progress
+  const run = useTransform(p, (v) => clamp01((v - T.run[0]) / (T.run[1] - T.run[0])));
+
+  // -- Hello copy leaves (and stops catching the pointer once it has); the phone wordmark goes with it
+  const copyOpacity = useTransform(p, (v) => Math.max(HIDDEN, 1 - ease(T.copyOut[0], T.copyOut[1])(v)));
+  const copyY = useTransform(p, (v) => -24 * ease(T.copyOut[0], T.copyOut[1])(v));
+  const copyEvents = useTransform(copyOpacity, (o) => (o > 0.5 ? "auto" : "none"));
+
+  // -- He steps back into the dark: the ground-coloured silhouette first, then
+  //    the whole figure and the light pool, before the canvas is bright.
+  const shadeOpacity = useTransform(p, (v) => Math.max(HIDDEN, ease(T.shade[0], T.shade[1])(v)));
+  const subjectOpacity = useTransform(p, (v) => Math.max(HIDDEN, 1 - easeInOut(T.subjectOut[0], T.subjectOut[1])(v)));
+  const subjScale = useTransform(p, (v) => 1 - 0.035 * ease(T.shade[0], T.subjectOut[1])(v));
+  const subjYsvh = useTransform(p, (v) => 3 * ease(T.shade[0], T.subjectOut[1])(v));
   const subjY = useMotionTemplate`${subjYsvh}svh`;
-  const subjScale = useTransform(p, (v) => 1 - 0.04 * ease(T.dim[0], T.dim[1])(v));
-  const subjX = useTransform(p, (v) => (phone ? 0 : 3 * ease(T.travel[0], T.travel[1])(v)));
-  const subjXvw = useMotionTemplate`${subjX}vw`;
-  const subjDim = useTransform(
-    p,
-    (v) => Math.max(HIDDEN, 0.42 * ease(T.dim[0], T.dim[1])(v) + (phone ? 0.52 : 0.43) * ease(T.fade[0], T.fade[1])(v)),
-  );
+  const lightOpacity = useTransform(p, (v) => Math.max(HIDDEN, 1 - ease(T.shade[0], T.subjectOut[1])(v)));
+
+  // -- The swap: his background (a still, masked image) gives way to the crisp drawing
+  const farOpacity = useTransform(p, (v) => Math.max(HIDDEN, 1 - easeInOut(T.swap[0], T.swap[1])(v)));
+  const canvasOpacity = useTransform(p, (v) => Math.max(HIDDEN, easeInOut(T.swap[0], T.swap[1])(v)));
+  const floorOpacity = useTransform(p, (v) => Math.max(HIDDEN, 1 - ease(T.swap[0], T.swap[1])(v)));
+  const scrimOpacity = useTransform(p, (v) => Math.max(HIDDEN, ease(T.swap[0], T.swap[1])(v)));
+
+  // -- The view: lined up with the image at the swap, then onto the reading spot, then along the run
+  const moveIn = (v: number) => easeInOut(T.swap[0], T.h2In[1])(v);
+  const camX = useTransform(p, (v) => {
+    const r = clamp01((v - T.run[0]) / (T.run[1] - T.run[0]));
+    const read = phone ? view.readX(0) : view.readX(along(PAN_WIDE, r));
+    return view.alignX + (read - view.alignX) * moveIn(v);
+  });
+  const camY = useTransform(p, (v) => {
+    const r = clamp01((v - T.run[0]) / (T.run[1] - T.run[0]));
+    const read = phone ? view.readY(along(PAN_TALL, r)) : view.readY(WIDE_Y);
+    return view.alignY + (read - view.alignY) * moveIn(v);
+  });
 
   // -- Hush line
   const hushOpacity = useTransform(
     p,
-    (v) => ease(T.hushIn[0], T.hushIn[1])(v) * (1 - ease(T.hushOut[0], T.hushOut[1])(v)),
+    (v) => Math.max(HIDDEN, ease(T.hushIn[0], T.hushIn[1])(v) * (1 - ease(T.hushOut[0], T.hushOut[1])(v))),
   );
   const hushY = useTransform(p, (v) => 14 * (1 - ease(T.hushIn[0], T.hushIn[1])(v)));
 
-  // -- Lifts, worst first
-  const baseDim = useTransform(p, (v) => 0.5 * ease(T.lifts[0][0], T.lifts[0][0] + 0.06)(v));
-  const h2Opacity = useTransform(p, ease(T.h2In[0], T.h2In[1]));
+  // -- The run column
+  const h2Opacity = useTransform(p, (v) => Math.max(HIDDEN, ease(T.h2In[0], T.h2In[1])(v)));
   const h2Y = useTransform(p, (v) => 14 * (1 - ease(T.h2In[0], T.h2In[1])(v)));
-  const turnEvents = useTransform(h2Opacity, (o) => (o > 0.5 ? "auto" : "none"));
-  const footerOpacity = useTransform(p, ease(T.footerIn[0], T.footerIn[1]));
+  const runEvents = useTransform(h2Opacity, (o) => (o > 0.5 ? "auto" : "none"));
+  const footerOpacity = useTransform(p, (v) => Math.max(HIDDEN, ease(T.footerIn[0], T.footerIn[1])(v)));
   const footerY = useTransform(p, (v) => 12 * (1 - ease(T.footerIn[0], T.footerIn[1])(v)));
   const footerEvents = useTransform(footerOpacity, (o) => (o > 0.5 ? "auto" : "none"));
+  const chatOpacity = useTransform(p, (v) => Math.max(HIDDEN, ease(T.run[0] - 0.03, T.run[0] + 0.005)(v)));
 
   const stageTop = () => {
     const el = track.current;
@@ -624,9 +689,9 @@ function DeskPinned({ phone, footerInFrame }: { phone: boolean; footerInFrame: b
   // once, so it is never focused and invisible) to where it shows.
   const revealFooter = () => {
     const el = track.current;
-    if (!el || p.get() >= SETTLED_AT - 0.02) return;
+    if (!el || p.get() >= settled - 0.02) return;
     const range = el.offsetHeight - document.documentElement.clientHeight;
-    window.scrollTo({ top: stageTop() + range * SETTLED_AT, behavior: "instant" });
+    window.scrollTo({ top: stageTop() + range * settled, behavior: "instant" });
   };
   // Keyboard: tabbing back into the hero copy after it has left brings the
   // hero back, so focus never lands on a link nobody can see.
@@ -638,12 +703,12 @@ function DeskPinned({ phone, footerInFrame }: { phone: boolean; footerInFrame: b
   return (
     <>
       <div ref={track} className="relative" style={{ height: `${span}svh` }}>
-        {/* Anchor for "Work": lands on the settled end state. */}
+        {/* Anchor for "AI agents": lands on the settled end state. */}
         <span
-          id="work"
+          id="agents"
           aria-hidden
           className="pointer-events-none absolute left-0 h-px w-px"
-          style={{ top: `${travel * SETTLED_AT}svh` }}
+          style={{ top: `${travel * settled}svh` }}
         />
 
         <div className="sticky top-0 h-svh overflow-hidden overflow-clip">
@@ -653,12 +718,12 @@ function DeskPinned({ phone, footerInFrame }: { phone: boolean; footerInFrame: b
             className="absolute inset-0 transition-opacity duration-500 ease-out-strong"
             style={{ opacity: ready ? 1 : 0 }}
           >
-            {/* Far: his real n8n canvas, masked away from the copy column. It holds
-                still (the furthest plane): a masked layer that never moves is
-                drawn once, so scrolling never pays for the mask again. */}
-            <div
+            {/* Far: his real n8n canvas as a still, masked image. It never moves,
+                so its mask is drawn once; it only fades as the drawing takes over. */}
+            <motion.div
               className="absolute inset-0"
               style={{
+                opacity: farOpacity,
                 WebkitMaskImage: phone
                   ? "radial-gradient(ellipse 90% 55% at 50% 70%, #000 30%, transparent 75%)"
                   : "radial-gradient(ellipse 38% 64% at 75% 46%, #000 30%, transparent 80%)",
@@ -667,27 +732,65 @@ function DeskPinned({ phone, footerInFrame }: { phone: boolean; footerInFrame: b
                   : "radial-gradient(ellipse 38% 64% at 75% 46%, #000 30%, transparent 80%)",
               }}
             >
-              <div className="absolute inset-0">
-                <img
-                  src={farSoft}
-                  alt=""
-                  width={1538}
-                  height={634}
-                  decoding="async"
-                  style={phone ? FAR_MASK_PHONE : undefined}
-                  className="absolute left-1/2 top-[44%] w-[150%] max-w-none -translate-x-[30%] -translate-y-1/2 opacity-70 lg:w-[112%] lg:-translate-x-[40%]"
-                />
-                <motion.img
-                  src={farSharp}
-                  alt=""
-                  width={1538}
-                  height={634}
-                  decoding="async"
-                  style={{ opacity: farSharpOpacity, ...(phone ? FAR_MASK_PHONE : null) }}
-                  className="absolute left-1/2 top-[44%] w-[150%] max-w-none -translate-x-[30%] -translate-y-1/2 opacity-70 lg:w-[112%] lg:-translate-x-[40%]"
-                />
-              </div>
-            </div>
+              <img
+                src={farSoft}
+                alt=""
+                width={1538}
+                height={634}
+                decoding="async"
+                style={phone ? FAR_MASK_PHONE : undefined}
+                className="absolute left-1/2 top-[44%] w-[150%] max-w-none -translate-x-[30%] -translate-y-1/2 opacity-70 lg:w-[112%] lg:-translate-x-[40%]"
+              />
+              <img
+                src={farSharp}
+                alt=""
+                width={1538}
+                height={634}
+                decoding="async"
+                style={phone ? FAR_MASK_PHONE : undefined}
+                className="absolute left-1/2 top-[44%] w-[150%] max-w-none -translate-x-[30%] -translate-y-1/2 opacity-70 lg:w-[112%] lg:-translate-x-[40%]"
+              />
+            </motion.div>
+
+            {/* The same canvas as a crisp drawing: unmasked, moved only by transform. */}
+            <motion.div
+              className="absolute left-0 top-0"
+              style={{ x: camX, y: camY, opacity: canvasOpacity, willChange: "transform" }}
+            >
+              <RunCanvas layout={phone ? "tall" : "wide"} run={run} unit={`${view.u}px`} />
+            </motion.div>
+
+            {/* Desktop: a still ground-coloured scrim under the caption column, so the
+                canvas can pass beneath the words. Phone: the same under the caption slot. */}
+            {phone && (
+              <motion.div
+                className="absolute inset-x-0 top-0 h-[5svh]"
+                style={{
+                  opacity: scrimOpacity,
+                  background: "linear-gradient(to bottom, hsl(var(--background)), hsl(var(--background) / 0))",
+                }}
+              />
+            )}
+            {phone ? (
+              <motion.div
+                className="absolute inset-x-0 bottom-0 h-[50svh]"
+                style={{
+                  opacity: scrimOpacity,
+                  background:
+                    "linear-gradient(to bottom, hsl(var(--background) / 0) 0%, hsl(var(--background)) 22%, hsl(var(--background)) 100%)",
+                }}
+              />
+            ) : (
+              <motion.div
+                className="absolute inset-y-0 left-0"
+                style={{
+                  opacity: scrimOpacity,
+                  width: COL_SCRIM_W,
+                  background:
+                    "linear-gradient(to right, hsl(var(--background)) 0%, hsl(var(--background)) calc(100% - 13rem), hsl(var(--background) / 0) 100%)",
+                }}
+              />
+            )}
 
             {/* Atmosphere: a warm-neutral light pool behind his head */}
             <motion.div
@@ -701,13 +804,10 @@ function DeskPinned({ phone, footerInFrame }: { phone: boolean; footerInFrame: b
             {/* Subject */}
             <motion.div
               className="absolute bottom-[-24px] left-1/2 h-[50svh] -translate-x-1/2 lg:bottom-0 lg:left-[71vw] lg:h-[86svh]"
-              style={{ aspectRatio: "1165 / 1080" }}
+              style={{ aspectRatio: "1165 / 1080", opacity: subjectOpacity }}
             >
-              <motion.div className="h-full w-full" style={lean.subject}>
-                <motion.div
-                  className="relative h-full w-full origin-bottom"
-                  style={{ x: subjXvw, y: subjY, scale: subjScale }}
-                >
+              <motion.div className="h-full w-full" style={lean}>
+                <motion.div className="relative h-full w-full origin-bottom" style={{ y: subjY, scale: subjScale }}>
                   <img
                     src={phone ? cutoutSm : cutout}
                     alt=""
@@ -722,97 +822,22 @@ function DeskPinned({ phone, footerInFrame }: { phone: boolean; footerInFrame: b
                     width={1165}
                     height={1080}
                     className="absolute inset-0 h-full w-full max-w-none"
-                    style={{ opacity: subjDim }}
+                    style={{ opacity: shadeOpacity }}
                     draggable={false}
                   />
                 </motion.div>
               </motion.div>
             </motion.div>
 
-            {/* Floor: hides the cutout's crop line at every scroll position */}
-            <div className="absolute inset-x-0 bottom-0 h-[22svh] bg-gradient-to-b from-transparent to-background lg:h-[30svh]" />
-          </div>
-
-          {/* ---------------- the screen (near plane) ---------------- */}
-          {/* Hidden from assistive tech: the dashboard is described right after the turn heading. */}
-          <div
-            aria-hidden
-            className="absolute"
-            style={{
-              left: `${geo.left}vw`,
-              top: geo.top,
-              width: `${geo.width}vw`,
-              aspectRatio: "16 / 10",
-            }}
-          >
-            <motion.div className="h-full w-full" style={{ opacity: ready ? lidIn : 0, y: lidRiseY }}>
-            <motion.div className="h-full w-full" style={lean.screen}>
-              {/* Desktop moves and sizes the whole projected screen (so its depth reads
-                  the same at rest at every size); phone moves the figure itself. */}
-              <motion.div
-                className="h-full w-full"
-                style={{
-                  y: outerY,
-                  x: phone ? 0 : innerX,
-                  scale: phone ? 1 : scrScale,
-                  perspective: phone ? 1400 : `${geo.width * DESK_REST.depth}vw`,
-                }}
-              >
-                <motion.figure
-                  className="relative m-0 h-full w-full"
-                  style={{
-                    x: phone ? innerX : 0,
-                    y: innerY,
-                    scale: phone ? scrScale : 1,
-                    rotateY: rotY,
-                    rotateX: rotX,
-                    transformStyle: "preserve-3d",
-                    willChange: "transform",
-                  }}
-                >
-                  <Edges />
-                  <motion.div className="absolute inset-0" style={{ opacity: backOpacity, transformStyle: "preserve-3d" }}>
-                    <ScreenBack sheen={sheen} />
-                  </motion.div>
-
-                  {/* Front face: the real dashboard */}
-                  <motion.div
-                    className="absolute inset-0 rounded-[10px]"
-                    style={{
-                      opacity: frontOpacity,
-                      transformStyle: "preserve-3d",
-                      background: SCREEN_BEZEL,
-                      padding: "0.6%",
-                      boxShadow: "inset 0 1px 0 hsl(40 25% 96% / 0.10), inset 0 0 0 1px hsl(40 25% 96% / 0.05), var(--e3)",
-                    }}
-                  >
-                    <div className="relative h-full w-full" style={{ transformStyle: "preserve-3d" }}>
-                      <img
-                        src={dashFull}
-                        alt=""
-                        width={1440}
-                        height={900}
-                        decoding="async"
-                        className="absolute inset-0 h-full w-full max-w-none rounded-[5px]"
-                        draggable={false}
-                      />
-                      <motion.div
-                        className="absolute inset-0 rounded-[5px] bg-background"
-                        style={{ opacity: baseDim, transform: "translateZ(0.5px)" }}
-                      />
-                      {PANELS.map((panel, i) => (
-                        <LiftPanel key={i} p={p} i={i} panel={panel} />
-                      ))}
-                    </div>
-                  </motion.div>
-                </motion.figure>
-              </motion.div>
-            </motion.div>
-            </motion.div>
+            {/* Floor: hides the cutout's crop line while he is there */}
+            <motion.div
+              className="absolute inset-x-0 bottom-0 h-[22svh] bg-gradient-to-b from-transparent to-background lg:h-[30svh]"
+              style={{ opacity: floorOpacity }}
+            />
           </div>
 
           {/* ---------------- copy (always above the planes) ---------------- */}
-          <Wordmark />
+          <Wordmark style={{ opacity: copyOpacity, pointerEvents: copyEvents }} />
 
           {/* Hello */}
           <motion.div
@@ -829,42 +854,57 @@ function DeskPinned({ phone, footerInFrame }: { phone: boolean; footerInFrame: b
             <TrustLine className="mt-4 lg:mt-7" />
           </motion.div>
 
-          {/* Hush: the authored silence (each sentence on its own line) */}
+          {/* Hush: one line as the canvas comes into focus (each sentence on its own line) */}
           <motion.p
             data-sc-copy
-            className="pointer-events-none absolute inset-x-5 top-[14svh] z-10 font-display text-[clamp(1.6rem,6.4vw,2.2rem)] font-medium leading-[1.12] tracking-[-0.025em] text-foreground sm:inset-x-8 lg:left-[max(8vw,calc((100vw-1200px)/2+2rem))] lg:right-auto lg:top-[36svh] lg:w-[min(36vw,520px)] lg:text-[clamp(2rem,3vw,2.75rem)]"
+            className={`pointer-events-none absolute z-10 ${CLS.hush} ${
+              phone ? "inset-x-5 bottom-[calc(5rem+env(safe-area-inset-bottom)+4svh)] sm:inset-x-8" : "left-[max(8vw,calc((100vw-1200px)/2+2rem))] top-[30svh] w-[min(34vw,500px)]"
+            }`}
             style={{ opacity: hushOpacity, y: hushY }}
           >
             <span className="block">{HUSH[0]}</span> <span className="block text-muted-foreground">{HUSH[1]}</span>
           </motion.p>
 
-          {/* Turn: heading, captions, and (when it fits) the footer */}
-          <motion.div className={CLS.col} style={{ pointerEvents: turnEvents }}>
-            <motion.h2
-              id="work-title"
-              tabIndex={-1}
-              data-sc-copy
-              className={`${CLS.h2} focus-visible:outline-none`}
-              style={{ opacity: h2Opacity, y: h2Y }}
-            >
-              {TURN_H2}
-            </motion.h2>
-            <p className="sr-only">{DASH_ALT}</p>
-            <ol className={CLS.ol}>
-              {CAPTIONS.map((c, i) => (
-                <Caption key={c.title} p={p} i={i} title={c.title} body={c.body} />
-              ))}
-            </ol>
-            {footerInFrame && (
-              <motion.div
-                data-sc-copy
-                className={CLS.footer}
-                style={{ opacity: footerOpacity, y: footerY, pointerEvents: footerEvents }}
-              >
-                <TurnFooter onFocus={revealFooter} />
+          {/* The run: what it is, then one step per beat */}
+          {phone ? (
+            <PhoneColumn p={p} T={T} h2Opacity={h2Opacity} h2Y={h2Y} runEvents={runEvents} footerInFrame={footerInFrame} revealFooter={revealFooter} />
+          ) : (
+            <motion.div className={CLS.col} style={{ pointerEvents: runEvents }}>
+              <motion.div style={{ opacity: h2Opacity, y: h2Y }}>
+                <p data-sc-copy className={CLS.eyebrow}>
+                  {RUN_EYEBROW}
+                </p>
+                <h2 id="agents-title" tabIndex={-1} data-sc-copy className={`${CLS.h2} focus-visible:outline-none`}>
+                  {RUN_H2}
+                </h2>
               </motion.div>
-            )}
-          </motion.div>
+              <p className="sr-only">{RUN_ALT}</p>
+              <ol className={CLS.ol}>
+                {STEPS.map((s, i) => (
+                  <Step key={s.title} p={p} T={T} i={i} title={s.title} body={s.body} />
+                ))}
+              </ol>
+              {footerInFrame && (
+                <motion.div
+                  data-sc-copy
+                  className={CLS.footer}
+                  style={{ opacity: footerOpacity, y: footerY, pointerEvents: footerEvents }}
+                >
+                  <RunFooter onFocus={revealFooter} />
+                </motion.div>
+              )}
+            </motion.div>
+          )}
+
+          {/* Desktop: n8n's chat panel, holding the sample issue and, at the end, the answer */}
+          {!phone && (
+            <motion.div
+              className="absolute bottom-[5svh] right-[max(2rem,calc((100vw-1200px)/2))] z-10 w-[clamp(19rem,25vw,24rem)]"
+              style={{ opacity: chatOpacity }}
+            >
+              <RunChat run={run} />
+            </motion.div>
+          )}
         </div>
       </div>
 
@@ -872,7 +912,7 @@ function DeskPinned({ phone, footerInFrame }: { phone: boolean; footerInFrame: b
       {!footerInFrame && (
         <div className={CLS.flow}>
           <motion.div data-sc-copy {...reveal}>
-            <TurnFooter />
+            <RunFooter />
           </motion.div>
         </div>
       )}
@@ -880,86 +920,16 @@ function DeskPinned({ phone, footerInFrame }: { phone: boolean; footerInFrame: b
   );
 }
 
-/** One problem panel: lifts off the sheet to a height set by its urgency. */
-function LiftPanel({
-  p,
-  i,
-  panel,
-}: {
-  p: MotionValue<number>;
-  i: number;
-  panel: (typeof PANELS)[number];
-}) {
-  const [a, b] = T.lifts[i];
-  const liftT = useTransform(p, ease(a, a + (b - a) * 0.6));
-  const z = useTransform(liftT, (t) => 1 + panel.lift * t);
-  const shadow = useTransform(liftT, (t) => 0.65 * t);
-  // A dark plate over the panel's own footprint, so the dimmed base copy never
-  // shows through beside the lifted one.
-  const plate = useTransform(liftT, (t) => 0.8 * Math.min(1, t * 4));
-  // One accent: the active panel carries the outline. At the end it returns to the worst one.
-  const outline = useTransform(p, (v) => {
-    const end = T.footerIn[0];
-    if (v >= end) return i === 0 ? 1 : 0;
-    return v >= a && v < b ? 1 : 0;
-  });
-  const rect: CSSProperties = {
-    left: `${panel.left}%`,
-    top: `${panel.top}%`,
-    width: `${panel.width}%`,
-    height: `${panel.height}%`,
-  };
-  return (
-    <>
-      <motion.div
-        className="absolute rounded-[6px] bg-background"
-        style={{ ...rect, opacity: plate, transform: "translateZ(0.6px)" }}
-      />
-      <motion.div
-        className="absolute rounded-[6px]"
-        style={{
-          ...rect,
-          opacity: shadow,
-          // A soft edge from a gradient, drawn once; a live blur() on a layer
-          // inside the moving 3D screen would be redrawn on every frame.
-          background:
-            "radial-gradient(closest-side, hsl(var(--shadow-tint) / 0.95) 55%, hsl(var(--shadow-tint) / 0) 100%)",
-          transform: "translateZ(0.8px) translateY(6px) scale(1.06, 1.25)",
-        }}
-      />
-      <motion.div className="absolute" style={{ ...rect, z, transformStyle: "preserve-3d" }}>
-        <PanelImg panel={panel} />
-        <motion.div
-          className="absolute -inset-[3px] rounded-[8px] border-2 border-primary"
-          style={{ opacity: outline }}
-        />
-      </motion.div>
-    </>
-  );
-}
-
-const PanelImg = ({ panel }: { panel: (typeof PANELS)[number] }) => (
-  <img
-    src={panel.src}
-    alt=""
-    width={panel.w}
-    height={panel.h}
-    decoding="async"
-    className="block h-full w-full max-w-none rounded-[6px] object-cover object-top"
-    style={panel.fade ? FADE_BOTTOM : undefined}
-    draggable={false}
-  />
-);
-
-/** A caption arrives with its lift and stays; earlier ones step back a little. */
-function Caption({ p, i, title, body }: { p: MotionValue<number>; i: number; title: string; body: string }) {
-  const [a, b] = T.lifts[i];
+/** A step arrives with its first beat and stays; earlier ones step back a little. */
+function Step({ p, T, i, title, body }: { p: MotionValue<number>; T: Windows; i: number; title: string; body: string }) {
+  const a = beatAt(T, STEPS[i].from)[0];
+  const b = beatAt(T, STEPS[i].to)[1];
   const opacity = useTransform(p, (v) => {
     const inT = ease(a, a + 0.03)(v);
     // 0.3 keeps the muted body text above 4.5:1 while stepped back.
-    const stepBack = i < T.lifts.length - 1 ? 0.3 * ease(b, b + 0.03)(v) : 0;
+    const stepBack = i < STEPS.length - 1 ? 0.3 * ease(b, b + 0.03)(v) : 0;
     const allBack = ease(T.footerIn[0], T.footerIn[1])(v);
-    return inT * (1 - stepBack * (1 - allBack));
+    return Math.max(HIDDEN, inT * (1 - stepBack * (1 - allBack)));
   });
   const y = useTransform(p, (v) => 10 * (1 - ease(a, a + 0.04)(v)));
   return (
@@ -972,10 +942,78 @@ function Caption({ p, i, title, body }: { p: MotionValue<number>; i: number; tit
   );
 }
 
+/**
+ * Phone: the heading, then one caption slot that crossfades through the issue,
+ * the four steps and the answer (and, when it fits, the source line last).
+ */
+function PhoneColumn({
+  p,
+  T,
+  h2Opacity,
+  h2Y,
+  runEvents,
+  footerInFrame,
+  revealFooter,
+}: {
+  p: MotionValue<number>;
+  T: Windows;
+  h2Opacity: MotionValue<number>;
+  h2Y: MotionValue<number>;
+  runEvents: MotionValue<string>;
+  footerInFrame: boolean;
+  revealFooter: () => void;
+}) {
+  // Slot windows: the first step arrives with the heading, then each step at its first beat; the last holds to the footer.
+  const starts = STEPS.map((s, i) => (i === 0 ? T.h2In[0] : beatAt(T, s.from)[0]));
+  const ends = [...starts.slice(1), footerInFrame ? T.footerIn[0] : 2];
+  return (
+    <motion.div className={CLS.colPhone} style={{ pointerEvents: runEvents }}>
+      <motion.div style={{ opacity: h2Opacity, y: h2Y }}>
+        <p data-sc-copy className={CLS.eyebrow}>
+          {RUN_EYEBROW}
+        </p>
+        <h2 id="agents-title" tabIndex={-1} data-sc-copy className={`${CLS.h2} focus-visible:outline-none`}>
+          {RUN_H2}
+        </h2>
+      </motion.div>
+      <p className="sr-only">{RUN_ALT}</p>
+      <div className="mt-3 grid">
+        {PHONE_STATES.map((s, i) => (
+          <PhoneState key={i} p={p} a={starts[i]} b={ends[i]} title={s.title} body={s.body} />
+        ))}
+        {footerInFrame && <PhoneFooter p={p} T={T} revealFooter={revealFooter} />}
+      </div>
+    </motion.div>
+  );
+}
+
+function PhoneState({ p, a, b, title, body }: { p: MotionValue<number>; a: number; b: number; title: string; body: string }) {
+  const opacity = useTransform(p, (v) => Math.max(HIDDEN, ease(a, a + 0.025)(v) * (1 - ease(b - 0.018, b)(v))));
+  const y = useTransform(p, (v) => 8 * (1 - ease(a, a + 0.03)(v)));
+  return (
+    <motion.p data-sc-copy aria-hidden className={`${CLS.caption} [grid-area:1/1]`} style={{ opacity, y }}>
+      <span className="font-semibold text-foreground">{title}</span> <span className="text-muted-foreground">{body}</span>
+    </motion.p>
+  );
+}
+
+function PhoneFooter({ p, T, revealFooter }: { p: MotionValue<number>; T: Windows; revealFooter: () => void }) {
+  const opacity = useTransform(p, (v) => Math.max(HIDDEN, ease(T.footerIn[0], T.footerIn[1])(v)));
+  const y = useTransform(p, (v) => 12 * (1 - ease(T.footerIn[0], T.footerIn[1])(v)));
+  const events = useTransform(opacity, (o) => (o > 0.5 ? "auto" : "none"));
+  return (
+    <motion.div data-sc-copy className="[grid-area:1/1]" style={{ opacity, y, pointerEvents: events }}>
+      <RunFooter onFocus={revealFooter} />
+    </motion.div>
+  );
+}
+
 // ---------------------------------------------------------------------------
 // Reduced motion (and viewports too short for the pin): the same story,
-// static. No sticky, no extra height. The hero keeps the back of the screen in
-// front of him; the dashboard itself appears once, below, with its captions.
+// static. No sticky, no extra height. The hero keeps his canvas soft behind
+// him; the finished run appears once, below, with its steps as a list. Both
+// canvas layouts are written out and switched by CSS (the pre-render cannot
+// know the screen size).
 
 function DeskStatic({ phone }: { phone: boolean }) {
   return (
@@ -1025,78 +1063,42 @@ function DeskStatic({ phone }: { phone: boolean }) {
         </div>
       </div>
 
-      {/* Hush + Turn, as a normal block */}
-      <div id="work" className="mx-auto w-full max-w-[1200px] px-5 pb-16 pt-20 sm:px-8 lg:pb-24 lg:pt-28">
-        <p className="max-w-[26ch] font-display text-[clamp(1.6rem,3vw,2.6rem)] font-medium leading-[1.12] tracking-[-0.025em] text-foreground">
+      {/* Hush + the finished run, as a normal block */}
+      <div id="agents" className="mx-auto w-full max-w-[1200px] px-5 pb-12 pt-16 sm:px-8 lg:pb-16 lg:pt-24">
+        <p className={`max-w-[26ch] ${CLS.hush}`}>
           <span className="block">{HUSH[0]}</span> <span className="block text-muted-foreground">{HUSH[1]}</span>
         </p>
-        <div className="mt-14 grid grid-cols-1 items-center gap-10 lg:grid-cols-12 lg:gap-14">
+        <div className="mt-12 grid grid-cols-1 gap-10 lg:grid-cols-12 lg:gap-14">
           <div className="lg:col-span-5 xl:col-span-4">
-            <h2 id="work-title" tabIndex={-1} className={`${CLS.h2} focus-visible:outline-none`}>
-              {TURN_H2}
+            <p className={CLS.eyebrow}>{RUN_EYEBROW}</p>
+            <h2 id="agents-title" tabIndex={-1} className={`${CLS.h2} focus-visible:outline-none`}>
+              {RUN_H2}
             </h2>
             <ol className="mt-6 space-y-4">
-              {CAPTIONS.map((c) => (
-                <li key={c.title} className={CLS.caption}>
-                  <span className="font-semibold text-foreground">{c.title}</span>{" "}
-                  <span className="text-muted-foreground">{c.body}</span>
+              {STEPS.map((s) => (
+                <li key={s.title} className={CLS.caption}>
+                  <span className="font-semibold text-foreground">{s.title}</span>{" "}
+                  <span className="text-muted-foreground">{s.body}</span>
                 </li>
               ))}
             </ol>
           </div>
-          <figure
-            className="m-0 max-lg:landscape:max-w-[150svh] lg:col-span-7 xl:col-span-8"
-            style={{ perspective: 1400 }}
-          >
-            <div
-              className="relative rounded-[10px]"
-              style={{
-                transform: phone ? "rotateX(6deg)" : "rotateY(-9deg) rotateX(9deg)",
-                transformStyle: "preserve-3d",
-                background: SCREEN_BEZEL,
-                padding: "0.6%",
-                boxShadow: "inset 0 1px 0 hsl(40 25% 96% / 0.10), var(--e3)",
-              }}
-            >
-              <div className="relative" style={{ transformStyle: "preserve-3d" }}>
-                <img
-                  src={dashFull}
-                  alt={DASH_ALT}
-                  width={1440}
-                  height={900}
-                  loading="lazy"
-                  decoding="async"
-                  className="block h-auto w-full rounded-[5px]"
-                />
-                <div aria-hidden className="absolute inset-0 rounded-[5px] bg-background/50" style={{ transform: "translateZ(0.5px)" }} />
-                {PANELS.map((panel, i) => {
-                  const rect: CSSProperties = {
-                    left: `${panel.left}%`,
-                    top: `${panel.top}%`,
-                    width: `${panel.width}%`,
-                    height: `${panel.height}%`,
-                  };
-                  // Direct children of the preserve-3d layer, so the lift keeps its depth.
-                  return (
-                    <Fragment key={i}>
-                      <div
-                        aria-hidden
-                        className="absolute rounded-[6px] bg-background/80"
-                        style={{ ...rect, transform: "translateZ(0.6px)" }}
-                      />
-                      <div aria-hidden className="absolute" style={{ ...rect, transform: `translateZ(${1 + panel.lift}px)` }}>
-                        <PanelImg panel={panel} />
-                        {i === 0 && <div className="absolute -inset-[3px] rounded-[8px] border-2 border-primary" />}
-                      </div>
-                    </Fragment>
-                  );
-                })}
+          <figure className="m-0 lg:col-span-7 xl:col-span-8">
+            <div className="relative overflow-hidden rounded-lg border border-border bg-[hsl(var(--surface))] p-3 sm:p-5">
+              {/* Wide drawing from lg up; the phone layout below it. Both scale to the box. */}
+              <div className="hidden [container-type:inline-size] lg:block">
+                <RunCanvas layout="wide" unit="calc(100cqw / 1015.1)" />
+              </div>
+              <div className="mx-auto max-w-[360px] [container-type:inline-size] lg:hidden">
+                <RunCanvas layout="tall" unit="calc(100cqw / 340)" />
               </div>
             </div>
+            <figcaption className="sr-only">{RUN_ALT}</figcaption>
+            <RunChat className="mt-4 lg:ml-auto lg:max-w-[24rem]" />
           </figure>
         </div>
         <div className="mt-10 max-w-[60ch]">
-          <TurnFooter />
+          <RunFooter />
         </div>
       </div>
     </>
