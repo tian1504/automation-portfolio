@@ -1,0 +1,39 @@
+# Eleazar Sebastian Martinez
+
+> AI automation engineer. I build AI agents, n8n workflows and Amazon SP-API tools that take the daily checks off your team. Upwork Top Rated. Fixed price per milestone.
+
+## What I build
+
+- Amazon System Build, $900 to $2,400: SP-API sync workflows for orders, inventory, financials and returns; live seller dashboards with re-order alerts; sourcing and buy-decision tools. Runs on the client's own accounts, credentials stay theirs, with a handover doc and a recorded walkthrough.
+- AI Agent and Workflow Build, $600 to $1,800: AI customer agents, n8n and Make workflows, internal AI assistants that answer with citations, data pipelines, API and CRM integrations.
+- Maintenance and Growth, $200 a month: up to 5 hours of updates a month, monitoring and quick fixes, priority support, a monthly summary.
+- Smaller jobs: hourly consults and fixes from $15 an hour.
+
+## Case studies
+
+- [The Seller Dashboard](https://eleazarai.dev/case-study/seller-dashboard): one screen that tells an Amazon seller what needs doing this morning, worst first. SP-API, n8n, Supabase and React. Client build, in delivery.
+- [The SP-API Sync Engine](https://eleazarai.dev/case-study/amazon-sp-api): about forty-five n8n workflows that keep a seller's inventory system fed with orders, returns, settlements, inventory and fees from Amazon, for the US and Canada marketplaces. Client build, live.
+- [The Book Sourcing Engine](https://eleazarai.dev/case-study/book-sourcing-engine): scans about 2,000 used-book listings each morning, checks each survivor live, counts postage and Amazon fees, and writes a buy list inside the daily budget. Client build, in delivery.
+
+## How a build goes
+
+1. Call and audit (day 1)
+2. Written scope with a fixed price per milestone, signed off before any building (days 2 to 3)
+3. Build, with working pieces every few days (1 to 3 weeks)
+4. Handoff: runs on the client's accounts, documented, with a recorded walkthrough (final week)
+
+## Tools
+
+n8n, Make, Zapier; Claude, Claude Code, OpenAI, Gemini; Amazon SP-API, Keepa API; Supabase, React, Node.js, Python, Netlify; Airtable, Notion, HubSpot, GoHighLevel; Apify and custom APIs.
+
+## Background
+
+Windows and Azure systems in enterprise IT from 2012 to 2026. Now building AI automation full time.
+
+## Contact
+
+- Book a call: https://calendly.com/tian1504/30min
+- Email: tian1504@gmail.com
+- LinkedIn: https://www.linkedin.com/in/eleazar-sebastian-martinez-76210983/
+- Upwork: https://www.upwork.com/freelancers/~01ac0c23391406fb0d
+- GitHub: https://github.com/tian1504

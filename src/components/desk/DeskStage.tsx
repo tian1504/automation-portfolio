@@ -176,7 +176,10 @@ function deskGeo(xl: boolean, w: number, h: number): Geo {
 }
 
 function useViewport() {
-  const [vp, setVp] = useState(() => ({ w: window.innerWidth, h: window.innerHeight }));
+  // The build-time pre-render has no window: assume a common laptop until the browser takes over.
+  const [vp, setVp] = useState(() =>
+    typeof window === "undefined" ? { w: 1440, h: 900 } : { w: window.innerWidth, h: window.innerHeight },
+  );
   useEffect(() => {
     const on = () => setVp({ w: window.innerWidth, h: window.innerHeight });
     window.addEventListener("resize", on);
@@ -228,7 +231,17 @@ const easeInOut = (a: number, b: number) => (v: number) => {
 };
 
 function useDecoded(srcs: string[]) {
-  const [ready, setReady] = useState(false);
+  // Already in the browser's cache (e.g. painted by the pre-rendered page a
+  // moment ago): ready at once, so the planes never blink out and fade back.
+  const [ready, setReady] = useState(
+    () =>
+      typeof window !== "undefined" &&
+      srcs.every((s) => {
+        const i = new Image();
+        i.src = s;
+        return i.complete && i.naturalWidth > 0;
+      }),
+  );
   useEffect(() => {
     let alive = true;
     Promise.all(
@@ -345,15 +358,21 @@ TurnProbe.displayName = "TurnProbe";
 
 // ---------------------------------------------------------------------------
 
+/** True only during the build-time pre-render (scripts/prerender.mjs). */
+const IS_SERVER = typeof window === "undefined";
+
 export const DeskStage = () => {
   const reduce = useReducedMotion();
   const phone = useMediaQuery(PHONE_QUERY);
   const { probe, fit } = useTurnFit(!reduce);
   // One section element whatever the mode, so anything holding #home keeps it.
+  // The pre-render writes the complete static layout (every word of the hero
+  // and the turn, in reading order) for crawlers that do not run JavaScript;
+  // the browser replaces it with the measured, animated stage on start.
   return (
     <>
       <section id="home" aria-label="Introduction" className="relative">
-        {reduce || fit === "none" ? (
+        {IS_SERVER || reduce || fit === "none" ? (
           <DeskStatic phone={phone} />
         ) : fit === null ? (
           // First pass only: replaced before the first paint, once measured.
@@ -362,7 +381,7 @@ export const DeskStage = () => {
           <DeskPinned phone={phone} footerInFrame={fit === "all"} />
         )}
       </section>
-      {!reduce && <TurnProbe ref={probe} />}
+      {!reduce && !IS_SERVER && <TurnProbe ref={probe} />}
     </>
   );
 };
@@ -992,7 +1011,9 @@ function DeskStatic({ phone }: { phone: boolean }) {
         </div>
         <Wordmark />
         {/* Copy in flow, so a short or zoomed viewport grows the hero instead of clipping it */}
-        <div className="relative z-10 flex min-h-[calc(100svh-4rem)] flex-col px-5 pb-[calc(50svh-0.5rem)] pt-[12svh] sm:px-8 max-lg:landscape:pb-6 max-lg:landscape:pt-[4.5rem] lg:min-h-svh lg:pb-16 lg:pl-[max(8vw,calc((100vw-1200px)/2+2rem))] lg:pr-0 lg:pt-[29svh]">
+        {/* Full height on phones too, so his photo sits exactly where the pinned
+            stage puts it (the pre-rendered page swaps to the stage without a jump). */}
+        <div className="relative z-10 flex min-h-svh flex-col px-5 pb-[calc(50svh-0.5rem)] pt-[12svh] sm:px-8 max-lg:landscape:pb-6 max-lg:landscape:pt-[4.5rem] lg:min-h-svh lg:pb-16 lg:pl-[max(8vw,calc((100vw-1200px)/2+2rem))] lg:pr-0 lg:pt-[29svh]">
           <div className="max-lg:landscape:w-[52vw] lg:w-[min(44vw,620px)]">
             <h1 className={CLS.h1}>{H1}</h1>
             <p className={CLS.subline}>{SUBLINE}</p>
