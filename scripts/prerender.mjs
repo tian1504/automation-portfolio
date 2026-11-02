@@ -36,8 +36,11 @@ const PERSON = {
   ],
   knowsAbout: [
     "AI automation",
+    "Claude Code",
     "AI agents",
+    "AI chat agents",
     "n8n workflow automation",
+    "Cold email operations",
     "Amazon Selling Partner API (SP-API)",
     "Amazon seller dashboards",
     "Claude",
@@ -99,7 +102,7 @@ const PAGES = [
     url: "/",
     title: "Eleazar Sebastian Martinez | AI Automation Engineer",
     description:
-      "I build AI agents, n8n workflows and Amazon SP-API tools that take the daily checks off your team. Fixed price per milestone.",
+      "I build AI agents and real software with Claude Code that take the daily checks off your team. Fixed price per milestone.",
     jsonld: {
       "@context": "https://schema.org",
       "@graph": [

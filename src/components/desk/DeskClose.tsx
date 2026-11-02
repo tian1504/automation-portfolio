@@ -80,6 +80,7 @@ export const DeskClose = () => {
   return (
     <section
       id="contact"
+      data-ledger-section="contact"
       ref={ref}
       aria-labelledby="close-title"
       className="relative isolate overflow-hidden bg-background [overflow:clip] lg:min-h-svh"
@@ -87,7 +88,7 @@ export const DeskClose = () => {
       {/* The picture: him at work. Decorative (the copy carries the meaning). */}
       <div
         aria-hidden
-        className="relative w-full lg:absolute lg:bottom-0 lg:right-0 lg:w-[min(70vw,calc((100svh-2rem)*1.777))]"
+        className="relative w-full lg:absolute lg:bottom-0 lg:right-0 lg:w-[min(calc(var(--page-w)*0.7),calc((100svh-2rem)*1.777))]"
       >
         {/* Held still: a masked photo that never moves is drawn once. */}
         <div className="aspect-[4/3] w-full sm:aspect-[16/10] lg:aspect-[1388/781]">
@@ -127,12 +128,12 @@ export const DeskClose = () => {
         className="pointer-events-none absolute inset-0 z-[1] hidden lg:block"
         style={{
           background:
-            "linear-gradient(90deg, hsl(var(--background)) 0, hsl(var(--background) / 0.9) calc(max(8vw, (100vw - 1200px) / 2 + 2rem) + min(34vw, 470px) - 2rem), hsl(var(--background) / 0) calc(max(8vw, (100vw - 1200px) / 2 + 2rem) + min(34vw, 470px) + 9rem))",
+            "linear-gradient(90deg, hsl(var(--background)) 0, hsl(var(--background) / 0.9) calc(var(--col-l) + min(34vw, 470px) - 2rem), hsl(var(--background) / 0) calc(var(--col-l) + min(34vw, 470px) + 9rem))",
         }}
       />
 
       {/* The copy, where the opening's headline sat. */}
-      <div className="relative z-10 -mt-12 flex flex-col px-5 pb-8 sm:-mt-16 sm:px-8 lg:mt-0 lg:min-h-svh lg:justify-center lg:py-24 lg:pl-[max(8vw,calc((100vw-1200px)/2+2rem))] lg:pr-0">
+      <div className="relative z-10 -mt-12 flex flex-col px-5 pb-8 sm:-mt-16 sm:px-8 lg:mt-0 lg:min-h-svh lg:justify-center lg:py-24 lg:pl-[var(--col-l)] lg:pr-0">
         <div className="max-w-[520px] lg:w-[min(34vw,470px)]">
           <motion.h2
             id="close-title"

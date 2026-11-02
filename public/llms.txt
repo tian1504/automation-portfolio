@@ -1,6 +1,14 @@
 # Eleazar Sebastian Martinez
 
-> AI automation engineer. I build AI agents, n8n workflows and Amazon SP-API tools that take the daily checks off your team. Upwork Top Rated. Fixed price per milestone.
+> AI automation engineer. I build AI agents and real software with Claude Code that take the daily checks off your team. Upwork Top Rated. Fixed price per milestone.
+
+## My work, by kind
+
+- Claude Code: I build with Claude Code, set the rules and write the checks, and the work is not done until it passes them. Examples: ThisIsNoted, my own meeting-notes app (not released yet), where every AI point shows where it came from and plain code flags names, numbers and dates that are not in your notes, the meeting invite or what was said on the call, with 1,327 automated tests and a 187-step click-through of the real app; AI tool reviews where a script re-found all 208 quoted facts in saved copies of the vendor pages, and a Claude Code hook blocks Claude's commits when a finished page fails the written standard; 13 websites moved to GitHub with automatic deploys (plus a 14th), each move checked against a written checklist, with a guide that lets the team edit their own sites through Claude Code; a browser extension that fills a book seller's shop baskets and logs his paid orders without ever seeing a card; a launch video for a made-up app, made entirely from code with Remotion.
+- AI agents: the DeductiveLabs IT troubleshooting engine, its multi-agent support system (a switch hands each issue to one of four specialist agents) and its problem identification agent.
+- Voice and chat agents: an Instagram AI chat agent built for an agency that sets up booking agents for med spas. It was made to answer DMs from each spa's knowledge base and book consults inside the thread (ManyChat, 7 n8n workflows, OpenAI gpt-4o-mini, GoHighLevel, Google Calendar; 219 automated checks across 7 test suites). Client build, delivered; the engagement ended in July 2026. Also: an ElevenLabs project for a client, a hands-on review with every take measured.
+- Outreach and marketing: cold-email safety checks for an Australian plumbing business, five checks that stop the send if any one fails (Node.js and the Instantly API); a lead list where every emailed address keeps its source page and passed an opt-out re-check; an Apollo lead scraper with icebreakers; a hook bank and UGC brief builder; an Instagram hook engine; a static ad generator.
+- E-commerce: the seller dashboard, the SP-API sync engine and the book sourcing engine (case studies below).
 
 ## What I build
 

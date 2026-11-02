@@ -240,6 +240,7 @@ export const ClientWords = () => {
   return (
     <section
       id="testimonials"
+      data-ledger-section="testimonials"
       aria-labelledby="clients-title"
       className="relative isolate"
     >

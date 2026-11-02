@@ -6,44 +6,58 @@ import { Dialog, DialogClose, DialogDescription, DialogOverlay, DialogPortal, Di
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { EASE_OUT, FINE_POINTER_QUERY, reveal, revealAt, useMediaQuery } from "@/lib/desk";
 import { OPEN_WORK_EVENT, WORKS, type Work } from "./Workshop.data";
+import { buildElementId } from "./ledgerStore";
 
 /**
- * Act 5, the workshop. Breadth for almost no scroll: seven rows, one preview.
+ * A list of builds with their real screenshots, used inside the chapters.
+ * Breadth for almost no scroll: a few rows, one preview.
  * Desktop with a mouse: point at (or focus) a row and its real canvas crossfades
  * into a sticky preview; click or Enter opens the full-color original. The
- * preview sits in columns 1 to 7 and the list from column 8, on the same
- * 12-column grid as the builds above, so the two line up.
+ * preview sits in columns 1 to 7 and the list from column 8.
  * Touch and narrow screens: each row is a disclosure with the preview inside.
+ * One dialog for the whole page (WorkDialogHost) shows the originals; anything
+ * on the page can open it with openWork().
  */
 
 const toolLine = (w: Work) => w.tools.join(" · ");
 
 type OpenFn = (i: number, trigger: HTMLElement | null) => void;
 
-const Heading = ({ pointer }: { pointer: boolean }) => (
+/** Where focus goes back to when the dialog closes. */
+let lastTrigger: HTMLElement | null = null;
+
+/** Opens a build's full-size original in the page's dialog. */
+export function openWork(id: string, trigger: HTMLElement | null) {
+  lastTrigger = trigger;
+  window.dispatchEvent(new CustomEvent(OPEN_WORK_EVENT, { detail: id }));
+}
+
+const Heading = ({ id, title, pointer }: { id: string; title: string; pointer: boolean }) => (
   <div>
-    <motion.h2
+    <motion.h3
       {...reveal}
-      id="workshop-title"
-      className="h-section max-w-[15ch] text-balance font-display font-semibold text-foreground"
+      id={id}
+      className="max-w-[18ch] text-balance font-display text-[clamp(1.5rem,2.6vw,2.1rem)] font-semibold leading-[1.1] tracking-[-0.025em] text-foreground"
     >
-      More AI agents and n8n workflows.
-    </motion.h2>
+      {title}
+    </motion.h3>
     <motion.p {...revealAt(1)} className="mt-4 text-base leading-relaxed text-muted-foreground md:text-[17px]">
       {pointer ? "Point at a row to see the real build." : "Tap a row to see the real build."}
     </motion.p>
   </div>
 );
 
+type ViewProps = { works: Work[]; onOpen: OpenFn; titleId: string; title: string };
+
 /* ------------------------------------------------------------------ desktop */
 
-const DeskView = ({ onOpen }: { onOpen: OpenFn }) => {
+const DeskView = ({ works, onOpen, titleId, title }: ViewProps) => {
   const [active, setActive] = useState(0);
   const rows = useRef<(HTMLButtonElement | null)[]>([]);
   const list = useRef<HTMLUListElement | null>(null);
   const previewId = useId();
   const highlightId = useId();
-  const current = WORKS[active];
+  const current = works[active];
 
   // Warm the full-color original for the row being looked at, so the dialog
   // opens on a loaded image. Only once the list is about a screen away (never
@@ -60,7 +74,7 @@ const DeskView = ({ onOpen }: { onOpen: OpenFn }) => {
   }, [current, near]);
 
   const onKey = (i: number) => (e: KeyboardEvent<HTMLButtonElement>) => {
-    const last = WORKS.length - 1;
+    const last = works.length - 1;
     const to =
       e.key === "ArrowDown" ? Math.min(last, i + 1)
       : e.key === "ArrowUp" ? Math.max(0, i - 1)
@@ -76,7 +90,7 @@ const DeskView = ({ onOpen }: { onOpen: OpenFn }) => {
     <div className="grid grid-cols-12 gap-x-8">
       {/* The left block stretches to the list's height so the preview can stick. */}
       <div className="col-span-7">
-        <Heading pointer />
+        <Heading id={titleId} title={title} pointer />
         {/* One frame: the canvas fills it edge to edge (every preview is cut to 11:5),
             with the caption under a hairline. Clicking it is a mouse shortcut to the
             dialog the rows open (keyboard users open it from the row). */}
@@ -87,14 +101,14 @@ const DeskView = ({ onOpen }: { onOpen: OpenFn }) => {
             className="cursor-zoom-in overflow-hidden rounded-lg border border-border/70 bg-[hsl(var(--surface-2))] shadow-[var(--edge),var(--e2)] transition-[transform,border-color] duration-150 ease-out-strong active:scale-[0.99] [@media(hover:hover)_and_(pointer:fine)]:hover:border-foreground/20"
           >
             <div className="relative aspect-[11/5] bg-background">
-              {WORKS.map((w, i) => {
+              {works.map((w, i) => {
                 const on = i === active;
                 return (
                   <img
                     key={w.id}
-                    src={w.preview.src}
-                    width={w.preview.w}
-                    height={w.preview.h}
+                    src={(w.color ?? w.preview).src}
+                    width={(w.color ?? w.preview).w}
+                    height={(w.color ?? w.preview).h}
                     alt={on ? (w.previewAlt ?? w.alt) : ""}
                     loading="lazy"
                     decoding="async"
@@ -107,7 +121,7 @@ const DeskView = ({ onOpen }: { onOpen: OpenFn }) => {
             </div>
             <figcaption className="grid grid-cols-[minmax(0,1fr)_auto] items-baseline gap-4 border-t border-border/70 px-4 py-3">
               <span className="grid min-w-0">
-                {WORKS.map((w, i) => (
+                {works.map((w, i) => (
                   <span
                     key={w.id}
                     aria-hidden={i !== active}
@@ -128,8 +142,14 @@ const DeskView = ({ onOpen }: { onOpen: OpenFn }) => {
       {/* Rules sit on column 8 like the plates above; each row's highlight hangs
           12px past them so the titles line up with the plate text. */}
       <ul ref={list} className="col-span-5 col-start-8 border-b border-border/70">
-        {WORKS.map((w, i) => (
-          <motion.li key={w.id} {...revealAt(i + 1, 0.045)} className="border-t border-border/70 py-0.5">
+        {works.map((w, i) => (
+          <motion.li
+            key={w.id}
+            id={buildElementId(w.id)}
+            data-build={w.id}
+            {...revealAt(i + 1, 0.045)}
+            className="scroll-mt-24 border-t border-border/70 py-0.5"
+          >
             <button
               ref={(el) => {
                 rows.current[i] = el;
@@ -174,15 +194,21 @@ const DeskView = ({ onOpen }: { onOpen: OpenFn }) => {
 
 /* -------------------------------------------------------------- touch/phone */
 
-const TouchView = ({ onOpen }: { onOpen: OpenFn }) => {
-  const [open, setOpen] = useState<boolean[]>(() => WORKS.map((_, i) => i === 0));
+const TouchView = ({ works, onOpen, titleId, title }: ViewProps) => {
+  const [open, setOpen] = useState<boolean[]>(() => works.map((_, i) => i === 0));
 
   return (
     <div className="mx-auto max-w-[720px]">
-      <Heading pointer={false} />
+      <Heading id={titleId} title={title} pointer={false} />
       <ul className="mt-8 border-b border-border/70">
-        {WORKS.map((w, i) => (
-          <motion.li key={w.id} {...revealAt(i + 1, 0.04)} className="border-t border-border/70">
+        {works.map((w, i) => (
+          <motion.li
+            key={w.id}
+            id={buildElementId(w.id)}
+            data-build={w.id}
+            {...revealAt(i + 1, 0.04)}
+            className="scroll-mt-6 border-t border-border/70"
+          >
             <Collapsible
               open={open[i]}
               onOpenChange={(o) => setOpen((prev) => prev.map((v, j) => (j === i ? o : v)))}
@@ -214,9 +240,9 @@ const TouchView = ({ onOpen }: { onOpen: OpenFn }) => {
                     onClick={(e) => onOpen(i, e.currentTarget.parentElement?.querySelector("button") ?? null)}
                   >
                     <img
-                      src={w.preview.src}
-                      width={w.preview.w}
-                      height={w.preview.h}
+                      src={(w.color ?? w.preview).src}
+                      width={(w.color ?? w.preview).w}
+                      height={(w.color ?? w.preview).h}
                       alt={w.previewAlt ?? w.alt}
                       loading="lazy"
                       decoding="async"
@@ -354,44 +380,38 @@ const WorkDialog = ({
   );
 };
 
-/* ------------------------------------------------------------------ section */
+/* ------------------------------------------------------------------ exports */
 
-export const Workshop = () => {
+/** A chapter's list of builds (ids from WORKS, in the order given). */
+export const BuildList = ({ ids, titleId, title }: { ids: string[]; titleId: string; title: string }) => {
   const wide = useMediaQuery("(min-width: 1024px)");
   const fine = useMediaQuery(FINE_POINTER_QUERY);
-  const desk = wide && fine;
+  const works = ids.map((id) => WORKS.find((w) => w.id === id)).filter((w): w is Work => !!w);
+  const onOpen: OpenFn = (i, el) => openWork(works[i].id, el);
+  return wide && fine ? (
+    <DeskView works={works} onOpen={onOpen} titleId={titleId} title={title} />
+  ) : (
+    <TouchView works={works} onOpen={onOpen} titleId={titleId} title={title} />
+  );
+};
 
+/** The page's one dialog for full-size originals. Mounted once, opened with openWork(). */
+export const WorkDialogHost = () => {
   const [dialog, setDialog] = useState({ open: false, i: 0 });
-  const trigger = useRef<HTMLElement | null>(null);
-
-  const openAt: OpenFn = (i, el) => {
-    trigger.current = el;
-    setDialog({ open: true, i });
-  };
-
-  // The run at the top of the page opens its canvas's real screenshot here.
   useEffect(() => {
     const on = (e: Event) => {
       const i = WORKS.findIndex((w) => w.id === (e as CustomEvent<string>).detail);
-      if (i < 0) return;
-      e.preventDefault();
-      openAt(i, document.activeElement instanceof HTMLElement ? document.activeElement : null);
+      if (i >= 0) setDialog({ open: true, i });
     };
     window.addEventListener(OPEN_WORK_EVENT, on);
     return () => window.removeEventListener(OPEN_WORK_EVENT, on);
   }, []);
-
   return (
-    <section id="portfolio" aria-labelledby="workshop-title" className="ground-canvas relative border-y border-border py-20 md:py-24">
-      <div className="mx-auto w-full max-w-[1200px] px-5 sm:px-8">
-        {desk ? <DeskView onOpen={openAt} /> : <TouchView onOpen={openAt} />}
-      </div>
-      <WorkDialog
-        work={WORKS[dialog.i]}
-        open={dialog.open}
-        onOpenChange={(o) => setDialog((d) => ({ ...d, open: o }))}
-        onClosed={() => trigger.current?.focus({ preventScroll: true })}
-      />
-    </section>
+    <WorkDialog
+      work={WORKS[dialog.i]}
+      open={dialog.open}
+      onOpenChange={(o) => setDialog((d) => ({ ...d, open: o }))}
+      onClosed={() => lastTrigger?.focus({ preventScroll: true })}
+    />
   );
 };

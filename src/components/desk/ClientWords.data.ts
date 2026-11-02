@@ -82,16 +82,16 @@ export const ROLES: Role[] = [
     skills: ["Node.js", "Web Scraping", "Chrome DevTools Protocol", "Amazon FBA"],
   },
   {
-    period: "Apr 2026 to present",
+    period: "Apr to Jul 2026",
     title: "AI DM Agent (Instagram to GoHighLevel)",
-    client: "Freelance · AVA (Tamara)",
+    client: "Freelance · Agency client (Instagram bookings for med spas)",
     bullets: [
-      "Shipped the full agent: 24/7 Instagram DM automation that classifies inbound intent, handles objections and generates context-aware replies with Claude.",
-      "Implemented two-way Instagram Graph API integration handling verification handshake, inbound message events and outbound automated replies.",
-      "Routes confirmed bookings into GoHighLevel with contact deduplication, pipeline opportunity creation and team alerts.",
-      "Runs end to end without human input. It escalates to a human only when the conversation actually needs one.",
+      "Built the full agent to read the intent of each Instagram DM, answer from the client’s knowledge base and book consults inside the DM thread, with an OpenAI model (gpt-4o-mini).",
+      "Built the first version on Instagram’s own webhooks (the verification handshake and inbound message events), with replies sent through ManyChat.",
+      "Set it up so every DM created or updated one GoHighLevel contact (no duplicates), and a confirmed booking added a calendar event, moved the pipeline opportunity to Booked, sent the intake form and alerted the team.",
+      "Medical, refund, legal or “talk to a person” messages were never answered by the AI: they went to a person, through a callback request and a team alert.",
     ],
-    skills: ["n8n", "Claude", "Instagram Graph API", "GoHighLevel", "AI Agents", "Webhooks"],
+    skills: ["n8n", "OpenAI", "ManyChat", "Instagram Graph API", "GoHighLevel", "AI Agents"],
   },
   {
     period: "Nov 2025 to present",

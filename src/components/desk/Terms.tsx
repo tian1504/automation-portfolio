@@ -410,7 +410,7 @@ const Questions = () => (
 /* ----------------------------------------------------------------- section */
 
 export const Terms = () => (
-  <section id="pricing" className="ground-bone relative pb-20 pt-24 md:pb-24 md:pt-32" aria-labelledby="terms-title">
+  <section id="pricing" data-ledger-section="pricing" className="ground-bone relative pb-20 pt-24 md:pb-24 md:pt-32" aria-labelledby="terms-title">
     <div className="mx-auto w-full max-w-[1200px] px-5 sm:px-8">
       <motion.div {...reveal} className="max-w-[40rem]">
         <h2
@@ -455,6 +455,7 @@ export const Terms = () => (
           foot, level with the last question. Phone: heading, questions, close. */}
       <div
         id="faq"
+        data-ledger-section="faq"
         className="mt-14 grid scroll-mt-6 grid-cols-1 md:mt-20 lg:scroll-mt-20 lg:grid-cols-12 lg:grid-rows-[auto_1fr] lg:gap-x-8"
       >
         <motion.h3

@@ -64,6 +64,14 @@
 
     --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
 
+    /* Line drawings: warm bone strokes on the dark grounds (ink on paper, below). */
+    --diagram: var(--bone);
+
+    /* The page's own width (the ledger margin takes 15rem on wide screens),
+       and the left edge of the 1200px text column measured from it. */
+    --page-w: 100vw;
+    --col-l: max(1.25rem, calc((var(--page-w) - 1200px) / 2 + 1.25rem));
+
     /* Gradients — yellow-only, no second hue */
     --gradient-primary: linear-gradient(135deg, hsl(45 93% 54%), hsl(45 93% 64%));
     --gradient-accent: linear-gradient(135deg, hsl(45 93% 54%), hsl(45 93% 64%));
@@ -73,6 +81,17 @@
     --shadow-subtle: 0 1px 3px 0 hsl(0 0% 0% / 0.3);
     --shadow-medium: 0 4px 6px -1px hsl(0 0% 0% / 0.3), 0 2px 4px -1px hsl(0 0% 0% / 0.2);
     --shadow-large: 0 10px 15px -3px hsl(0 0% 0% / 0.3), 0 4px 6px -2px hsl(0 0% 0% / 0.2);
+  }
+}
+
+@media (min-width: 640px) {
+  :root {
+    --col-l: max(2rem, calc((var(--page-w) - 1200px) / 2 + 2rem));
+  }
+}
+@media (min-width: 1280px) {
+  :root {
+    --page-w: calc(100vw - 17rem);
   }
 }
 
@@ -118,7 +137,7 @@
        bottom band and (on phones) of the fixed dock. */
     scroll-padding-bottom: 16svh;
   }
-  @media (max-width: 1023.98px) {
+  @media (max-width: 1279.98px) {
     html {
       scroll-padding-bottom: calc(4rem + 16svh + env(safe-area-inset-bottom));
     }
@@ -147,14 +166,16 @@
     text-decoration-thickness: 1px;
   }
 
-  /* Keep anchored section headings clear of the fixed desktop chip. */
+  /* A little air above an anchored heading. Chapters land on their title
+     card, edge to edge. */
   section[id] {
     scroll-margin-top: 1.5rem;
   }
-  @media (min-width: 1024px) {
-    section[id] {
-      scroll-margin-top: 4.5rem;
-    }
+  section[data-chapter] {
+    scroll-margin-top: 0;
+    --ch-ink: var(--foreground);
+    --ch-ink-soft: var(--muted-foreground);
+    --ch-rule: var(--border);
   }
 
   /* Custom scrollbar: warm neutral, the accent is not spent here. */
@@ -211,6 +232,15 @@
     --foreground: var(--bone-ink);
     --muted-foreground: var(--bone-ink-soft);
     --border: var(--bone-rule);
+    /* Raised surfaces and shadows re-tinted for paper. */
+    --surface: 38 20% 85%;
+    --surface-2: 37 17% 81%;
+    --edge: inset 0 1px 0 hsl(0 0% 100% / 0.5);
+    --shadow-tint: 32 18% 30%;
+    --e1: 0 1px 2px hsl(32 18% 30% / 0.14), 0 2px 8px -2px hsl(32 18% 30% / 0.16);
+    --e2: 0 2px 4px hsl(32 18% 30% / 0.12), 0 12px 32px -8px hsl(32 18% 30% / 0.22);
+    --e3: 0 4px 8px hsl(32 18% 30% / 0.12), 0 32px 64px -16px hsl(32 18% 30% / 0.28);
+    --diagram: var(--bone-ink);
     background: hsl(var(--bone));
     color: hsl(var(--bone-ink));
   }
@@ -226,10 +256,46 @@
      the AI builds come from. Same hue as the page, one step lighter, drawn
      once (it never moves). */
   .ground-canvas {
+    --ch-ground: var(--surface);
     background-color: hsl(var(--surface));
     background-image: radial-gradient(hsl(var(--bone) / 0.075) 1px, transparent 1.5px);
     background-size: 20px 20px;
     background-position: center top;
+  }
+
+  /* Chapter grounds. Each chapter lands on its own ground and stays there:
+     hard cuts between them, never a blend. --ch-ground is the page that is
+     laid over the chapter's title card. */
+  .ground-clay {
+    --ch-ground: 16 22% 6.5%;
+    --surface: 16 16% 9.5%;
+    --surface-2: 16 13% 12%;
+    background: hsl(var(--ch-ground));
+  }
+  .ground-ink {
+    --ch-ground: 22 14% 5.5%;
+    background: hsl(var(--ch-ground));
+  }
+  .ground-amber {
+    --ch-ground: 36 26% 7.5%;
+    --surface: 36 22% 10.5%;
+    --surface-2: 36 18% 13%;
+    background: hsl(var(--ch-ground));
+  }
+  .ground-paper {
+    --ch-ground: var(--bone);
+  }
+  .ch-body {
+    background: hsl(var(--ch-ground));
+    box-shadow:
+      inset 0 1px 0 hsl(var(--foreground) / 0.07),
+      0 -32px 64px -28px hsl(var(--shadow-tint) / 0.85);
+  }
+  /* On paper the page casts a softer shadow and its edge is a printed rule. */
+  .ground-paper .ch-body {
+    box-shadow:
+      inset 0 1px 0 hsl(var(--bone-rule)),
+      0 -18px 40px -26px hsl(32 18% 30% / 0.32);
   }
 }
 

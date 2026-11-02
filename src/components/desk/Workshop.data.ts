@@ -20,6 +20,15 @@ import hookBankPreview from "@/assets/desk/workshop/hook-bank-preview.webp";
 import instagramPreview from "@/assets/desk/workshop/instagram-preview.webp";
 import staticAdPreview from "@/assets/desk/workshop/static-ad-preview.webp";
 
+// The same crops in full color (what the page shows), cut from the originals.
+import multiAgentColor from "@/assets/desk/workshop/multi-agent-preview-color.webp";
+import internalGptColor from "@/assets/desk/workshop/internal-gpt-preview-color.webp";
+import deductiveColor from "@/assets/desk/workshop/deductive-labs-preview-color.webp";
+import apolloColor from "@/assets/desk/workshop/apollo-preview-color.webp";
+import hookBankColor from "@/assets/desk/workshop/hook-bank-preview-color.webp";
+import instagramColor from "@/assets/desk/workshop/instagram-preview-color.webp";
+import staticAdColor from "@/assets/desk/workshop/static-ad-preview-color.webp";
+
 // Full-color originals. Lossless WebP copies of src/assets/workflows/*.png
 // (pixel-identical, about 60% lighter); internal-gpt loses a 7px white strip
 // at the top and instagram a 3px strip at the bottom (browser edge in the
@@ -48,6 +57,8 @@ export type Work = {
   kind: "n8n canvas" | "web app";
   /** Warm mono preview, toned to the page: the canvas alone, 11:5. */
   preview: Img;
+  /** The same crop in full color (what the page shows). */
+  color?: Img;
   /** The original full-color screenshot, shown only in the dialog. */
   full: Img;
   /** What the picture shows, for the alt text. */
@@ -72,6 +83,7 @@ export const WORKS: Work[] = [
     tools: ["n8n", "Gemini"],
     kind: "n8n canvas",
     preview: { src: internalGptPreview, w: 1337, h: 608 },
+    color: { src: internalGptColor, w: 1337, h: 608 },
     full: { src: internalGptFull, w: 1682, h: 659 },
     alt: "n8n canvas of the Problem Identification Agent: a webhook from the app, branches that read images and files, a knowledge base search, an optional web search, and a reply to the app",
     panStart: 0,
@@ -85,6 +97,7 @@ export const WORKS: Work[] = [
     tools: ["React", "Gemini", "n8n", "Supabase"],
     kind: "web app",
     preview: { src: deductivePreview, w: 1300, h: 591 },
+    color: { src: deductiveColor, w: 1300, h: 591 },
     full: { src: deductiveFull, w: 1300, h: 691 },
     alt: "The DeductiveLabs intelligence dashboard: session totals, average confidence, knowledge base coverage and a problem category heatmap",
     panStart: 0,
@@ -94,10 +107,11 @@ export const WORKS: Work[] = [
     title: "Multi-Agent Orchestration System",
     line: "Routes each support issue to one of four specialist agents.",
     detail:
-      "Part of the DeductiveLabs engine. A product manager agent reads the issue, a summary agent condenses it, and a switch hands it to one of four specialist agents, each with its own OpenAI model. This is the system from the sample run at the top of this page.",
+      "Part of the DeductiveLabs engine. A product manager agent reads the issue, a summary agent condenses it, and a switch hands it to one of four specialist agents, each with its own OpenAI model.",
     tools: ["n8n", "OpenAI"],
     kind: "n8n canvas",
     preview: { src: multiAgentPreview, w: 1305, h: 593 },
+    color: { src: multiAgentColor, w: 1305, h: 593 },
     full: { src: multiAgentFull, w: 1592, h: 697 },
     alt: "n8n canvas of the DeductiveLabs agent flow: a webhook and a chat trigger, a product manager agent, an incident summary agent, and a switch that routes to four specialist agents",
     panStart: 0.1,
@@ -111,6 +125,7 @@ export const WORKS: Work[] = [
     tools: ["n8n", "Apify", "OpenAI", "Google Sheets"],
     kind: "n8n canvas",
     preview: { src: apolloPreview, w: 1196, h: 544 },
+    color: { src: apolloColor, w: 1196, h: 544 },
     full: { src: apolloFull, w: 1441, h: 938 },
     alt: "n8n canvas of the Apollo lead scraper in three groups: run the scraper, fill the sheet, write the icebreakers",
     previewAlt: "Part of the Apollo lead scraper’s n8n canvas: the groups that fill the sheet and write the icebreakers",
@@ -125,6 +140,7 @@ export const WORKS: Work[] = [
     tools: ["n8n", "Gemini", "Notion", "ClickUp", "Slack"],
     kind: "n8n canvas",
     preview: { src: hookBankPreview, w: 1200, h: 545 },
+    color: { src: hookBankColor, w: 1200, h: 545 },
     full: { src: hookBankFull, w: 1582, h: 1017 },
     alt: "n8n canvas of the hook bank in two groups: building the hook library, and writing UGC briefs and scripts",
     panStart: 0.15,
@@ -138,6 +154,7 @@ export const WORKS: Work[] = [
     tools: ["n8n", "Apify", "Gemini", "Notion"],
     kind: "n8n canvas",
     preview: { src: instagramPreview, w: 1176, h: 535 },
+    color: { src: instagramColor, w: 1176, h: 535 },
     full: { src: instagramFull, w: 1640, h: 1024 },
     alt: "n8n canvas of the Instagram engine: scrape posts on a schedule, generate hook ideas, clean the data and save ideas to Notion",
     panStart: 0.16,
@@ -151,6 +168,7 @@ export const WORKS: Work[] = [
     tools: ["n8n", "Gemini", "Notion", "Google Drive"],
     kind: "n8n canvas",
     preview: { src: staticAdPreview, w: 1268, h: 576 },
+    color: { src: staticAdColor, w: 1268, h: 576 },
     full: { src: staticAdFull, w: 1838, h: 927 },
     alt: "n8n canvas of the static prompt flow: four Notion databases of organic posts, a Gemini chain that writes a prompt, then nodes that generate an image and upload it to Google Drive",
     panStart: 0.1,

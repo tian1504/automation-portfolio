@@ -14,10 +14,10 @@ import { ArrowRight } from "lucide-react";
 import { EASE_OUT, reveal, revealAt, useMediaQuery } from "@/lib/desk";
 import { SourcingDiagram, SyncDiagramTall, SyncDiagramWide } from "./AmazonBuilds.diagrams";
 import { REVEAL, SellerDashboard } from "./SellerDashboard";
+import { buildElementId } from "./ledgerStore";
 
 /**
- * The Amazon work, right after the pinned stage (a different client's build
- * from the AI run above it, so it opens on its own heading and source line).
+ * Chapter three, e-commerce: the Amazon work, one kind of work among four.
  *
  * First the seller dashboard, as a flat, readable replica of the real app on
  * SAMPLE data: once it is well into view, its three problem cards lift worst
@@ -170,7 +170,12 @@ const PlateView = ({
         transition: { ...reveal.transition, delay: 0.35 },
       };
   return (
-    <article aria-labelledby={`${plate.id}-title`} className={className}>
+    <article
+      id={buildElementId(plate.id)}
+      data-build={plate.id}
+      aria-labelledby={`${plate.id}-title`}
+      className={`scroll-mt-10 ${className}`}
+    >
       <figure>
         <motion.div
           {...panel}
@@ -184,13 +189,13 @@ const PlateView = ({
         </motion.figcaption>
       </figure>
 
-      <motion.h3
+      <motion.h4
         {...after}
         id={`${plate.id}-title`}
         className="mt-5 text-xl font-semibold tracking-tight text-foreground md:mt-8 md:text-2xl"
       >
         {plate.title}
-      </motion.h3>
+      </motion.h4>
 
       <dl className="mt-4 border-t border-border md:mt-5">
         {plate.rows.map((r, i) => (
@@ -256,16 +261,18 @@ const DashboardPlate = () => {
   }, [inView, reduce, progress]);
 
   return (
-    <article aria-labelledby="work-title">
-      <motion.p {...reveal} className="label-mono text-muted-foreground">
-        For Amazon sellers
-      </motion.p>
+    <article
+      id={buildElementId("seller-dashboard")}
+      data-build="seller-dashboard"
+      aria-labelledby="work-title"
+      className="scroll-mt-10"
+    >
       {/* The lead-in: the problem, in the seller's words, before the screen that answers it. */}
       <motion.p
-        {...revealAt(1)}
+        {...reveal}
         id="work-lead"
         tabIndex={-1}
-        className="mt-3 max-w-[24ch] focus-visible:outline-none font-display text-[clamp(1.6rem,3vw,2.6rem)] font-medium leading-[1.12] tracking-[-0.025em] text-foreground"
+        className="max-w-[24ch] focus-visible:outline-none font-display text-[clamp(1.6rem,3vw,2.6rem)] font-medium leading-[1.12] tracking-[-0.025em] text-foreground"
       >
         <span className="block">{LEAD[0]}</span> <span className="block text-muted-foreground">{LEAD[1]}</span>
       </motion.p>
@@ -282,16 +289,16 @@ const DashboardPlate = () => {
         <p className="sr-only">{DASH_ALT}</p>
       </div>
 
-      <div className="mt-8 grid gap-8 md:mt-10 lg:grid-cols-12 lg:gap-x-8">
+      <div className="mt-8 grid grid-cols-[minmax(0,1fr)] gap-8 md:mt-10 lg:grid-cols-12 lg:gap-x-8">
         <div className="lg:col-span-7">
-          <motion.h2
+          <motion.h3
             {...reveal}
             id="work-title"
             tabIndex={-1}
             className="text-xl font-semibold tracking-tight text-foreground focus-visible:outline-none md:text-2xl"
           >
             {DASH_H3}
-          </motion.h2>
+          </motion.h3>
           {/* Below lg the replica shows the app's narrow layout, whose own card titles carry these,
               so the list is for screen readers there. */}
           <motion.ol {...revealAt(1)} className="max-lg:sr-only lg:mt-4 lg:space-y-3">
@@ -331,25 +338,26 @@ function DashCaption({ progress, at, title, body }: { progress: MotionValue<numb
   );
 }
 
-export const AmazonBuilds = () => {
+export const EcommerceChapter = () => {
   // The sync route reads left to right from md up, top to bottom on phones; its panel wipes the same way.
   const wide = useMediaQuery("(min-width: 768px)");
 
   return (
-    // #work keeps its old address: links already sent in proposals land on the dashboard.
-    <section id="builds" aria-label="Amazon builds" className="pb-12 pt-6 md:pb-20 lg:pt-4">
-      <div id="work" className="mx-auto w-full max-w-[1200px] px-5 sm:px-8">
-        <DashboardPlate />
+    // #work keeps its old address (links already sent in proposals land on the dashboard),
+    // and #builds the case studies' "back" links.
+    <div id="work" className="mx-auto w-full max-w-[1200px] scroll-mt-0 px-5 pb-24 pt-20 sm:px-8 md:pb-32 md:pt-28">
+      <DashboardPlate />
 
-        <motion.h2
+      <div id="builds" className="scroll-mt-10">
+        <motion.h3
           {...reveal}
           id="builds-title"
-          className="mt-16 max-w-[22ch] font-display text-[clamp(1.5rem,2.6vw,2.1rem)] font-semibold leading-[1.1] tracking-[-0.025em] text-foreground md:mt-20"
+          className="mt-24 max-w-[22ch] font-display text-[clamp(1.5rem,2.6vw,2.1rem)] font-semibold leading-[1.1] tracking-[-0.025em] text-foreground md:mt-32"
         >
           Two more Amazon systems I’ve built.
-        </motion.h2>
+        </motion.h3>
 
-        <div className="mt-8 grid gap-10 md:mt-12 md:gap-16 lg:grid-cols-12 lg:gap-x-8 lg:gap-y-0">
+        <div className="mt-8 grid grid-cols-[minmax(0,1fr)] gap-10 md:mt-12 md:gap-16 lg:grid-cols-12 lg:gap-x-8 lg:gap-y-0">
           <PlateView
             plate={SYNC}
             flow={wide ? "right" : "down"}
@@ -374,6 +382,6 @@ export const AmazonBuilds = () => {
           />
         </div>
       </div>
-    </section>
+    </div>
   );
 };

@@ -36,17 +36,18 @@ const ink: Variants = {
   }),
 };
 
+/** --diagram is warm bone on the dark grounds and ink on paper. */
 const C = {
-  node: "hsl(var(--bone) / 0.56)",
-  line: "hsl(var(--bone) / 0.48)",
-  soft: "hsl(var(--bone) / 0.38)",
-  title: "hsl(var(--bone) / 0.94)",
-  sub: "hsl(var(--bone) / 0.64)",
+  node: "hsl(var(--diagram) / 0.56)",
+  line: "hsl(var(--diagram) / 0.48)",
+  soft: "hsl(var(--diagram) / 0.38)",
+  title: "hsl(var(--diagram) / 0.94)",
+  sub: "hsl(var(--diagram) / 0.66)",
 } as const;
 
 type Tone = "node" | "line" | "soft";
 
-const Box = ({
+export const Box = ({
   x,
   y,
   w,
@@ -76,7 +77,7 @@ const Box = ({
 );
 
 /** A solid stroke draws; a dashed one cannot (pathLength owns the dash), so it fades. */
-const Stroke = ({ d, i, tone = "line", dashed = false }: { d: string; i: number; tone?: Tone; dashed?: boolean }) =>
+export const Stroke = ({ d, i, tone = "line", dashed = false }: { d: string; i: number; tone?: Tone; dashed?: boolean }) =>
   dashed ? (
     <motion.path
       d={d}
@@ -99,7 +100,7 @@ const HEAD: Record<Dir, (x: number, y: number) => string> = {
   u: (x, y) => `M${x - 3.5} ${y + 4.5}L${x} ${y}L${x + 3.5} ${y + 4.5}`,
 };
 
-const Head = ({ x, y, dir, i, soft = false }: { x: number; y: number; dir: Dir; i: number; soft?: boolean }) => (
+export const Head = ({ x, y, dir, i, soft = false }: { x: number; y: number; dir: Dir; i: number; soft?: boolean }) => (
   <motion.path
     d={HEAD[dir](x, y)}
     fill="none"
@@ -111,7 +112,7 @@ const Head = ({ x, y, dir, i, soft = false }: { x: number; y: number; dir: Dir; 
 );
 
 /** A straight run with an open chevron at its tip. `d` must end at the tip. */
-const Arrow = ({
+export const Arrow = ({
   d,
   tip,
   dir,
@@ -130,7 +131,7 @@ const Arrow = ({
   </>
 );
 
-const Label = ({
+export const Label = ({
   x,
   y,
   i,
