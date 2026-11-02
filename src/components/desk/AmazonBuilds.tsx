@@ -263,7 +263,9 @@ const DashboardPlate = () => {
       {/* The lead-in: the problem, in the seller's words, before the screen that answers it. */}
       <motion.p
         {...revealAt(1)}
-        className="mt-3 max-w-[24ch] font-display text-[clamp(1.6rem,3vw,2.6rem)] font-medium leading-[1.12] tracking-[-0.025em] text-foreground"
+        id="work-lead"
+        tabIndex={-1}
+        className="mt-3 max-w-[24ch] focus-visible:outline-none font-display text-[clamp(1.6rem,3vw,2.6rem)] font-medium leading-[1.12] tracking-[-0.025em] text-foreground"
       >
         <span className="block">{LEAD[0]}</span> <span className="block text-muted-foreground">{LEAD[1]}</span>
       </motion.p>

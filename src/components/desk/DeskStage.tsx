@@ -117,11 +117,11 @@ const T_DESK: Windows = {
   footerIn: [0.89, 0.93],
 };
 const T_PHONE: Windows = {
-  copyOut: [0.04, 0.1],
-  shade: [0.04, 0.1],
-  subjectOut: [0.08, 0.15],
-  hushIn: [0.07, 0.11],
-  hushOut: [0.17, 0.2],
+  copyOut: [0.03, 0.09],
+  shade: [0.02, 0.07],
+  subjectOut: [0.05, 0.11],
+  hushIn: [0.1, 0.14],
+  hushOut: [0.18, 0.21],
   swap: [0.09, 0.19],
   h2In: [0.19, 0.23],
   run: [0.22, 0.86],
@@ -166,15 +166,21 @@ const PAN_WIDE: [number, number][] = [
   [1, 650],
 ];
 const WIDE_Y = 236;
-/** Tall: the canvas y at the top of the view. */
-const PAN_TALL: [number, number][] = [
+/**
+ * Tall: the canvas y at the top of the view. The last stop is set per screen
+ * (phoneView): low enough that the Switch and all four specialists, with their
+ * labels, sit above the caption slot, whatever the phone's height.
+ */
+const panTall = (end: number): [number, number][] => [
   [0, 0],
   [0.18, 8],
   [0.3, 70],
-  [0.44, 196],
-  [0.58, 412],
-  [1, 412],
+  [0.44, Math.min(196, end)],
+  [0.58, end],
+  [1, end],
 ];
+/** The lowest point of the tall canvas that must stay in view (the last specialist's model label). */
+const TALL_BOTTOM = 862;
 
 const smoothstep = (t: number) => t * t * (3 - 2 * t);
 const clamp01 = (t: number) => Math.min(1, Math.max(0, t));
@@ -191,6 +197,8 @@ function along(stops: [number, number][], v: number) {
 type View = {
   /** px per canvas unit. */
   u: number;
+  /** Tall only: the canvas y at the top of the view when the run settles. */
+  endY: number;
   /** Canvas translate at the swap (lined up with the far canvas image). */
   alignX: number;
   alignY: number;
@@ -219,6 +227,7 @@ function deskView(w: number, h: number): View {
   const ry = 0.45 * h;
   return {
     u,
+    endY: 0,
     alignX: sx - (cx - VIEWBOX.x) * u,
     alignY: sy - (cy - VIEWBOX.y) * u,
     readX: (c) => rx - (c - VIEWBOX.x) * u,
@@ -226,15 +235,21 @@ function deskView(w: number, h: number): View {
   };
 }
 
-function phoneView(w: number, h: number): View {
-  const side = 14;
-  const u = (w - side * 2) / TALL_VIEWBOX.w;
+/**
+ * Tall layout: as wide as the phone, but never zoomed past 1.25 (tablets keep
+ * phone-sized names, centred). `colTop` is where the caption slot starts.
+ */
+function phoneView(w: number, h: number, colTop: number): View {
+  const u = Math.min((w - 28) / TALL_VIEWBOX.w, 1.25);
+  const left = (w - TALL_VIEWBOX.w * u) / 2;
   const top = 0.035 * h;
+  const room = (colTop > 0 ? colTop - 14 : 0.55 * h) - top;
   return {
     u,
-    alignX: side,
+    endY: Math.max(300, TALL_BOTTOM - room / u),
+    alignX: left,
     alignY: top,
-    readX: () => side,
+    readX: () => left,
     readY: (c) => top - (c - TALL_VIEWBOX.y) * u,
   };
 }
@@ -486,6 +501,7 @@ const IS_SERVER = typeof window === "undefined";
 export const DeskStage = () => {
   const reduce = useReducedMotion();
   const phone = useMediaQuery(PHONE_QUERY);
+  const sideways = useMediaQuery("(orientation: landscape)") && phone;
   const { probe, fit } = useRunFit(!reduce, phone);
   // One section element whatever the mode, so anything holding #home keeps it.
   // The pre-render writes the complete static layout (every word of the hero
@@ -494,7 +510,7 @@ export const DeskStage = () => {
   return (
     <>
       <section id="home" aria-label="Introduction" className="relative">
-        {IS_SERVER || reduce || fit === "none" ? (
+        {IS_SERVER || reduce || sideways || fit === "none" ? (
           <DeskStatic phone={phone} />
         ) : fit === null ? (
           // First pass only: replaced before the first paint, once measured.
@@ -623,7 +639,21 @@ function DeskPinned({ phone, footerInFrame }: { phone: boolean; footerInFrame: b
   const span = phone ? SPAN.phone : SPAN.desk;
   const travel = span - 100;
   const settled = phone ? SETTLED.phone : SETTLED.desk;
-  const view = useMemo(() => (phone ? phoneView(frame.w, frame.h) : deskView(frame.w, frame.h)), [phone, frame.w, frame.h]);
+  const [colTop, setColTop] = useState(0);
+  const colRef = useRef<HTMLDivElement>(null);
+  useLayoutEffect(() => {
+    const el = colRef.current;
+    if (!phone || !el) return;
+    const measure = () => setColTop(el.offsetTop);
+    measure();
+    const ro = new ResizeObserver(measure);
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, [phone, frame.h]);
+  const view = useMemo(
+    () => (phone ? phoneView(frame.w, frame.h, colTop) : deskView(frame.w, frame.h)),
+    [phone, frame.w, frame.h, colTop],
+  );
 
   // "Hidden" layers rest at an invisible 0.001, never 0: the browser skips
   // preparing fully transparent layers, then prepares them all on the first
@@ -661,7 +691,7 @@ function DeskPinned({ phone, footerInFrame }: { phone: boolean; footerInFrame: b
   });
   const camY = useTransform(p, (v) => {
     const r = clamp01((v - T.run[0]) / (T.run[1] - T.run[0]));
-    const read = phone ? view.readY(along(PAN_TALL, r)) : view.readY(WIDE_Y);
+    const read = phone ? view.readY(along(panTall(view.endY), r)) : view.readY(WIDE_Y);
     return view.alignY + (read - view.alignY) * moveIn(v);
   });
 
@@ -773,11 +803,12 @@ function DeskPinned({ phone, footerInFrame }: { phone: boolean; footerInFrame: b
             )}
             {phone ? (
               <motion.div
-                className="absolute inset-x-0 bottom-0 h-[50svh]"
+                className="absolute inset-x-0 bottom-0"
                 style={{
                   opacity: scrimOpacity,
+                  top: colTop > 0 ? colTop - 48 : "50svh",
                   background:
-                    "linear-gradient(to bottom, hsl(var(--background) / 0) 0%, hsl(var(--background)) 22%, hsl(var(--background)) 100%)",
+                    "linear-gradient(to bottom, hsl(var(--background) / 0) 0, hsl(var(--background)) 40px, hsl(var(--background)) 100%)",
                 }}
               />
             ) : (
@@ -867,7 +898,16 @@ function DeskPinned({ phone, footerInFrame }: { phone: boolean; footerInFrame: b
 
           {/* The run: what it is, then one step per beat */}
           {phone ? (
-            <PhoneColumn p={p} T={T} h2Opacity={h2Opacity} h2Y={h2Y} runEvents={runEvents} footerInFrame={footerInFrame} revealFooter={revealFooter} />
+            <PhoneColumn
+              colRef={colRef}
+              p={p}
+              T={T}
+              h2Opacity={h2Opacity}
+              h2Y={h2Y}
+              runEvents={runEvents}
+              footerInFrame={footerInFrame}
+              revealFooter={revealFooter}
+            />
           ) : (
             <motion.div className={CLS.col} style={{ pointerEvents: runEvents }}>
               <motion.div style={{ opacity: h2Opacity, y: h2Y }}>
@@ -947,6 +987,7 @@ function Step({ p, T, i, title, body }: { p: MotionValue<number>; T: Windows; i:
  * the four steps and the answer (and, when it fits, the source line last).
  */
 function PhoneColumn({
+  colRef,
   p,
   T,
   h2Opacity,
@@ -955,6 +996,7 @@ function PhoneColumn({
   footerInFrame,
   revealFooter,
 }: {
+  colRef: React.RefObject<HTMLDivElement>;
   p: MotionValue<number>;
   T: Windows;
   h2Opacity: MotionValue<number>;
@@ -967,7 +1009,7 @@ function PhoneColumn({
   const starts = STEPS.map((s, i) => (i === 0 ? T.h2In[0] : beatAt(T, s.from)[0]));
   const ends = [...starts.slice(1), footerInFrame ? T.footerIn[0] : 2];
   return (
-    <motion.div className={CLS.colPhone} style={{ pointerEvents: runEvents }}>
+    <motion.div ref={colRef} className={CLS.colPhone} style={{ pointerEvents: runEvents }}>
       <motion.div style={{ opacity: h2Opacity, y: h2Y }}>
         <p data-sc-copy className={CLS.eyebrow}>
           {RUN_EYEBROW}

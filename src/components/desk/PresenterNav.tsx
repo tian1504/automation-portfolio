@@ -43,9 +43,9 @@ const SHEET_LINKS = [
  * Where keyboard focus lands after a jump, when it is not the anchor itself.
  * #agents is an aria-hidden marker inside the pinned stage; its visible heading
  * sits after the hero copy, so the next Tab continues to the run's link.
- * #work is the seller dashboard's section, focused on its heading.
+ * #work is the seller dashboard's section, focused on its opening line (its heading sits under the dashboard).
  */
-const FOCUS_AFTER_JUMP: Record<string, string> = { agents: "agents-title", work: "work-title" };
+const FOCUS_AFTER_JUMP: Record<string, string> = { agents: "agents-title", work: "work-lead" };
 const jump = (id: string) => jumpTo(id, FOCUS_AFTER_JUMP[id]);
 
 /** Let modified clicks (new tab, new window) keep the browser's behaviour. */
