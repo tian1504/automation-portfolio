@@ -170,8 +170,8 @@ const CaseStudyBookSourcing = () => (
           <SectionHeading
             number="05"
             label="Verification"
-            title="230 checks before any change ships."
-            description="The checks pin behaviour, not implementation. A few of them:"
+            title="600 checks before any change ships."
+            description="600 as of November 2026. The checks pin behaviour, not implementation. A few of them:"
           />
           <ul className="mt-2 space-y-3 max-w-2xl">
             {CHECKS.map((check) => (
@@ -184,6 +184,12 @@ const CaseStudyBookSourcing = () => (
           <p className="mt-6 text-muted-foreground leading-relaxed max-w-2xl">
             One gate fails on purpose until changes to the scraping engine are committed deliberately, so the
             engine can never be edited casually.
+          </p>
+          <p className="mt-4 text-muted-foreground leading-relaxed max-w-2xl">
+            Green checks were not enough. The code once passed 332 of its own checks while it claimed a $9.29
+            book sold for $33.29. So a second check, separate from the code, goes back to Amazon and the
+            used-book shops and reproduces every figure from the source. No list reaches the client unless it
+            passes.
           </p>
         </div>
       </section>
@@ -201,6 +207,11 @@ const CaseStudyBookSourcing = () => (
             Each row shows the profit subtraction written out in full, so the client can check the arithmetic
             himself; the condition and the town the copy ships from; and the sales rank expressed as a rough
             waiting time rather than a raw number.
+          </p>
+          <p className="mt-4 text-muted-foreground leading-relaxed max-w-2xl">
+            It runs on a private server as a background service. The panel only listens on the server itself
+            and has no login of its own. It is reached through a Cloudflare Tunnel (the server connects out, so
+            nothing is opened on its firewall), behind a Cloudflare Access sign-in with a one-time email code.
           </p>
         </div>
       </section>

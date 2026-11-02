@@ -75,7 +75,8 @@ export const ROLES: Role[] = [
     bullets: [
       "Building a sourcing engine that scans about 2,000 used-book listings each morning across AbeBooks, Biblio and Alibris, and ends with a daily buy list that fits the client’s budget.",
       "Every surviving listing is opened live for its current price, condition and seller location. Postage and real Amazon fees are inside the margin before a book can be recommended.",
-      "230 automated checks pin behavior before any change ships; a deliberate gate keeps the scraping engine from being edited casually.",
+      "600 automated checks (as of November 2026) pin behavior before any change ships; a deliberate gate keeps the scraping engine from being edited casually.",
+      "A second check goes back to Amazon and the shops and reproduces every figure from the source, so no list reaches the client unverified.",
       "Phased, milestone-based engagement. Sourcing failure modes the client caught by hand are now guarded by automated checks.",
     ],
     skills: ["Node.js", "Web Scraping", "Chrome DevTools Protocol", "Amazon FBA"],

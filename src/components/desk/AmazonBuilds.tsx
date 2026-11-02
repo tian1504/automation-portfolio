@@ -120,8 +120,8 @@ const SOURCING: Plate = {
       label: "Status",
       value: (
         <>
-          <span className="text-foreground">Client build, in delivery.</span> 230 automated checks guard every
-          change.
+          <span className="text-foreground">Client build, in delivery.</span> 600 automated checks guard every
+          change, and a second check re-reads Amazon and the shops before a list goes out.
         </>
       ),
     },
