@@ -3,6 +3,7 @@ import { EASE_OUT, reveal, revealAt } from "@/lib/desk";
 import { BuildTitle, Rows } from "./Plate";
 import { BuildList } from "./Workshop";
 import { buildElementId } from "./ledgerStore";
+import { CaseLink } from "./CaseLink";
 
 /**
  * Chapter four, on paper: outreach and marketing. First the checks that keep
@@ -129,6 +130,9 @@ export const OutreachChapter = () => (
         </div>
         <div className="lg:col-span-5">
           <Rows rows={ROWS} first={1} />
+          <div className="mt-6">
+            <CaseLink to="/case-study/cold-email-safety-checks" label="Read the case study: Cold-email safety checks" />
+          </div>
         </div>
       </div>
 

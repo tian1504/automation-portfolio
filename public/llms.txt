@@ -1,24 +1,32 @@
 # Eleazar Sebastian Martinez
 
-> AI automation engineer. I build AI agents and real software with Claude Code that take the daily checks off your team. Upwork Top Rated. Fixed price per milestone.
+> AI automation engineer in Calamba, Laguna, Philippines. I build AI agents and real software with Claude Code that take the daily checks off your team. Rated 5.0 on Upwork. Fixed price per milestone.
 
 ## My work, by kind
 
-- Claude Code: I build with Claude Code, set the rules and write the checks, and the work is not done until it passes them. Examples: ThisIsNoted, my own meeting-notes app (not released yet), where every AI point shows where it came from and plain code flags names, numbers and dates that are not in your notes, the meeting invite or what was said on the call, with 1,327 automated tests and a 187-step click-through of the real app; AI tool reviews where a script re-found all 208 quoted facts in saved copies of the vendor pages, and a Claude Code hook blocks Claude's commits when a finished page fails the written standard; 13 websites moved to GitHub with automatic deploys (plus a 14th), each move checked against a written checklist, with a guide that lets the team edit their own sites through Claude Code; a browser extension that fills a book seller's shop baskets and logs his paid orders without ever seeing a card; a launch video for a made-up app, made entirely from code with Remotion.
-- AI agents: the DeductiveLabs IT troubleshooting engine, its multi-agent support system (a switch hands each issue to one of four specialist agents) and its problem identification agent.
-- Voice and chat agents: an Instagram AI chat agent built for an agency that sets up booking agents for med spas. It was made to answer DMs from each spa's knowledge base and book consults inside the thread (ManyChat, 7 n8n workflows, OpenAI gpt-4o-mini, GoHighLevel, Google Calendar; 219 automated checks across 7 test suites). Client build, delivered; the engagement ended in July 2026. Also: an ElevenLabs project for a client, a hands-on review with every take measured.
+- Claude Code (https://eleazarai.dev/claude-code): I build with Claude Code, set the rules and write the checks, and the work is not done until it passes them. Examples: ThisIsNoted, my own meeting-notes app (not released yet), where every AI point shows where it came from and plain code flags names, numbers and dates that are not in your notes, the meeting invite or what was said on the call, with 1,327 automated tests and a 187-step click-through of the real app; AI tool reviews where a script re-found all 208 quoted facts in saved copies of the vendor pages, and a Claude Code hook blocks Claude's commits when a finished page fails the written standard; 13 websites moved to GitHub with automatic deploys (plus a 14th), each move checked against a written checklist, with a guide that lets the team edit their own sites through Claude Code; a browser extension that fills a book seller's shop baskets and logs his paid orders without ever seeing a card; a launch video for a made-up app, made entirely from code with Remotion.
+- AI agents (https://eleazarai.dev/ai-agents): the DeductiveLabs IT troubleshooting engine, its multi-agent support system (a switch hands each issue to one of four specialist agents) and its problem identification agent.
+- Chat and voice: an Instagram AI chat agent built for an agency that sets up booking agents for med spas. It was made to answer DMs from each spa's knowledge base and book consults inside the thread (ManyChat, 7 n8n workflows, OpenAI gpt-4o-mini, GoHighLevel, Google Calendar; 219 automated checks across 7 test suites). Client build, delivered; the engagement ended in July 2026. Also: an ElevenLabs project for a client, a hands-on review with every take measured.
 - Outreach and marketing: cold-email safety checks for an Australian plumbing business, five checks that stop the send if any one fails (Node.js and the Instantly API); a lead list where every emailed address keeps its source page and passed an opt-out re-check; an Apollo lead scraper with icebreakers; a hook bank and UGC brief builder; an Instagram hook engine; a static ad generator.
 - E-commerce: the seller dashboard, the SP-API sync engine and the book sourcing engine (case studies below).
 
 ## What I build
 
-- Amazon System Build, $900 to $2,400: SP-API sync workflows for orders, inventory, financials and returns; live seller dashboards with re-order alerts; sourcing and buy-decision tools. Runs on the client's own accounts, credentials stay theirs, with a handover doc and a recorded walkthrough.
 - AI Agent and Workflow Build, $600 to $1,800: AI customer agents, n8n and Make workflows, internal AI assistants that answer with citations, data pipelines, API and CRM integrations.
+- Amazon System Build, $900 to $2,400: SP-API sync workflows for orders, inventory, financials and returns; live seller dashboards with re-order alerts; sourcing and buy-decision tools. Runs on the client's own accounts, credentials stay theirs, with a handover doc and a recorded walkthrough.
 - Maintenance and Growth, $200 a month: up to 5 hours of updates a month, monitoring and quick fixes, priority support, a monthly summary.
 - Smaller jobs: hourly consults and fixes from $15 an hour.
 
+## Pages
+
+- [Claude Code builds](https://eleazarai.dev/claude-code): what I build with Claude Code and the checks each build has to pass.
+- [AI agents](https://eleazarai.dev/ai-agents): the agents I have built, what they cost and how a build goes.
+
 ## Case studies
 
+- [Fact-checked AI tool reviews](https://eleazarai.dev/case-study/fact-checked-ai-reviews): every vendor page saved, every quoted fact re-found by a script, and a Claude Code hook that blocks the commit when a review page fails. Client build, in delivery.
+- [Instagram DM booking agent](https://eleazarai.dev/case-study/instagram-dm-agent): an Instagram AI agent built for an agency serving med spas, to answer DMs and book consults in the thread. Client build, delivered; the engagement ended in July 2026.
+- [Cold email safety checks](https://eleazarai.dev/case-study/cold-email-safety-checks): five checks that stop a cold email send if any one fails, built on Node.js and the Instantly API for an Australian plumbing business.
 - [The Seller Dashboard](https://eleazarai.dev/case-study/seller-dashboard): one screen that tells an Amazon seller what needs doing this morning, worst first. Amazon SP-API, GitHub Actions, Supabase and React. Client build, in delivery.
 - [The SP-API Sync Engine](https://eleazarai.dev/case-study/amazon-sp-api): about forty-five n8n workflows that keep a seller's inventory system fed with orders, returns, settlements, inventory and fees from Amazon, for the US and Canada marketplaces. Client build, live.
 - [The Book Sourcing Engine](https://eleazarai.dev/case-study/book-sourcing-engine): scans about 2,000 used-book listings each morning, checks each survivor live, counts postage and Amazon fees, and writes a buy list inside the daily budget. Client build, in delivery.
@@ -32,16 +40,16 @@
 
 ## Tools
 
-n8n, Make, Zapier; Claude, Claude Code, OpenAI, Gemini; Amazon SP-API, Keepa API; Supabase, React, Node.js, Python, Netlify; Airtable, Notion, HubSpot, GoHighLevel; Apify and custom APIs.
+Claude Code, Claude, OpenAI, Gemini; n8n, Make, Zapier; Supabase, React, Node.js, Python, Netlify; Airtable, Notion, HubSpot, GoHighLevel; Amazon SP-API, Keepa API; Apify and custom APIs.
 
 ## Background
 
-Windows and Azure systems in enterprise IT from 2012 to 2026. Now building AI automation full time.
+Windows and Azure systems in enterprise IT from 2012 to 2026, 14 years. Now building AI automation full time, from Calamba, Laguna, Philippines.
 
 ## Contact
 
 - Book a call: https://calendly.com/tian1504/30min
 - Email: tian1504@gmail.com
 - LinkedIn: https://www.linkedin.com/in/eleazar-sebastian-martinez-76210983/
-- Upwork: https://www.upwork.com/freelancers/~01ac0c23391406fb0d
+- Upwork: https://www.upwork.com/freelancers/eleazarautomation
 - GitHub: https://github.com/tian1504

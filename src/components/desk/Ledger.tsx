@@ -218,7 +218,7 @@ export const Ledger = () => {
               rel="noopener noreferrer"
               className="underline decoration-border underline-offset-4 transition-colors duration-150 ease-out-strong [@media(hover:hover)_and_(pointer:fine)]:hover:text-foreground"
             >
-              Upwork Top Rated
+              5.0 on Upwork
               <span className="sr-only"> (opens in a new tab)</span>
             </a>
             . Fixed price per milestone.

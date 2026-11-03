@@ -301,7 +301,7 @@ export const ClientWords = () => {
                 Windows and Azure systems in enterprise IT from{" "}
                 <span className="whitespace-nowrap">2012 to 2026.</span>
               </span>{" "}
-              <span className="block">Now building AI automation full time.</span>
+              <span className="block">Now building AI automation full time, from Calamba, Laguna, Philippines.</span>
             </p>
           </motion.div>
 

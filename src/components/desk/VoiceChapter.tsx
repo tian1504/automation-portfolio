@@ -13,6 +13,7 @@ import { Count } from "./Count";
 import { AudioClip } from "./AudioClip";
 import { StackCards, type StackItem } from "./StackCards";
 import { buildElementId } from "./ledgerStore";
+import { CaseLink } from "./CaseLink";
 
 /**
  * Chapter three: voice and chat agents.
@@ -223,6 +224,9 @@ export const VoiceChapter = () => (
         </div>
         <div className="lg:col-span-7">
           <Rows rows={IG_ROWS} first={1} />
+          <div className="mt-6">
+            <CaseLink to="/case-study/instagram-dm-agent" label="Read the case study: Instagram AI chat agent" />
+          </div>
         </div>
       </div>
     </article>

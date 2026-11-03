@@ -26,20 +26,6 @@ type Plan = {
 
 const PLANS: Plan[] = [
   {
-    name: "Amazon System Build",
-    tag: "The specialty",
-    from: "$900",
-    to: "$2,400",
-    unit: "per build",
-    covers: [
-      "SP-API sync workflows for orders, inventory, financials and returns",
-      "Live seller dashboards with re-order alerts",
-      "Sourcing and buy-decision tools",
-      "Runs on your accounts, credentials stay yours",
-      "Handoff doc and recorded walkthrough",
-    ],
-  },
-  {
     name: "AI Agent and Workflow Build",
     from: "$600",
     to: "$1,800",
@@ -50,6 +36,19 @@ const PLANS: Plan[] = [
       "Internal AI assistants that answer with citations",
       "Data pipelines",
       "API and CRM integrations",
+    ],
+  },
+  {
+    name: "Amazon System Build",
+    from: "$900",
+    to: "$2,400",
+    unit: "per build",
+    covers: [
+      "SP-API sync workflows for orders, inventory, financials and returns",
+      "Live seller dashboards with re-order alerts",
+      "Sourcing and buy-decision tools",
+      "Runs on your accounts, credentials stay yours",
+      "Handoff doc and recorded walkthrough",
     ],
   },
   {
@@ -397,7 +396,7 @@ const Questions = () => (
             </AccordionPrimitive.Trigger>
           </h4>
         </AccordionPrimitive.Header>
-        <AccordionPrimitive.Content className="data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:slide-in-from-top-1 data-[state=open]:duration-200 motion-reduce:data-[state=open]:slide-in-from-top-0 data-[state=open]:ease-out-strong">
+        <AccordionPrimitive.Content forceMount className="data-[state=closed]:hidden data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:slide-in-from-top-1 data-[state=open]:duration-200 motion-reduce:data-[state=open]:slide-in-from-top-0 data-[state=open]:ease-out-strong">
           <p className="max-w-[62ch] pb-5 pr-10 text-[15px] leading-relaxed text-muted-foreground md:text-base">
             {item.a}
           </p>

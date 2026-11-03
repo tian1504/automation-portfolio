@@ -35,7 +35,7 @@ export const LEAD_REVIEW: Review = {
 export const MORE_REVIEWS: Review[] = [
   {
     quote:
-      "Eleazar brought the vision into reality. I wasn’t sure how the automation was going to work but he showed us that everything was possible. He works really quick.",
+      "Eleazar brought the vision into reality. I wasn’t sure how the automation is going to work but he showed us that everything was possible. He works really quick and very knowledgeable",
     project: "AI Automation, Image Generation",
     period: "Jan 2026",
     rating: 5,
@@ -51,7 +51,7 @@ export const MORE_REVIEWS: Review[] = [
   },
   {
     quote:
-      "Great experience working with this developer. Responsive, detail-oriented, and delivered high-quality work on time. Excellent communication throughout. Highly recommended.",
+      "Great experience working with this developer. They were responsive, detail-oriented, and delivered high-quality work on time. Excellent communication throughout the project. Highly recommended.",
     project: "Workflow Automation (Asana, Zapier, HubSpot)",
     period: "Oct to Nov 2025",
     rating: 5,

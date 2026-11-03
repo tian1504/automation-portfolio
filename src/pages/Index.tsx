@@ -12,6 +12,7 @@ import { ClientWords } from "@/components/desk/ClientWords";
 import { Terms } from "@/components/desk/Terms";
 import { DeskClose } from "@/components/desk/DeskClose";
 import { useLedgerWatch } from "@/components/desk/ledgerStore";
+import { CaseLink } from "@/components/desk/CaseLink";
 
 // Old anchors from earlier versions of the site (and shared links) that no
 // longer have their own section map to the nearest one that does.
@@ -87,6 +88,9 @@ const Index = () => {
             <h3 className="max-w-[24ch] font-display text-[clamp(1.5rem,2.6vw,2.1rem)] font-semibold leading-[1.1] tracking-[-0.025em] text-foreground">
               Three parts of one IT troubleshooting engine, built for one client.
             </h3>
+            <div className="mt-4">
+              <CaseLink to="/ai-agents">How I build AI agents</CaseLink>
+            </div>
             <div className="mt-12 space-y-24 md:mt-16 md:space-y-36">
               <ShotPlate id="deductive-labs" variant="feature" />
               <PlatePair ids={["multi-agent", "internal-gpt"]} />

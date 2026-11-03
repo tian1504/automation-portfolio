@@ -4,7 +4,12 @@ import { MotionConfig } from "motion/react";
 import { ScrollToTop } from "@/components/ScrollToTop";
 import Index from "./pages/Index";
 
-// Case studies load on demand, so the homepage ships only what it shows.
+// Other pages load on demand, so the homepage ships only what it shows.
+const ClaudeCode = lazy(() => import("./pages/ClaudeCode"));
+const AiAgents = lazy(() => import("./pages/AiAgents"));
+const CaseStudyFactCheckedReviews = lazy(() => import("./pages/CaseStudyFactCheckedReviews"));
+const CaseStudyInstagramAgent = lazy(() => import("./pages/CaseStudyInstagramAgent"));
+const CaseStudyColdEmail = lazy(() => import("./pages/CaseStudyColdEmail"));
 const CaseStudyBookSourcing = lazy(() => import("./pages/CaseStudyBookSourcing"));
 const CaseStudySpApi = lazy(() => import("./pages/CaseStudySpApi"));
 const CaseStudySellerDashboard = lazy(() => import("./pages/CaseStudySellerDashboard"));
@@ -69,6 +74,11 @@ const Pages = () => {
       <Suspense fallback={<Blank />}>
         <Routes>
           <Route path="/" element={<Index />} />
+          <Route path="/claude-code" element={<ClaudeCode />} />
+          <Route path="/ai-agents" element={<AiAgents />} />
+          <Route path="/case-study/fact-checked-ai-reviews" element={<CaseStudyFactCheckedReviews />} />
+          <Route path="/case-study/instagram-dm-agent" element={<CaseStudyInstagramAgent />} />
+          <Route path="/case-study/cold-email-safety-checks" element={<CaseStudyColdEmail />} />
           <Route path="/case-study/book-sourcing-engine" element={<CaseStudyBookSourcing />} />
           <Route path="/case-study/amazon-sp-api" element={<CaseStudySpApi />} />
           <Route path="/case-study/seller-dashboard" element={<CaseStudySellerDashboard />} />

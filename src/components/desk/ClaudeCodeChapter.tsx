@@ -10,6 +10,7 @@ import tinDraft from "@/assets/desk/thisisnoted/tin-ai-draft.webp";
 import tinCarry from "@/assets/desk/thisisnoted/tin-carry-over.webp";
 import tinRules from "@/assets/desk/thisisnoted/tin-ai-rules.webp";
 import { buildElementId } from "./ledgerStore";
+import { CaseLink } from "./CaseLink";
 
 /**
  * Chapter one: Claude Code. How he builds, shown by what the builds had to
@@ -215,6 +216,9 @@ export const ClaudeCodeChapter = () => (
       were written with Claude Code.
     </motion.p>
     </div>
+    <div className="mt-6 md:mt-8">
+      <CaseLink to="/claude-code">How I build with Claude Code</CaseLink>
+    </div>
 
     {/* His own product, shown by its real screens */}
     <article
@@ -300,6 +304,9 @@ export const ClaudeCodeChapter = () => (
           </motion.p>
           <div className="mt-8">
             <Rows rows={REVIEW_ROWS} />
+          </div>
+          <div className="mt-6">
+            <CaseLink to="/case-study/fact-checked-ai-reviews" label="Read the case study: Fact-checked AI tool reviews" />
           </div>
         </div>
         <motion.figure {...revealAt(2)} className="m-0 lg:col-span-6 lg:pt-2">

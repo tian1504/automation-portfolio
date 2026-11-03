@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 
 /** The one action on the site. One label ("Book a call"), one destination. */
 export const BOOKING_URL = "https://calendly.com/tian1504/30min";
-export const UPWORK_URL = "https://www.upwork.com/freelancers/~01ac0c23391406fb0d?nav_dir=pop";
+export const UPWORK_URL = "https://www.upwork.com/freelancers/eleazarautomation";
 export const EMAIL = "tian1504@gmail.com";
 /** mailto, so phones and in-app browsers hand it to a mail app (no sign-in wall). */
 export const EMAIL_URL = `mailto:${EMAIL}`;

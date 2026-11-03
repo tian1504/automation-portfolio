@@ -121,7 +121,7 @@ const TrustLine = () => (
         rel="noopener noreferrer"
         className="-my-3 inline-flex min-h-11 items-center whitespace-nowrap text-foreground/85 underline decoration-border underline-offset-4 transition-[text-decoration-color,opacity] duration-150 ease-out-strong active:opacity-70 [@media(hover:hover)_and_(pointer:fine)]:hover:decoration-foreground"
       >
-        Upwork Top Rated
+        5.0 on Upwork
         {NEW_TAB}
       </a>
     </li>
