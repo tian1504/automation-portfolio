@@ -1,6 +1,6 @@
 import { useRef, type ReactNode } from "react";
-import { motion, useInView, useReducedMotion, useScroll, useTransform } from "motion/react";
-import { EASE_OUT } from "@/lib/desk";
+import { motion, useInView, useScroll, useTransform } from "motion/react";
+import { EASE_OUT, useStill } from "@/lib/desk";
 import { CHAPTERS, type Chapter as ChapterData } from "./chapters";
 import { BrandIcon, brandTitle } from "./BrandIcon";
 
@@ -28,7 +28,7 @@ const GROUND: Record<ChapterData["ground"], string> = {
 export function Chapter({ id, children }: { id: string; children: ReactNode }) {
   const chapter = CHAPTERS.find((c) => c.id === id)!;
   const index = CHAPTERS.indexOf(chapter);
-  const reduce = useReducedMotion();
+  const reduce = useStill();
   const body = useRef<HTMLDivElement>(null);
 
   return (

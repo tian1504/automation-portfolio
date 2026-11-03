@@ -1,5 +1,5 @@
-import { motion, useReducedMotion } from "motion/react";
-import { EASE_OUT, reveal, revealAt } from "@/lib/desk";
+import { motion } from "motion/react";
+import { EASE_OUT, reveal, revealAt, useStill } from "@/lib/desk";
 import { BuildTitle, Rows } from "./Plate";
 import { BuildList } from "./Workshop";
 import { buildElementId } from "./ledgerStore";
@@ -71,7 +71,7 @@ const ROWS = [
 
 /** The five checks on one drawn line: it draws down once, each check lands on it in turn. */
 function Gates() {
-  const reduce = useReducedMotion();
+  const reduce = useStill();
   return (
     <ol className="relative" aria-label="The five checks">
       <motion.span

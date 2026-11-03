@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useReducedMotion } from "motion/react";
 
 /** The one action on the site. One label ("Book a call"), one destination. */
 export const BOOKING_URL = "https://calendly.com/tian1504/30min";
@@ -22,20 +23,43 @@ const PREFERS_REDUCED =
   typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
 /**
+ * Search engines that run the page's code (Googlebot, Bingbot and others) read
+ * one still snapshot: they never scroll, so scroll-triggered fades stay at
+ * opacity 0 and counters stay at zero. They get the same words and numbers a
+ * visitor gets, through the same still path as reduced motion, minus the
+ * movement. The pre-render runs in Node, whose user agent ("Node.js/NN") never
+ * matches, so its HTML is unchanged. "bot" must be followed by "/", ";", "-"
+ * or ".html" (Googlebot/2.1, bingbot/2.0, AdsBot-Google), so phones named
+ * CUBOT still get the motion.
+ */
+export const IS_CRAWLER =
+  typeof navigator !== "undefined" &&
+  /bot[/;-]|bot\.html|crawl|spider|slurp|Google-InspectionTool|GoogleOther/i.test(navigator.userAgent);
+
+/** No entrance motion: the visitor asked for less motion, or this is a crawler. */
+export const STILL = PREFERS_REDUCED || IS_CRAWLER;
+
+/** Live reduced-motion preference, or a crawler. Use in place of useReducedMotion. */
+export function useStill() {
+  const reduce = useReducedMotion();
+  return IS_CRAWLER || !!reduce;
+}
+
+/**
  * Entrance for ordinary flow content: a 14px rise and a fade over 620ms,
  * fired once, slightly inside the viewport. Spread onto a motion element.
  */
 export const reveal = {
-  initial: PREFERS_REDUCED ? (false as const) : { opacity: 0, y: 14 },
+  initial: STILL ? (false as const) : { opacity: 0, y: 14 },
   whileInView: { opacity: 1, y: 0 },
   viewport: { once: true, margin: "0px 0px -12% 0px" },
-  transition: PREFERS_REDUCED ? { duration: 0 } : { duration: 0.62, ease: EASE_OUT },
+  transition: STILL ? { duration: 0 } : { duration: 0.62, ease: EASE_OUT },
 };
 
 /** Stagger helper for a list of reveals (30 to 80ms apart). */
 export const revealAt = (i: number, step = 0.06) => ({
   ...reveal,
-  transition: { ...reveal.transition, delay: PREFERS_REDUCED ? 0 : i * step },
+  transition: { ...reveal.transition, delay: STILL ? 0 : i * step },
 });
 
 export function useMediaQuery(query: string) {

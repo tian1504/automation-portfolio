@@ -1,6 +1,6 @@
 import { createRef, useMemo, type ReactNode, type RefObject } from "react";
-import { motion, useMotionValue, useReducedMotion, useScroll, useTransform, type MotionValue } from "motion/react";
-import { useMediaQuery } from "@/lib/desk";
+import { motion, useMotionValue, useScroll, useTransform, type MotionValue } from "motion/react";
+import { useMediaQuery, useStill } from "@/lib/desk";
 
 /**
  * Real screenshots on cards that stack as you scroll: each card holds near
@@ -24,7 +24,7 @@ const OFFSET = 14;
 const PHONE_SCALE = 0.56;
 
 export function StackCards({ items, label }: { items: StackItem[]; label: string }) {
-  const reduce = useReducedMotion();
+  const reduce = useStill();
   const phone = useMediaQuery("(max-width: 639.98px)");
   const flat = !!reduce || phone;
   const refs = useMemo(() => items.map(() => createRef<HTMLLIElement>()), [items]);

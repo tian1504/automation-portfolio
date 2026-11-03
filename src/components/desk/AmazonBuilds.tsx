@@ -5,13 +5,12 @@ import {
   motion,
   useInView,
   useMotionValue,
-  useReducedMotion,
   useTransform,
   type MotionValue,
   type Variants,
 } from "motion/react";
 import { ArrowRight } from "lucide-react";
-import { EASE_OUT, reveal, revealAt, useMediaQuery } from "@/lib/desk";
+import { EASE_OUT, reveal, revealAt, useMediaQuery, useStill } from "@/lib/desk";
 import { SourcingDiagram, SyncDiagramTall, SyncDiagramWide } from "./AmazonBuilds.diagrams";
 import { REVEAL, SellerDashboard } from "./SellerDashboard";
 import { buildElementId } from "./ledgerStore";
@@ -151,7 +150,7 @@ const PlateView = ({
   diagram: ReactNode;
   className?: string;
 }) => {
-  const reduce = useReducedMotion();
+  const reduce = useStill();
   // The wipe travels the way the data does. Reduced motion: a plain fade.
   const panel = reduce
     ? reveal
@@ -246,7 +245,7 @@ const PlateView = ({
  */
 const ARMED = 0.0001;
 const DashboardPlate = () => {
-  const reduce = useReducedMotion();
+  const reduce = useStill();
   const figure = useRef<HTMLDivElement>(null);
   const near = useInView(figure, { once: true, margin: "0px 0px 90% 0px" });
   const inView = useInView(figure, { once: true, margin: "0px 0px -42% 0px" });

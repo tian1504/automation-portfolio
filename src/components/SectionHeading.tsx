@@ -1,4 +1,5 @@
 import { motion } from "motion/react";
+import { STILL } from "@/lib/desk";
 
 type SectionHeadingProps = {
   /** Kept so existing call sites compile. No longer rendered. */
@@ -15,7 +16,7 @@ export const SectionHeading = ({ title, description, align = "left" }: SectionHe
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 16 }}
+      initial={STILL ? false : { opacity: 0, y: 16 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-80px" }}
       transition={{ duration: 0.5 }}

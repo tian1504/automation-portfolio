@@ -2,14 +2,14 @@ import { motion } from "motion/react";
 import { ArrowRight, ArrowUpRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { CaseStudyBar } from "@/components/desk/PresenterNav";
-import { BOOKING_URL } from "@/lib/desk";
+import { BOOKING_URL, STILL } from "@/lib/desk";
 import { SectionHeading } from "@/components/SectionHeading";
 
 const reveal = {
-  initial: { opacity: 0, y: 24 },
+  initial: STILL ? (false as const) : { opacity: 0, y: 24 },
   whileInView: { opacity: 1, y: 0 },
   viewport: { once: true, margin: "-100px" },
-  transition: { duration: 0.6 },
+  transition: { duration: STILL ? 0 : 0.6 },
 } as const;
 
 const FUNNEL = [

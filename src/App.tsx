@@ -1,6 +1,7 @@
 import { Component, lazy, Suspense, type ReactNode } from "react";
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import { MotionConfig } from "motion/react";
+import { IS_CRAWLER } from "@/lib/desk";
 import { ScrollToTop } from "@/components/ScrollToTop";
 import Index from "./pages/Index";
 
@@ -92,7 +93,7 @@ const Pages = () => {
 const App = () => (
   // reducedMotion="user": entrance transforms drop for visitors who ask for
   // less motion; opacity (which carries comprehension) stays.
-  <MotionConfig reducedMotion="user">
+  <MotionConfig reducedMotion={IS_CRAWLER ? "always" : "user"}>
     <div className="relative z-[1]">
       <BrowserRouter>
         <ScrollToTop />

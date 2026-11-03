@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { CaseStudyBar } from "@/components/desk/PresenterNav";
 import { CaseLink } from "@/components/desk/CaseLink";
 import { PlainHeading } from "@/components/PlainHeading";
-import { BOOKING_URL } from "@/lib/desk";
+import { BOOKING_URL, STILL } from "@/lib/desk";
 // The same cropped test conversations the homepage shows (no account names,
 // photos or the sandbox spa's town). Facts on this page come only from
 // VoiceChapter.tsx, the AI DM Agent entry in ClientWords.data.ts and llms.txt.
@@ -16,10 +16,10 @@ import dmBrain from "@/assets/desk/igdm/ig-dm-brain-split.webp";
 
 /** Fades the screenshot frames in. Used on images only, never on text. */
 const reveal = {
-  initial: { opacity: 0, y: 24 },
+  initial: STILL ? (false as const) : { opacity: 0, y: 24 },
   whileInView: { opacity: 1, y: 0 },
   viewport: { once: true, margin: "-100px" },
-  transition: { duration: 0.6 },
+  transition: { duration: STILL ? 0 : 0.6 },
 } as const;
 
 const STEPS = [

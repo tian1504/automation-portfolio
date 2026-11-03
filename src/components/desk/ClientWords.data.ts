@@ -118,7 +118,7 @@ export const ROLES: Role[] = [
     skills: ["n8n", "Apify", "Notion", "OpenAI", "Gemini", "UGC"],
   },
   {
-    period: "2012 to Jul 2026",
+    period: "2012 to Aug 2026",
     title: "System Administrator, Windows and Azure Cloud",
     client: "Enterprise Infrastructure",
     bullets: [

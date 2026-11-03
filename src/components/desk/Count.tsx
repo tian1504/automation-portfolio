@@ -1,5 +1,6 @@
 import { useEffect, useRef } from "react";
-import { animate, useInView, useReducedMotion } from "motion/react";
+import { animate, useInView } from "motion/react";
+import { useStill } from "@/lib/desk";
 
 /**
  * A real figure that ticks up once, when half of it is on screen: a hard
@@ -8,7 +9,7 @@ import { animate, useInView, useReducedMotion } from "motion/react";
  */
 export function Count({ to, decimals = 0 }: { to: number; decimals?: number }) {
   const ref = useRef<HTMLSpanElement>(null);
-  const reduce = useReducedMotion();
+  const reduce = useStill();
   const inView = useInView(ref, { once: true, amount: 0.5 });
   const fmt = (v: number) => v.toLocaleString("en-US", { minimumFractionDigits: decimals, maximumFractionDigits: decimals });
   useEffect(() => {

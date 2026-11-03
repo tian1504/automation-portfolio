@@ -1,6 +1,6 @@
-import { motion, useReducedMotion, type Variants } from "motion/react";
+import { motion, type Variants } from "motion/react";
 import { Maximize2 } from "lucide-react";
-import { EASE_OUT, reveal, revealAt } from "@/lib/desk";
+import { EASE_OUT, reveal, revealAt, useStill } from "@/lib/desk";
 import { WORKS, type Work } from "./Workshop.data";
 import { openWork } from "./Workshop";
 import { buildElementId } from "./ledgerStore";
@@ -22,7 +22,7 @@ const WIPE: Variants = {
 const work = (id: string) => WORKS.find((w) => w.id === id)!;
 
 function Picture({ work: w }: { work: Work }) {
-  const reduce = useReducedMotion();
+  const reduce = useStill();
   const panel = reduce
     ? reveal
     : { initial: "hidden", whileInView: "shown", viewport: { once: true, margin: "0px 0px -14% 0px" }, variants: WIPE };

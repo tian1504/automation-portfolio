@@ -1,6 +1,6 @@
-import { motion, useReducedMotion } from "motion/react";
+import { motion } from "motion/react";
 import { ArrowUpRight, BadgeCheck, Plus, Star } from "lucide-react";
-import { UPWORK_URL, reveal, revealAt } from "@/lib/desk";
+import { UPWORK_URL, reveal, revealAt, useStill } from "@/lib/desk";
 import {
   LEAD_REVIEW,
   MORE_REVIEWS,
@@ -32,7 +32,7 @@ import {
  * frame-by-frame screencast). Reduced-motion readers get the content in place.
  */
 const useEnter = () => {
-  const reduce = useReducedMotion();
+  const reduce = useStill();
   return (i?: number, step?: number) =>
     reduce ? {} : i === undefined ? reveal : revealAt(i, step);
 };
@@ -212,7 +212,7 @@ const RoleRow = ({ role, index }: { role: Role; index: number }) => {
           </span>
         </summary>
 
-        <div className="pb-7 pt-1 animate-in fade-in-0 slide-in-from-top-1 [animation-duration:200ms] ease-out-strong motion-reduce:animate-none sm:grid sm:grid-cols-[9.75rem_1fr] sm:gap-x-6">
+        <div className="pb-7 pt-1 fade-in-0 slide-in-from-top-1 [animation-duration:200ms] ease-out-strong group-open/row:motion-safe:animate-in sm:grid sm:grid-cols-[9.75rem_1fr] sm:gap-x-6">
           <div className="sm:col-start-2">
             <ul className="max-w-[62ch] space-y-2.5 text-[15px] leading-relaxed text-muted-foreground md:text-base">
               {role.bullets.map((b) => (

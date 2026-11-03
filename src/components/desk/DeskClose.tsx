@@ -1,5 +1,5 @@
 import { Fragment, useRef, type MouseEvent } from "react";
-import { motion, useReducedMotion } from "motion/react";
+import { motion } from "motion/react";
 import { ArrowUpRight } from "lucide-react";
 import {
   BOOKING_URL,
@@ -9,6 +9,7 @@ import {
   LINKEDIN_URL,
   UPWORK_URL,
   revealAt,
+  useStill,
 } from "@/lib/desk";
 import deskLg from "@/assets/desk/close-desk.webp";
 import deskSm from "@/assets/desk/close-desk-sm.webp";
@@ -66,7 +67,7 @@ function useSelectableMailto() {
 
 export const DeskClose = () => {
   const ref = useRef<HTMLElement>(null);
-  const reduce = useReducedMotion();
+  const reduce = useStill();
   const rv = (i: number) => (reduce ? {} : revealAt(i));
   const mailto = useSelectableMailto();
 

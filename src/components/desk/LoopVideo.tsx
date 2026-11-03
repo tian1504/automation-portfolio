@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
-import { useInView, useReducedMotion } from "motion/react";
+import { useInView } from "motion/react";
+import { useStill } from "@/lib/desk";
 import { Pause, Play } from "lucide-react";
 
 /**
@@ -24,7 +25,7 @@ export function LoopVideo({
   className?: string;
 }) {
   const ref = useRef<HTMLVideoElement>(null);
-  const reduce = useReducedMotion();
+  const reduce = useStill();
   const near = useInView(ref, { once: true, margin: "0px 0px 60% 0px" });
   const inView = useInView(ref, { amount: 0.5 });
   const [paused, setPaused] = useState(false);

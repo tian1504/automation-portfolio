@@ -2,12 +2,11 @@ import { Fragment, useLayoutEffect, useRef, useState, type RefObject } from "rea
 import * as AccordionPrimitive from "@radix-ui/react-accordion";
 import {
   motion,
-  useReducedMotion,
   useScroll,
   useTransform,
   type MotionValue,
 } from "motion/react";
-import { BOOKING_URL, PHONE_QUERY, reveal, revealAt, useMediaQuery } from "@/lib/desk";
+import { BOOKING_URL, PHONE_QUERY, reveal, revealAt, useMediaQuery, useStill } from "@/lib/desk";
 
 /**
  * Act 7, "The terms". The one bone-paper section: a hard ground cut, a price
@@ -288,7 +287,7 @@ const ProcessRuler = () => {
   const trackRef = useRef<HTMLDivElement>(null);
   const nodes = useRef<(HTMLSpanElement | null)[]>([]);
   const phone = useMediaQuery(PHONE_QUERY);
-  const still = useReducedMotion() ?? false;
+  const still = useStill();
   const { scrollYProgress } = useScroll({
     target: listRef,
     offset: ["start 85%", "end 60%"],

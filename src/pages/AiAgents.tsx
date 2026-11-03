@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { CaseStudyBar } from "@/components/desk/PresenterNav";
 import { CaseLink } from "@/components/desk/CaseLink";
 import { PlainHeading } from "@/components/PlainHeading";
-import { BOOKING_URL } from "@/lib/desk";
+import { BOOKING_URL, STILL } from "@/lib/desk";
 // The same full-color crops the homepage shows (Workshop.data.ts), and the
 // originals they were cut from, for the "see the full screen" links.
 import deductiveColor from "@/assets/desk/workshop/deductive-labs-preview-color.webp";
@@ -24,10 +24,10 @@ import dmHandoff from "@/assets/desk/igdm/ig-dm-handoff.webp";
  */
 
 const reveal = {
-  initial: { opacity: 0, y: 24 },
+  initial: STILL ? (false as const) : { opacity: 0, y: 24 },
   whileInView: { opacity: 1, y: 0 },
   viewport: { once: true, margin: "-100px" },
-  transition: { duration: 0.6 },
+  transition: { duration: STILL ? 0 : 0.6 },
 } as const;
 
 const LINK =

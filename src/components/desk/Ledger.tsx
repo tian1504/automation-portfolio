@@ -1,8 +1,8 @@
 import { useRef, useState, type MouseEvent } from "react";
-import { AnimatePresence, motion, useReducedMotion } from "motion/react";
+import { AnimatePresence, motion } from "motion/react";
 import { X } from "lucide-react";
 import { Sheet, SheetClose, SheetContent, SheetDescription, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
-import { BOOKING_URL, EASE_OUT, UPWORK_URL, jumpTo } from "@/lib/desk";
+import { BOOKING_URL, EASE_OUT, UPWORK_URL, jumpTo, useStill } from "@/lib/desk";
 import avatar from "@/assets/desk/avatar.webp";
 import { CHAPTERS, type Chapter } from "./chapters";
 import { buildElementId, useLedger } from "./ledgerStore";
@@ -88,7 +88,7 @@ type Go = (id: string, focusId?: string) => (e: MouseEvent) => void;
  */
 function Index({ go, open = false }: { go: Go; open?: boolean }) {
   const { current, seen } = useLedger();
-  const reduce = useReducedMotion();
+  const reduce = useStill();
   return (
     <ol className="space-y-1">
       {CHAPTERS.map((c, k) => {
